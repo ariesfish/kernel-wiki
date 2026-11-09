@@ -1,4 +1,5 @@
-# Record of restricted material removed by pi-kernel-expert's fetch.
+# Record of restricted material removed when this copy was taken from upstream.
+# The consumers' fetch still scans for the marker; this file is the source-side record.
 upstream_revision: b6b4301f15e8ce6955a56776690643ce5db369e6
 marker: LicenseRef-NvidiaProprietary
 scope: artifacts/
