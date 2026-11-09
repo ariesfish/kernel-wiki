@@ -1,6 +1,6 @@
-# Blackwell Kernel Optimization Knowledge Base — Schema
+# Blackwell Kernel Optimization Knowledge Base — Schema and Navigation
 
-A structured knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90), optimized for LLM agent retrieval.
+A structured knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90), optimized for agent retrieval.
 
 ## Navigation
 
@@ -12,7 +12,7 @@ python3 scripts/grep_wiki.py "<pattern>" [--only wiki]
 ```
 See `SKILL.md` (skill entry point) and `references/examples.md` for query patterns.
 
-### Direct navigation (when skill not available)
+### Direct navigation (when the query scripts are unavailable)
 
 1. **Start**: Read `index.md` for curated top-level navigation
 2. **By architecture**: Read `queries/by-architecture.md` → choose exact, family-only, or validated-unknown evidence

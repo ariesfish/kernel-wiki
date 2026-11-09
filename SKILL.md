@@ -1,6 +1,12 @@
 ---
 name: kernel-wiki
 license: MIT
+compatibility: "python3 >= 3.8; no third-party packages required (bundled pure-Python YAML fallback)"
+metadata:
+  upstream: mit-han-lab/KernelWiki
+  upstream_revision: b6b4301f15e8ce6955a56776690643ce5db369e6
+  maintained_by: ariesfish
+  divergence: "skill renamed to kernel-wiki; 19 LicenseRef-NvidiaProprietary files removed at source; page ids frozen"
 description: Use when the user asks about optimizing NVIDIA Blackwell (SM100, B200) or Hopper (SM90, H100) GPU kernels — tcgen05/TMEM/CLC/NVFP4/2-SM cooperative, warp specialization, FlashAttention-4, DeepGEMM, FlashMLA, MoE, grouped GEMM, CuTe-DSL/PTX/Triton on Blackwell, or wants concrete PR references from CUTLASS/SGLang/vLLM/FlashInfer/PyTorch. Do NOT use for generic CUDA Q&A that is not Blackwell/Hopper-specific, host-side framework integration, or distributed systems (DeepEP/EPLB/DualPipe).
 allowed-tools: "bash read grep find"
 ---

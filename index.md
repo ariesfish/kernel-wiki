@@ -1,8 +1,8 @@
 # Blackwell Kernel Optimization Knowledge Base
 
 > Comprehensive knowledge base for GPU kernel optimization on NVIDIA Blackwell (SM100) and Hopper (SM90).
-> Optimized for LLM agent retrieval. See [CLAUDE.md](CLAUDE.md) for schema and conventions.
-> **For Claude Code agents**: this repository is a Claude Code skill — see [SKILL.md](SKILL.md).
+> Optimized for LLM agent retrieval. See [SCHEMA.md](SCHEMA.md) for schema and conventions.
+> **For agents**: this repository is an Agent Skill — start at [SKILL.md](SKILL.md); the schema and conventions are in [SCHEMA.md](SCHEMA.md).
 
 ## Recommended Query Tools (for LLM agents)
 

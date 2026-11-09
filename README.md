@@ -15,26 +15,35 @@
 > documentation, releases, and leaderboard snapshots were verified through
 > 2026-08-18 UTC.
 
-A structured knowledge base of NVIDIA Blackwell (SM100, B200) and Hopper (SM90, H100) GPU kernel optimization, packaged as a Claude Code skill. The repository root **is** the skill directory — clone it directly into `~/.claude/skills/` and it works out of the box.
+A structured knowledge base of NVIDIA Blackwell (SM100, B200) and Hopper (SM90, H100) GPU kernel optimization, packaged as a standard **Agent Skill**: `SKILL.md` at the repository root, portable frontmatter, supporting scripts alongside. The repository root **is** the skill directory.
 
-## Install as a Claude Code Skill
+## Install
+
+Any Agent Skills runtime that reads a directory containing `SKILL.md` can use it. Place the clone where that runtime looks:
+
+| Runtime | Location |
+|---|---|
+| pi (via `pi-kernel-expert`) | fetched automatically into the pi agent cache at a pinned revision — no manual step |
+| pi (manual) | `~/.agents/skills/kernel-wiki` or `.agents/skills/kernel-wiki` |
+| Claude Code | `~/.claude/skills/kernel-wiki` |
+| anything else | wherever the runtime discovers skills |
 
 ```bash
-git clone git@github.com:mit-han-lab/KernelWiki.git ~/.claude/skills/KernelWiki
+git clone git@github.com:ariesfish/kernel-wiki.git <that-location>
 ```
 
-That's it. The skill auto-registers (because `SKILL.md` lives at the clone root), and the query scripts auto-resolve the wiki root to their own directory — no environment variable or Python package installation is required. The scripts prefer a host PyYAML installation and transparently use the bundled pure-Python fallback when PyYAML is unavailable (including offline or `python3 -S` environments).
+The query scripts resolve the corpus root to their own directory, so no environment variable or Python package is required. The scripts prefer a host PyYAML installation and transparently use the bundled pure-Python fallback when PyYAML is unavailable (including offline or `python3 -S` environments).
 
 PyYAML remains an optional performance dependency. If a package installation is available, it can be enabled with:
 
 ```bash
-python3 -m pip install -r ~/.claude/skills/KernelWiki/requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 Smoke test:
 
 ```bash
-cd ~/.claude/skills/KernelWiki
+cd <the skill directory>
 python3 scripts/query.py --tag nvfp4 --type kernel --compact
 python3 scripts/get_page.py kernel-flash-attention-4 --frontmatter-only
 ```
@@ -80,7 +89,7 @@ python3 scripts/grep_wiki.py "tcgen05" --only wiki
 - [`references/primer.md`](references/primer.md) — Topic map: hardware features, techniques, kernels, symptoms → canonical page IDs.
 - [`references/schema.md`](references/schema.md) — Frontmatter schema, confidence rules, reproducibility ladder, controlled vocabulary, canonical aliases.
 - [`references/examples.md`](references/examples.md) — 10 worked query patterns (user question → command sequence → synthesis).
-- [`CLAUDE.md`](CLAUDE.md) — Extended schema + navigation reference for Claude Code.
+- [`SCHEMA.md`](SCHEMA.md) — Extended schema + navigation reference (tool-agnostic).
 - [`index.md`](index.md) — Human-facing curated top-level index.
 
 ## Architecture
@@ -142,10 +151,10 @@ These commands also work without PyYAML. Installing `requirements.txt` is option
 ## Repository Layout
 
 ```
-KernelWiki/                             (= ~/.claude/skills/KernelWiki/)
+kernel-wiki/                            (= the skill directory the runtime loads)
 ├── SKILL.md                           # Skill entry point
 ├── README.md                          # This file
-├── CLAUDE.md                          # Extended navigation + schema reference
+├── SCHEMA.md                          # Extended navigation + schema reference
 ├── index.md                           # Curated top-level index
 ├── requirements.txt                   # Optional host PyYAML dependency
 │
