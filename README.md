@@ -1,11 +1,15 @@
 # KernelWiki — Blackwell & Hopper Kernel Optimization Knowledge Base
 > [!IMPORTANT]
-> This skill is maintained as a standalone submodule of
-> [Kernel Design Agents (KDA)](https://github.com/mit-han-lab/kernel-design-agents)
-> for easy installation.
+> **This is `kernel-wiki`, a maintained copy of
+> [KernelWiki](https://github.com/mit-han-lab/KernelWiki) (MIT, hanlab).** Three changes from
+> upstream: the skill is named `kernel-wiki` so Agent Skills runtimes load it without a warning;
+> the 19 files marked `LicenseRef-NvidiaProprietary` are removed at the source (see
+> `SANITIZED.yaml`) instead of being pruned by each consumer; and this copy is what
+> [`pi-kernel-expert`](https://github.com/ariesfish/pi-kernel-expert) pins.
 >
-> For bug reports, feature requests, and discussions, please use the main KDA repository:
-> https://github.com/mit-han-lab/kernel-design-agents
+> Page ids are frozen: `migration-wgmma-to-tcgen05` here is the same id upstream, because ids are
+> the citation contract. Update the corpus by adding pages and running
+> `python3 scripts/generate-indices.py` plus the two checks in `scripts/`; never renumber an id.
 
 > **Evidence boundaries:** the audited upstream PR corpus closes at 2026-05-20;
 > documentation, releases, and leaderboard snapshots were verified through

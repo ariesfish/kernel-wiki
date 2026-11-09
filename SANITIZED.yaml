@@ -1,0 +1,25 @@
+# Record of restricted material removed by pi-kernel-expert's fetch.
+upstream_revision: b6b4301f15e8ce6955a56776690643ce5db369e6
+marker: LicenseRef-NvidiaProprietary
+scope: artifacts/
+removed: 19
+files:
+  - artifacts/prs/cutlass/PR-2750/diff.patch
+  - artifacts/prs/cutlass/PR-2750/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_1.py
+  - artifacts/prs/cutlass/PR-3021/key-files/python/CuTeDSL/cutlass/cute/arch/clc.py
+  - artifacts/prs/cutlass/PR-3091/key-files/python/CuTeDSL/cutlass/utils/tensormap_manager.py
+  - artifacts/prs/cutlass/PR-3106/diff.patch
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_0.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_1.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_2.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_3.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_3_1.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_4.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_5.py
+  - artifacts/prs/cutlass/PR-3106/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_6.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_2.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_3.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_3_1.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_4.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_5.py
+  - artifacts/prs/cutlass/PR-3130/key-files/examples/python/CuTeDSL/blackwell/tutorial_gemm/fp16_gemm_6.py

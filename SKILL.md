@@ -1,11 +1,11 @@
 ---
-name: KernelWiki
+name: kernel-wiki
+license: MIT
 description: Use when the user asks about optimizing NVIDIA Blackwell (SM100, B200) or Hopper (SM90, H100) GPU kernels — tcgen05/TMEM/CLC/NVFP4/2-SM cooperative, warp specialization, FlashAttention-4, DeepGEMM, FlashMLA, MoE, grouped GEMM, CuTe-DSL/PTX/Triton on Blackwell, or wants concrete PR references from CUTLASS/SGLang/vLLM/FlashInfer/PyTorch. Do NOT use for generic CUDA Q&A that is not Blackwell/Hopper-specific, host-side framework integration, or distributed systems (DeepEP/EPLB/DualPipe).
-argument-hint: "[natural-language-question] | [--tag foo --type kernel] | [page-id]"
-allowed-tools: "Bash Read Grep Glob"
+allowed-tools: "bash read grep find"
 ---
 
-# KernelWiki — Blackwell & Hopper Kernel Optimization Wiki
+# kernel-wiki — Blackwell & Hopper Kernel Optimization Wiki
 
 Query a structured, cross-referenced knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90). The repository update date is recorded in `README.md`; run `python3 scripts/repo_status.py` for current corpus counts.
 
