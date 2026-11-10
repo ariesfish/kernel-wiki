@@ -4,8 +4,8 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
-import { listFiles, WIKI_ROOT } from "./_corpus.mjs";
-import { parse } from "./_yaml.mjs";
+import { listFiles, WIKI_ROOT } from "./lib/corpus.mjs";
+import { parse } from "./lib/yaml.mjs";
 
 function countFiles(...parts) {
   const root = path.join(WIKI_ROOT, ...parts);

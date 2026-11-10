@@ -16,9 +16,9 @@
 
 import { parseArgs } from "node:util";
 
-import { expandKeyword } from "./_aliases.mjs";
-import { architectureMatchesFilter } from "./_architectures.mjs";
-import { hasCode, loadIndexedPages, pageTypeOf } from "./_corpus.mjs";
+import { expandKeyword } from "./lib/aliases.mjs";
+import { architectureMatchesFilter } from "./lib/architectures.mjs";
+import { hasCode, loadIndexedPages, pageTypeOf } from "./lib/corpus.mjs";
 
 const USAGE = `usage: query.mjs [-h] [--type TYPE] [--tag TAG] [--repo REPO]
                   [--language LANGUAGE] [--architecture ARCHITECTURE]

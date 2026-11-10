@@ -32,7 +32,7 @@ Any Agent Skills runtime that reads a directory containing `SKILL.md` can use it
 git clone git@github.com:ariesfish/kernel-wiki.git <that-location>
 ```
 
-The query tools are Node.js (>= 22) and resolve the corpus root to their own directory, so no environment variable, `npm install`, or Python interpreter is required. The YAML parser is vendored as a single ESM file under `scripts/_vendor/`.
+The query tools are Node.js (>= 22) and resolve the corpus root to their own directory, so no environment variable, `npm install`, or Python interpreter is required. The YAML parser is vendored as a single ESM file under `scripts/vendor/`.
 
 All query and maintenance tools run on Node.js (>= 22), use the committed YAML parser, and need no `npm install` or Python environment. Commands that retrieve upstream evidence also need `gh` with GitHub access.
 
@@ -124,12 +124,12 @@ Supporting files:
 | `scripts/validate.mjs` | Validate frontmatter, schemas, links, evidence receipts, ledgers, and artifact bundles |
 | `scripts/generate-indices.mjs` | Regenerate `queries/*.md` from frontmatter |
 | `scripts/generate-pr-pages.mjs` | Generate source PR pages from candidate ledgers and upstream evidence |
-| `scripts/refresh_candidate_ledger.mjs` | Refresh candidate decisions from GitHub |
-| `scripts/compute_core_prs.mjs` | Derive core PR and DSL universe manifests |
-| `scripts/fetch_pr_diff.mjs` | Capture upstream PR diffs and pinned source files |
-| `scripts/extract_blog_code.mjs` | Extract and check blog code bundles |
-| `scripts/collect_contest_code.mjs` | Collect contest submission bundles |
-| `scripts/check_version_freshness.mjs` | Check local version and ledger freshness without network access |
+| `scripts/refresh-candidate-ledger.mjs` | Refresh candidate decisions from GitHub |
+| `scripts/compute-core-prs.mjs` | Derive core PR and DSL universe manifests |
+| `scripts/fetch-pr-diff.mjs` | Capture upstream PR diffs and pinned source files |
+| `scripts/extract-blog-code.mjs` | Extract and check blog code bundles |
+| `scripts/collect-contest-code.mjs` | Collect contest submission bundles |
+| `scripts/check-version-freshness.mjs` | Check local version and ledger freshness without network access |
 
 ```bash
 npm test
@@ -145,11 +145,11 @@ These commands also work directly with `node scripts/<name>.mjs` from a fresh cl
 ## Quality Gates
 
 - `scripts/validate.mjs` reports 0 validation errors
-- `scripts/verify_verbatim.mjs` verifies upstream-pinned assets
-- `scripts/check_dod_fixtures.mjs` verifies every active Definition-of-Done asset contract and audits retired fixture tombstones
-- `scripts/verify_pr_architecture_upstream.mjs` re-derives a deterministic high-risk PR sample from live paginated GitHub evidence
-- `scripts/verify_core_prs.mjs` verifies generated PR manifests
-- `scripts/repo_size_check.mjs` enforces the repository size budget
+- `scripts/verify-verbatim.mjs` verifies upstream-pinned assets
+- `scripts/check-dod-fixtures.mjs` verifies every active Definition-of-Done asset contract and audits retired fixture tombstones
+- `scripts/verify-pr-architecture-upstream.mjs` re-derives a deterministic high-risk PR sample from live paginated GitHub evidence
+- `scripts/verify-core-prs.mjs` verifies generated PR manifests
+- `scripts/repo-size-check.mjs` enforces the repository size budget
 - 0 broken links across all internal references
 - All `verified` wiki pages have official-doc + upstream-code evidence (enforced by `evidence_basis` field)
 - All technique/kernel/language pages have compilable code snippets (`reproducibility >= snippet`)
@@ -178,16 +178,21 @@ kernel-wiki/                            (= the skill directory the runtime loads
 │   ├── get_page.mjs                   # Page fetcher
 │   ├── grep_wiki.mjs                  # Regex search
 │   ├── repo_status.mjs                # Corpus counts
-│   ├── _root.mjs                      # Shared root resolver
-│   ├── _corpus.mjs                    # Frontmatter, page index, artifact discovery
-│   ├── _architectures.mjs             # Architecture hierarchy matcher
-│   ├── _aliases.mjs                   # Alias expansion
-│   ├── _yaml.mjs                      # Vendored YAML entry point
-│   ├── _vendor/yaml.mjs               # Committed ESM bundle of `yaml` 2.9.1
+│   ├── lib/                           # Shared modules
+│   │   ├── root.mjs                   # Corpus root resolver
+│   │   ├── corpus.mjs                 # Page and artifact discovery
+│   │   ├── architectures.mjs          # Architecture matcher
+│   │   ├── aliases.mjs                # Alias expansion
+│   │   ├── yaml.mjs                   # YAML compatibility adapter
+│   │   └── pr-policy.mjs              # PR evidence policy
+│   ├── vendor/yaml.mjs                # Committed YAML bundle
 │   ├── validate.mjs                   # Schema and evidence validator
-│   ├── pr_policy.mjs                  # Shared PR scope and architecture policy
 │   ├── generate-indices.mjs           # Query-index generator
 │   └── generate-pr-pages.mjs          # Batch PR page generator
+│
+├── tests/                             # Node.js *.test.mjs files
+│   ├── helpers/                       # Test fixture utilities
+│   └── fixtures/                      # Frozen data and regression inputs
 │
 ├── references/                        # Skill knowledge layer
 │   ├── primer.md                      # Topic map

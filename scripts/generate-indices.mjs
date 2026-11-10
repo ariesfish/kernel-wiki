@@ -3,8 +3,8 @@
 import { existsSync, readFileSync, readdirSync, lstatSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseMaintenance as parse } from './_yaml.mjs';
-import { ARCHITECTURE_FAMILY_PREFIXES } from './pr_policy.mjs';
+import { parseMaintenance as parse } from "./lib/yaml.mjs";
+import { ARCHITECTURE_FAMILY_PREFIXES } from "./lib/pr-policy.mjs";
 export { ARCHITECTURE_FAMILY_PREFIXES };
 export let REPO_ROOT, SOURCES_DIR, WIKI_DIR, QUERIES_DIR;
 export function configure_root(root = process.env.BLACKWELL_WIKI_ROOT || fileURLToPath(new URL('../', import.meta.url))) {

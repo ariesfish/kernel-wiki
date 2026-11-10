@@ -26,14 +26,14 @@ original evidence-pattern digests.
 | Area | Entry points and responsibility |
 | --- | --- |
 | Queries | `query.mjs`, `get_page.mjs`, `grep_wiki.mjs`, `repo_status.mjs`; existing CLI and page IDs remain the consumer contract |
-| PR policy | `pr_policy.mjs`; shared scope, architecture evidence, language inference, generated-body contracts, and evidence hashing |
-| Ingestion | `refresh_candidate_ledger.mjs`, `generate-pr-pages.mjs`, `fetch_pr_diff.mjs`; candidate decisions, PR pages, pinned asset capture |
+| PR policy | `pr-policy.mjs`; shared scope, architecture evidence, language inference, generated-body contracts, and evidence hashing |
+| Ingestion | `refresh-candidate-ledger.mjs`, `generate-pr-pages.mjs`, `fetch-pr-diff.mjs`; candidate decisions, PR pages, pinned asset capture |
 | Generated navigation | `generate-indices.mjs`; seven cross-reference indices |
-| Core manifests | `compute_core_prs.mjs`, `verify_core_prs.mjs`; deterministic core PR and DSL universe derivation |
-| Extraction | `extract_blog_code.mjs`, `collect_contest_code.mjs`; source bundles and manifests |
-| Offline checks | `validate.mjs`, `check_dod_fixtures.mjs`, `check_version_freshness.mjs`, `repo_size_check.mjs` |
-| Live evidence | `verify_verbatim.mjs`, `verify_pr_architecture_upstream.mjs`; remote SHA/content verification |
-| Shared infrastructure | `_root.mjs`, `_corpus.mjs`, `_yaml.mjs`, `_architectures.mjs`, `_aliases.mjs`; root discovery, corpus reads, YAML and controlled vocabulary |
+| Core manifests | `compute-core-prs.mjs`, `verify-core-prs.mjs`; deterministic core PR and DSL universe derivation |
+| Extraction | `extract-blog-code.mjs`, `collect-contest-code.mjs`; source bundles and manifests |
+| Offline checks | `validate.mjs`, `check-dod-fixtures.mjs`, `check-version-freshness.mjs`, `repo-size-check.mjs` |
+| Live evidence | `verify-verbatim.mjs`, `verify-pr-architecture-upstream.mjs`; remote SHA/content verification |
+| Shared infrastructure | `root.mjs`, `corpus.mjs`, `yaml.mjs`, `architectures.mjs`, `aliases.mjs`; root discovery, corpus reads, YAML and controlled vocabulary |
 
 Maintenance modules expose functions for behavior tests and only execute their
 CLI when invoked directly. Script paths change from `.py` to `.mjs`; names and
@@ -57,7 +57,7 @@ Every npm command is a direct `node scripts/<name>.mjs` invocation and also
 works without an install step. To install the optional Git hook:
 
 ```bash
-node scripts/install_precommit_hook.mjs
+node scripts/install-precommit-hook.mjs
 ```
 
 The installer supports Git worktrees, preserves an existing unrelated hook
@@ -108,7 +108,7 @@ The universe files also use the Node emitter's line wrapping. Their parsed
 contents match Python output, and the core PR checksum remains
 `cde1aab41b706ba9b050d63b61a5d6a62c9c3c547d56caddd535b652ddfb7c59`.
 
-The two frozen PR audit receipts now bind `scripts/pr_policy.mjs`. Each retains
+The two frozen PR audit receipts now bind `scripts/lib/pr-policy.mjs`. Each retains
 the original Python policy SHA and identifies the 388-case parity fixture and
 its hash. The cap-correction receipt link was updated accordingly. The six
 cap-correction rows and 944 architecture rows remain unchanged; this migration
@@ -127,7 +127,7 @@ does not claim to have recaptured live upstream evidence.
 - **Seven generated indices** match Python output byte-for-byte for the same
   1,042-page corpus. Existing checked-in indices were preserved.
 - **Three core/universe manifests** preserve their parsed content and the
-  110-PR checksum. `verify_core_prs.mjs` passes after regeneration.
+  110-PR checksum. `verify-core-prs.mjs` passes after regeneration.
 - **1,457 corpus, query, and artifact files** retain their pre-migration
   SHA-256 values. This includes all 403 artifact files.
 - **Validator diagnostics match exactly:** the same 29 pre-existing errors,

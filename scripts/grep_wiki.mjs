@@ -13,7 +13,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 
-import { ARTIFACT_SEARCH_EXTS, listFiles, WIKI_ROOT, wikiPath } from "./_corpus.mjs";
+import { ARTIFACT_SEARCH_EXTS, listFiles, WIKI_ROOT, wikiPath } from "./lib/corpus.mjs";
 
 const USAGE = `usage: grep_wiki.mjs [-h] [--only {wiki,sources,all,artifacts}]
                        [--context CONTEXT] [--any] [--limit LIMIT]

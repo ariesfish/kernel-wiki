@@ -22,8 +22,8 @@ import {
   resolveArtifactDir,
   splitFrontmatter,
   WIKI_ROOT,
-} from "./_corpus.mjs";
-import { stringify } from "./_yaml.mjs";
+} from "./lib/corpus.mjs";
+import { stringify } from "./lib/yaml.mjs";
 
 const USAGE = `usage: get_page.mjs [-h] [--body-only] [--frontmatter-only]
                      [--follow-sources] [--include-code]

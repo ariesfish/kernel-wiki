@@ -5,10 +5,10 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import { WIKI_ROOT } from "./_root.mjs";
-import { parseMaintenance as parse, stringifyMaintenance as stringify } from "./_yaml.mjs";
-import { BODY_CONTRACT, classify_scope, derive_architectures, derive_metadata, normalize_files, render_generated_body, upstream_files_sha256 } from "./pr_policy.mjs";
-import { REPO_SLUG_TO_FULL, gh_json, iso_date } from "./refresh_candidate_ledger.mjs";
+import { WIKI_ROOT } from "./lib/root.mjs";
+import { parseMaintenance as parse, stringifyMaintenance as stringify } from "./lib/yaml.mjs";
+import { BODY_CONTRACT, classify_scope, derive_architectures, derive_metadata, normalize_files, render_generated_body, upstream_files_sha256 } from "./lib/pr-policy.mjs";
+import { REPO_SLUG_TO_FULL, gh_json, iso_date } from "./refresh-candidate-ledger.mjs";
 
 export const REPO_ROOT = WIKI_ROOT;
 export const TAGS_PATH = path.join(REPO_ROOT, "data/tags.yaml");

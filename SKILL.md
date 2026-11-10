@@ -41,7 +41,7 @@ All commands below run from the skill directory (the clone root — the director
 
 The query layer is Node.js (>= 22) and self-contained: `scripts/query.mjs`,
 `get_page.mjs`, `grep_wiki.mjs`, and `repo_status.mjs` use only Node built-ins
-plus the YAML parser vendored in `scripts/_vendor/yaml.mjs`. A cloned skill
+plus the YAML parser vendored in `scripts/vendor/yaml.mjs`. A cloned skill
 needs no `npm install`, no Python interpreter, and no network access.
 
 Corpus maintenance (validation, page generation, index generation) also uses
@@ -121,7 +121,7 @@ When answering from this KB:
 - **Validator** `scripts/validate.mjs` — schema, link, artifact, and ledger checks
 - **Blackwell-first** — Hopper-only wiki pages carry explicit `blackwell_relevance`; source pages preserve upstream evidence and are exempt
 
-To refresh the corpus: run `node scripts/refresh_candidate_ledger.mjs`, regenerate PR pages with `node scripts/generate-pr-pages.mjs --all` and query indices with `node scripts/generate-indices.mjs`, then validate with `node scripts/validate.mjs`.
+To refresh the corpus: run `node scripts/refresh-candidate-ledger.mjs`, regenerate PR pages with `node scripts/generate-pr-pages.mjs --all` and query indices with `node scripts/generate-indices.mjs`, then validate with `node scripts/validate.mjs`.
 
 ## Quality Guarantees
 

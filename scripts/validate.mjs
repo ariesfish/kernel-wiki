@@ -5,11 +5,11 @@ import { existsSync, readFileSync, readdirSync, realpathSync, statSync, lstatSyn
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
-import { parseMaintenance as parse } from './_yaml.mjs';
+import { parseMaintenance as parse } from "./lib/yaml.mjs";
 import {
   ARCHITECTURE_FAMILY_PREFIXES, PRODUCT_ARCHITECTURE_MAPPINGS,
   SUPPORTED_EXACT_ARCHITECTURES, body_contract_errors, device_code_pattern_sha256,
-} from './pr_policy.mjs';
+} from "./lib/pr-policy.mjs";
 export {
   ARCHITECTURE_FAMILY_PREFIXES, PRODUCT_ARCHITECTURE_MAPPINGS,
   SUPPORTED_EXACT_ARCHITECTURES, body_contract_errors, device_code_pattern_sha256,
@@ -227,7 +227,7 @@ export function validate_cap_reconstruction_receipt() {
   try { receipt = JSON.parse(text(PR_CAP_RECONSTRUCTION_RECEIPT)); }
   catch (error) { return [`audit/pr-file-cap-reconstruction.json: cannot parse receipt: ${error.message}`]; }
   const errors = [];
-  if (receipt.policy_sha256 !== sha256_of_file(path.join(REPO_ROOT, 'scripts/pr_policy.mjs'))) errors.push('audit/pr-file-cap-reconstruction.json: pr_policy.mjs digest mismatch');
+  if (receipt.policy_sha256 !== sha256_of_file(path.join(REPO_ROOT, "scripts/lib/pr-policy.mjs"))) errors.push("audit/pr-file-cap-reconstruction.json: pr-policy.mjs digest mismatch");
   const rows = receipt.rows || [], by_key = new Map();
   for (const row of rows) if (mapping(row)) by_key.set(JSON.stringify([get(row, 'repo'), get(row, 'pr')]), row);
   if (by_key.size !== rows.length) errors.push('audit/pr-file-cap-reconstruction.json: duplicate or invalid rows');
@@ -280,7 +280,7 @@ export function compare_pr_architecture_receipt(actual_rows, receipt) {
   if (!mapping(expected_rows)) return ['data/pr-architecture-evidence.json: rows must be a mapping'];
   const expected_fields = ['upstream_body_sha256', 'upstream_files_sha256', 'architectures', 'architecture_disposition', 'architecture_evidence_sha256'];
   if (!isDeepStrictEqual(receipt.row_fields, expected_fields)) errors.push('data/pr-architecture-evidence.json: row_fields contract mismatch');
-  if (receipt.policy_sha256 !== sha256_of_file(path.join(REPO_ROOT, 'scripts/pr_policy.mjs'))) errors.push('data/pr-architecture-evidence.json: pr_policy.mjs digest mismatch');
+  if (receipt.policy_sha256 !== sha256_of_file(path.join(REPO_ROOT, "scripts/lib/pr-policy.mjs"))) errors.push("data/pr-architecture-evidence.json: pr-policy.mjs digest mismatch");
   const expected_keys = new Set(Object.keys(expected_rows)), actual_keys = new Set(Object.keys(actual_rows));
   const missing = sorted(difference(expected_keys, actual_keys)), unexpected = sorted(difference(actual_keys, expected_keys));
   if (missing.length) errors.push(`data/pr-architecture-evidence.json: ${missing.length} receipted page(s) missing; first 5: ${repr(missing.slice(0, 5))}`);

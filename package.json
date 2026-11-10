@@ -9,20 +9,20 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/js/*.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "validate": "node scripts/validate.mjs",
     "generate:indices": "node scripts/generate-indices.mjs",
     "generate:pr-pages": "node scripts/generate-pr-pages.mjs --all",
-    "generate:core": "node scripts/compute_core_prs.mjs",
-    "refresh:candidates": "node scripts/refresh_candidate_ledger.mjs",
-    "check:dod": "node scripts/check_dod_fixtures.mjs",
-    "check:core": "node scripts/verify_core_prs.mjs",
-    "check:size": "node scripts/repo_size_check.mjs",
-    "check:freshness": "node scripts/check_version_freshness.mjs",
-    "check:blogs": "node scripts/extract_blog_code.mjs --check-all",
-    "verify:verbatim": "node scripts/verify_verbatim.mjs --strict",
-    "verify:architecture": "node scripts/verify_pr_architecture_upstream.mjs",
-    "build:yaml": "node scripts/build_yaml_vendor.mjs"
+    "generate:core": "node scripts/compute-core-prs.mjs",
+    "refresh:candidates": "node scripts/refresh-candidate-ledger.mjs",
+    "check:dod": "node scripts/check-dod-fixtures.mjs",
+    "check:core": "node scripts/verify-core-prs.mjs",
+    "check:size": "node scripts/repo-size-check.mjs",
+    "check:freshness": "node scripts/check-version-freshness.mjs",
+    "check:blogs": "node scripts/extract-blog-code.mjs --check-all",
+    "verify:verbatim": "node scripts/verify-verbatim.mjs --strict",
+    "verify:architecture": "node scripts/verify-pr-architecture-upstream.mjs",
+    "build:yaml": "node scripts/build-yaml-vendor.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
