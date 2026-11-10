@@ -1,0 +1,51 @@
+{
+  "description": "Frozen inventory of the Python tests before their JavaScript migration; historical audit documents refer to this inventory, not the current Node suite.",
+  "total_tests": 154,
+  "files": [
+    {
+      "path": "tests/test_architecture_query_index.py",
+      "tests": 1,
+      "sha256": "66fffde737117f77171596e62d0a66c664ea0b7cc8f8076c9345af052747c171"
+    },
+    {
+      "path": "tests/test_architecture_receipt.py",
+      "tests": 2,
+      "sha256": "68bc79b2f04a35dc06f12f76b540ae2c719a301c74ddc2d7415225d1ca56f0d3"
+    },
+    {
+      "path": "tests/test_check_dod_fixtures.py",
+      "tests": 4,
+      "sha256": "abeac2aa8c86217c6987e474fbbcfbb4a063174296790eb8abd47ce38120d0ce"
+    },
+    {
+      "path": "tests/test_pr_policy.py",
+      "tests": 79,
+      "sha256": "b39a549bf642088a4d14a9d064546eeeceaf438bc884e69cfa06d15a7768efb7"
+    },
+    {
+      "path": "tests/test_refresh_candidate_policy.py",
+      "tests": 3,
+      "sha256": "d5234e052dfb076499fdaecdde03b04d1d906afee523c938876afa8687b2ec7c"
+    },
+    {
+      "path": "tests/test_validate_factual_contracts.py",
+      "tests": 48,
+      "sha256": "84ae1a14af84f322dec1eaa85d8e8dab9212003c14d8d3fcab6914016e4c577c"
+    },
+    {
+      "path": "tests/test_verify_pr_architecture_upstream.py",
+      "tests": 6,
+      "sha256": "de90f936dd79f25d2141767c6675f614e69826f2d5c9f3f3dfc9fcbbe18b5d81"
+    },
+    {
+      "path": "tests/test_verify_verbatim.py",
+      "tests": 3,
+      "sha256": "46054ce4008a86efff4872384b5ac377719a30c970a5c40dbff08a62288ecb41"
+    },
+    {
+      "path": "tests/test_version_freshness.py",
+      "tests": 8,
+      "sha256": "0d8a46f546a7210c5899f483b2775cb8a87f0db122ef3d92b83a4c9e61e75f8c"
+    }
+  ]
+}

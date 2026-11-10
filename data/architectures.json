@@ -1,5 +1,5 @@
 {
-  "comment": "Language-neutral mirror of the authoritative tables in scripts/pr_policy.py, consumed by the Node query layer (scripts/_architectures.mjs). tests/test_pr_policy.py fails if this file and pr_policy.py diverge; pr_policy.py stays authoritative because the frozen audit receipts hash it.",
+  "comment": "Language-neutral mirror of the authoritative tables in scripts/pr_policy.mjs, consumed by scripts/_architectures.mjs. The PR policy tests enforce agreement; frozen audit receipts bind the policy implementation by SHA-256.",
   "families": {
     "turing": ["sm75"],
     "ampere": ["sm80", "sm86", "sm87", "sm88"],
