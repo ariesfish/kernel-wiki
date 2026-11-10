@@ -1,0 +1,11 @@
+scripts/vendor/
+tests/fixtures/
+artifacts/
+candidates/
+data/
+queries/
+sources/
+wiki/
+.dev/
+node_modules/
+package-lock.json

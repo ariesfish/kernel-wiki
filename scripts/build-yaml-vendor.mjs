@@ -7,16 +7,14 @@
  * after changing the `yaml` version in package.json, then commit both the
  * bundle and the refreshed license file.
  */
-
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-
 import { build } from "esbuild";
-
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const PACKAGE = JSON.parse(readFileSync(path.join(ROOT, "node_modules", "yaml", "package.json"), "utf8"));
-
+const PACKAGE = JSON.parse(
+  readFileSync(path.join(ROOT, "node_modules", "yaml", "package.json"), "utf8"),
+);
 await build({
   stdin: {
     contents: 'export { parse, stringify } from "yaml";',
@@ -38,10 +36,8 @@ await build({
     js: `/*! yaml v${PACKAGE.version} | ${PACKAGE.license} | https://github.com/eemeli/yaml */`,
   },
 });
-
 writeFileSync(
   path.join(ROOT, "scripts", "vendor", "yaml.LICENSE"),
   readFileSync(path.join(ROOT, "node_modules", "yaml", "LICENSE")),
 );
-
 console.log(`vendored yaml ${PACKAGE.version} -> scripts/vendor/yaml.mjs`);

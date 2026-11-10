@@ -10,11 +10,9 @@
  *   get_page.mjs kernel-flash-attention-4 --frontmatter-only
  *   get_page.mjs kernel-flash-attention-4 --follow-sources
  */
-
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-
 import {
   findPage,
   INCLUDE_CODE_EXTS,
@@ -24,26 +22,30 @@ import {
   WIKI_ROOT,
 } from "./lib/corpus.mjs";
 import { stringify } from "./lib/yaml.mjs";
-
 const USAGE = `usage: get_page.mjs [-h] [--body-only] [--frontmatter-only]
                      [--follow-sources] [--include-code]
                      lookup`;
-
 function pageExcerpt(pageFile) {
   const content = readFileSync(pageFile, "utf8");
   const [, body] = splitFrontmatter(content);
-  return { content, body: body ?? "" };
+  return {
+    content,
+    body: body ?? "",
+  };
 }
-
 function printFollowSources(fm) {
-  if (!fm || !Object.hasOwn(fm, "sources")) return;
+  if (!fm || !Object.hasOwn(fm, "sources")) {
+    return;
+  }
   console.log();
   console.log("---");
   console.log("## Cited Sources (excerpts)");
   console.log();
   for (const sourceId of fm.sources ?? []) {
     const sourcePage = findPage(String(sourceId));
-    if (!sourcePage) continue;
+    if (!sourcePage) {
+      continue;
+    }
     const { body } = pageExcerpt(sourcePage);
     const excerpt = body.slice(0, 500).trim();
     console.log(`### ${sourceId}`);
@@ -53,7 +55,6 @@ function printFollowSources(fm) {
     console.log();
   }
 }
-
 function printCode(pagePath, fm) {
   const { rel, abs, fallback } = resolveArtifactDir(pagePath, fm);
   if (!abs) {
@@ -63,7 +64,7 @@ function printCode(pagePath, fm) {
     }
     return;
   }
-  let isDirectory = false;
+  let isDirectory;
   try {
     isDirectory = statSync(abs).isDirectory();
   } catch {
@@ -74,15 +75,15 @@ function printCode(pagePath, fm) {
     console.log(`*(artifact_dir '${rel}' not found on disk)*`);
     return;
   }
-
   console.log();
   console.log("---");
   const suffix = fallback ? " (conventional path — artifact_dir not backfilled)" : "";
   console.log(`## Artifact Bundle: \`${rel}\`${suffix}`);
   console.log();
-
   for (const file of listFiles(abs)) {
-    if (!INCLUDE_CODE_EXTS.has(path.extname(file).toLowerCase())) continue;
+    if (!INCLUDE_CODE_EXTS.has(path.extname(file).toLowerCase())) {
+      continue;
+    }
     const relative = path.relative(abs, file);
     console.log(`### \`${relative}\``);
     console.log();
@@ -103,7 +104,6 @@ function printCode(pagePath, fm) {
     }
   }
 }
-
 function main() {
   let values;
   let positionals;
@@ -111,11 +111,22 @@ function main() {
     ({ values, positionals } = parseArgs({
       allowPositionals: true,
       options: {
-        "body-only": { type: "boolean" },
-        "frontmatter-only": { type: "boolean" },
-        "follow-sources": { type: "boolean" },
-        "include-code": { type: "boolean" },
-        help: { type: "boolean", short: "h" },
+        "body-only": {
+          type: "boolean",
+        },
+        "frontmatter-only": {
+          type: "boolean",
+        },
+        "follow-sources": {
+          type: "boolean",
+        },
+        "include-code": {
+          type: "boolean",
+        },
+        help: {
+          type: "boolean",
+          short: "h",
+        },
       },
     }));
   } catch (error) {
@@ -123,7 +134,6 @@ function main() {
     console.error(USAGE);
     process.exit(2);
   }
-
   if (values.help) {
     console.log(USAGE);
     return;
@@ -133,16 +143,13 @@ function main() {
     console.error(USAGE);
     process.exit(2);
   }
-
   const pagePath = findPage(positionals[0]);
   if (!pagePath) {
     console.error(`ERROR: No page found for '${positionals[0]}'`);
     process.exit(1);
   }
-
   const content = readFileSync(pagePath, "utf8");
   const [fm, body] = splitFrontmatter(content);
-
   if (values["frontmatter-only"]) {
     if (fm) {
       console.log(
@@ -160,13 +167,14 @@ function main() {
     console.log(body ?? "");
     return;
   }
-
   console.log(`# ${path.relative(WIKI_ROOT, pagePath)}`);
   console.log();
   console.log(content);
-
-  if (values["follow-sources"]) printFollowSources(fm);
-  if (values["include-code"]) printCode(pagePath, fm);
+  if (values["follow-sources"]) {
+    printFollowSources(fm);
+  }
+  if (values["include-code"]) {
+    printCode(pagePath, fm);
+  }
 }
-
 main();

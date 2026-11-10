@@ -7,11 +7,8 @@
  */
 
 import { readFileSync } from "node:fs";
-
 import { WIKI_ROOT } from "./root.mjs";
-
 const DATA = JSON.parse(readFileSync(`${WIKI_ROOT}/data/architectures.json`, "utf8"));
-
 export const FAMILY_PREFIXES = DATA.families;
 export const EXACT_ARCHITECTURES = DATA.exact;
 export const PRODUCT_ARCHITECTURES = DATA.products;
@@ -26,21 +23,19 @@ export const PRODUCT_ARCHITECTURES = DATA.products;
 export function architectureMatchesFilter(architectures, disposition, requested) {
   const archs = new Set((architectures ?? []).map((value) => String(value).toLowerCase()));
   let normalized = String(requested).toLowerCase().replaceAll("_", "");
-
   if (Object.hasOwn(PRODUCT_ARCHITECTURES, normalized)) {
     normalized = PRODUCT_ARCHITECTURES[normalized].architecture;
   }
-
   if (normalized === "unknown") {
     return disposition === "unknown" && archs.size === 0;
   }
-
   if (Object.hasOwn(FAMILY_PREFIXES, normalized)) {
     return (
       archs.has(normalized) ||
-      [...archs].some((value) => FAMILY_PREFIXES[normalized].some((prefix) => value.startsWith(prefix)))
+      [...archs].some((value) =>
+        FAMILY_PREFIXES[normalized].some((prefix) => value.startsWith(prefix)),
+      )
     );
   }
-
   return archs.has(normalized);
 }

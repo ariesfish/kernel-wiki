@@ -140,7 +140,7 @@ npm run check:core
 npm run check:size
 ```
 
-These commands also work directly with `node scripts/<name>.mjs` from a fresh clone. `npm install` is needed only to rebuild the vendored YAML bundle. Upstream verification commands use `gh` and require network access. See [the JavaScript migration notes](docs/javascript-migration.md) for module boundaries, compatibility, and verification evidence.
+These commands also work directly with `node scripts/<name>.mjs` from a fresh clone. Contributors use `npm ci` for linting, formatting, and rebuilding the vendored YAML bundle; see [JavaScript conventions](docs/code-style.md). Upstream verification commands use `gh` and require network access. See [the JavaScript migration notes](docs/javascript-migration.md) for module boundaries, compatibility, and verification evidence.
 
 ## Quality Gates
 

@@ -35,9 +35,10 @@ original evidence-pattern digests.
 | Live evidence | `verify-verbatim.mjs`, `verify-pr-architecture-upstream.mjs`; remote SHA/content verification |
 | Shared infrastructure | `root.mjs`, `corpus.mjs`, `yaml.mjs`, `architectures.mjs`, `aliases.mjs`; root discovery, corpus reads, YAML and controlled vocabulary |
 
-Maintenance modules expose functions for behavior tests and only execute their
-CLI when invoked directly. Script paths change from `.py` to `.mjs`; names and
-flags retain their existing meanings. `BLACKWELL_WIKI_ROOT` relocates the corpus.
+Maintenance modules expose camelCase functions for behavior tests and only
+execute their CLI when invoked directly. New modules and maintenance commands
+use kebab-case filenames; the existing query entry-point filenames remain the
+consumer contract. `BLACKWELL_WIKI_ROOT` relocates the corpus.
 
 ## Commands
 
@@ -53,8 +54,10 @@ npm run check:freshness
 npm run check:blogs
 ```
 
-Every npm command is a direct `node scripts/<name>.mjs` invocation and also
-works without an install step. To install the optional Git hook:
+Every npm maintenance command is a direct `node scripts/<name>.mjs` invocation
+and works without an install step. Contributor lint and formatting tools are
+installed with `npm ci`; see [code-style.md](code-style.md).
+To install the optional Git hook:
 
 ```bash
 node scripts/install-precommit-hook.mjs

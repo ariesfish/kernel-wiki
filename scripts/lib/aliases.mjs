@@ -7,14 +7,13 @@
  */
 
 import { readFileSync } from "node:fs";
-
 import { WIKI_ROOT } from "./root.mjs";
 import { parse } from "./yaml.mjs";
-
 let cache;
-
 export function loadAliasExpansions() {
-  if (cache) return cache;
+  if (cache) {
+    return cache;
+  }
   const out = new Map();
   try {
     const raw = parse(readFileSync(`${WIKI_ROOT}/data/aliases.yaml`, "utf8")) ?? {};
@@ -32,7 +31,6 @@ export function loadAliasExpansions() {
   cache = out;
   return out;
 }
-
 export function expandKeyword(keyword) {
   const canonical = loadAliasExpansions().get(keyword.toLowerCase());
   if (canonical && canonical.toLowerCase() !== keyword.toLowerCase()) {

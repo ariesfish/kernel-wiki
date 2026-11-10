@@ -8,52 +8,47 @@
  *   grep_wiki.mjs "ping-pong" --context 3
  *   grep_wiki.mjs "nvfp4 block_scale" --any     # match if ANY word appears
  */
-
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-
 import { ARTIFACT_SEARCH_EXTS, listFiles, WIKI_ROOT, wikiPath } from "./lib/corpus.mjs";
-
 const USAGE = `usage: grep_wiki.mjs [-h] [--only {wiki,sources,all,artifacts}]
                        [--context CONTEXT] [--any] [--limit LIMIT]
                        [--files-only] [--ext EXT]
                        patterns [patterns ...]`;
-
 const SCOPES = {
   wiki: ["wiki"],
   sources: ["sources"],
   all: ["wiki", "sources"],
   artifacts: ["artifacts"],
 };
-
 function iterFiles(scope, extensions) {
   let subdirs = SCOPES[scope] ?? ["wiki", "sources"];
   const hasExtensions = extensions && extensions.size > 0;
   if (hasExtensions && !subdirs.includes("artifacts") && scope !== "wiki" && scope !== "sources") {
     subdirs = [...subdirs, "artifacts"];
   }
-
   const searchExts =
     scope === "artifacts" && !hasExtensions
       ? ARTIFACT_SEARCH_EXTS
       : new Set([".md", ...(hasExtensions ? extensions : [])]);
-
   const files = [];
   for (const subdir of subdirs) {
     for (const file of listFiles(wikiPath(subdir))) {
-      if (searchExts.has(path.extname(file).toLowerCase())) files.push(file);
+      if (searchExts.has(path.extname(file).toLowerCase())) {
+        files.push(file);
+      }
     }
   }
   return files;
 }
-
 function splitLines(text) {
   const lines = text.split(/\r\n|\r|\n/);
-  if (lines.length > 0 && lines[lines.length - 1] === "") lines.pop();
+  if (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop();
+  }
   return lines;
 }
-
 function grepFile(file, patterns, context, anyMatch) {
   let text;
   try {
@@ -63,13 +58,13 @@ function grepFile(file, patterns, context, anyMatch) {
   }
   const lines = splitLines(text);
   const results = [];
-
   for (let i = 0; i < lines.length; i++) {
     const matched = anyMatch
       ? patterns.some((pattern) => pattern.test(lines[i]))
       : patterns.every((pattern) => pattern.test(lines[i]));
-    if (!matched) continue;
-
+    if (!matched) {
+      continue;
+    }
     const start = Math.max(0, i - context);
     const end = Math.min(lines.length, i + context + 1);
     const snippet = [];
@@ -80,16 +75,16 @@ function grepFile(file, patterns, context, anyMatch) {
   }
   return results;
 }
-
 function parseIntArg(value, flag, fallback) {
-  if (value === undefined) return fallback;
+  if (value === undefined) {
+    return fallback;
+  }
   if (!/^-?\d+$/.test(String(value))) {
     console.error(`grep_wiki.mjs: error: argument ${flag}: invalid int value: '${value}'`);
     process.exit(2);
   }
   return Number.parseInt(value, 10);
 }
-
 function main() {
   let values;
   let positionals;
@@ -97,13 +92,28 @@ function main() {
     ({ values, positionals } = parseArgs({
       allowPositionals: true,
       options: {
-        only: { type: "string" },
-        context: { type: "string" },
-        any: { type: "boolean" },
-        limit: { type: "string" },
-        "files-only": { type: "boolean" },
-        ext: { type: "string" },
-        help: { type: "boolean", short: "h" },
+        only: {
+          type: "string",
+        },
+        context: {
+          type: "string",
+        },
+        any: {
+          type: "boolean",
+        },
+        limit: {
+          type: "string",
+        },
+        "files-only": {
+          type: "boolean",
+        },
+        ext: {
+          type: "string",
+        },
+        help: {
+          type: "boolean",
+          short: "h",
+        },
       },
     }));
   } catch (error) {
@@ -111,7 +121,6 @@ function main() {
     console.error(USAGE);
     process.exit(2);
   }
-
   if (values.help) {
     console.log(USAGE);
     return;
@@ -121,7 +130,6 @@ function main() {
     console.error(USAGE);
     process.exit(2);
   }
-
   const only = values.only ?? "all";
   if (!Object.hasOwn(SCOPES, only)) {
     console.error(`grep_wiki.mjs: error: --only must be one of ${Object.keys(SCOPES).join(", ")}`);
@@ -129,7 +137,6 @@ function main() {
   }
   const context = parseIntArg(values.context, "--context", 1);
   const limit = parseIntArg(values.limit, "--limit", 20);
-
   const patterns = [];
   for (const source of positionals) {
     try {
@@ -140,7 +147,6 @@ function main() {
       process.exit(2);
     }
   }
-
   let extensions = null;
   if (values.ext) {
     extensions = new Set(
@@ -151,24 +157,24 @@ function main() {
         .map((value) => `.${value}`),
     );
   }
-
   let matchedFiles = [];
   for (const file of iterFiles(only, extensions)) {
     const hits = grepFile(file, patterns, context, values.any === true);
-    if (hits.length > 0) matchedFiles.push([file, hits]);
+    if (hits.length > 0) {
+      matchedFiles.push([file, hits]);
+    }
   }
   matchedFiles = matchedFiles.slice(0, limit);
-
   if (values["files-only"]) {
-    for (const [file] of matchedFiles) console.log(path.relative(WIKI_ROOT, file));
+    for (const [file] of matchedFiles) {
+      console.log(path.relative(WIKI_ROOT, file));
+    }
     return;
   }
-
   if (matchedFiles.length === 0) {
     console.log("No matches.");
     return;
   }
-
   console.log(`# ${matchedFiles.length} file(s) match`);
   for (const [file, hits] of matchedFiles) {
     console.log();
@@ -182,5 +188,4 @@ function main() {
     }
   }
 }
-
 main();

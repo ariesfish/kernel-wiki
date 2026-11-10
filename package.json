@@ -10,6 +10,10 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
+    "lint": "eslint scripts tests eslint.config.mjs --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"scripts/**/*.mjs\" \"tests/**/*.mjs\" eslint.config.mjs package.json .prettierrc.json",
+    "format:check": "prettier --check \"scripts/**/*.mjs\" \"tests/**/*.mjs\" eslint.config.mjs package.json .prettierrc.json",
     "validate": "node scripts/validate.mjs",
     "generate:indices": "node scripts/generate-indices.mjs",
     "generate:pr-pages": "node scripts/generate-pr-pages.mjs --all",
@@ -24,8 +28,15 @@
     "verify:architecture": "node scripts/verify-pr-architecture-upstream.mjs",
     "build:yaml": "node scripts/build-yaml-vendor.mjs"
   },
+  "overrides": {
+    "minimatch": "11.0.1"
+  },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "esbuild": "^0.25.0",
+    "eslint": "10.14.0",
+    "globals": "16.5.0",
+    "prettier": "3.9.10",
     "yaml": "^2.9.1"
   }
 }
