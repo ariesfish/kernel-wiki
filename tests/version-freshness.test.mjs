@@ -219,15 +219,12 @@ test("version claims require a verification date and a known release", () => {
   }
   assert.deepEqual([...F.checkVersionClaims(null, registry, today, 180)], []);
 });
-test("ledger cutoff disagreement remains info and supersession is limited to the first three lines", async (t) => {
+test("ledger cutoff disagreement remains informational and missing metadata is optional", async (t) => {
   const root = tempRoot(t);
   put(root, "candidates/a.json", '{\n  "searched_at": "2025-01-01"\n}\n');
   put(root, "candidates/b.json", "{}\n");
   put(root, "candidates/c.json", '{\n  "searched_at": "bad"\n}\n');
   put(root, "candidates/d.json", "[]\n");
-  put(root, "plan-phase1.md", "# Plan\n\n> sUpErSeDeD by phase4\n");
-  put(root, "plan-phase2.md", "# Plan\n\nbody\n> Superseded by phase4\n");
-  put(root, "plan-phase4.md", "> Superseded by future\n");
   const f = await importInRoot("check-version-freshness.mjs", root);
   assert.equal(warnings(f.checkLedgerFreshness(today, 30, null)).length, 3);
   const cutoffFindings = [...f.checkLedgerFreshness(today, 30, today)];
@@ -235,12 +232,7 @@ test("ledger cutoff disagreement remains info and supersession is limited to the
   assert.ok(
     cutoffFindings.some(([s, m]) => s === "info" && m.includes("disagrees with refresh-cutoff")),
   );
-  assert.deepEqual(
-    [...f.checkSupersession(today)].map(([, m]) => m.split(":")[0]),
-    ["plan-phase2.md", "plan-phase4.md"],
-  );
-  assert.equal(f.isSuperseded(path.join(root, "missing.md")), false);
-  assert.equal(f.loadJson(path.join(root, "missing.yaml")), null);
+  assert.equal(f.loadJson(path.join(root, "missing.json")), null);
 });
 test("freshness CLI is advisory by default, strict on warnings, and validates every flag", (t) => {
   const root = tempRoot(t);

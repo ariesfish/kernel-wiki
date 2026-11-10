@@ -5,7 +5,6 @@ import {
   cpSync,
   mkdirSync,
   mkdtempSync,
-  readdirSync,
   readFileSync,
   rmSync,
   symlinkSync,
@@ -472,6 +471,21 @@ test("candidate ledger fixtures exercise valid and missing-field contracts", () 
     "missing required top-level field 'keywords_used'",
   );
 });
+test("skip evidence coverage preserves exact PR IDs and recognizes existing pages", () =>
+  fixture(({ write, page }) => {
+    const number = 9007199254740993n;
+    write("candidates/project.json", {
+      repo: "example/project",
+      prs: [{ number, decision: "include" }],
+    });
+    write("data/pr-page-skipped.json", { rows: [{ repo: "example/project", pr_number: number }] });
+    assert.deepEqual(v.validateSkipAuditCoverage(), []);
+    write("data/pr-page-skipped.json", { rows: [] });
+    has(v.validateSkipAuditCoverage(), "9007199254740993");
+    page("sources/prs/project/PR-9007199254740993.md", { repo: "example/project", pr: number });
+    assert.deepEqual(v.validateSkipAuditCoverage(), []);
+  }));
+
 test("ledger summary, refresh coverage, subset and cutoff audits remain independent", () =>
   fixture(({ write, page }) => {
     const ledger = {
@@ -533,7 +547,7 @@ test("ledger summary, refresh coverage, subset and cutoff audits remain independ
     has(v.validateLedger(filename), "disagrees with row count");
     has(v.validateLedger(filename), "included + excluded + deferred");
   }));
-test("registry pointers, obsolete claims, dev pinning and plan immutability all fail closed", () =>
+test("registry pointers, obsolete claims and dev pinning fail closed", () =>
   fixture(({ write, page }) => {
     const claim = {
       id: "claim",
@@ -580,15 +594,6 @@ test("registry pointers, obsolete claims, dev pinning and plan immutability all 
       "## Pre-3.6 historical context\nno direct tcgen05 access\n## Current\nno direct tcgen05 access",
     );
     has(v.validateClaimBearingPagesHavePointer(), "lacks version_sensitive");
-    write("plan-phase2.md", "# Plan\n\n> Superseded by phase4\n\nOriginal body\n");
-    write("data/plan-supersession-baselines/plan-phase2.body.md", "# Plan\n\nOriginal body\n");
-    assert.deepEqual(v.validatePlanSupersession(), []);
-    assert.deepEqual(v.validatePlanBodyUnchanged(), []);
-    write("plan-phase2.md", "# Plan\n\nChanged body\n");
-    has(v.validatePlanSupersession(), "missing supersession header");
-    has(v.validatePlanBodyUnchanged(), "body content");
-    write("references/supersession.md", "Wrong mechanism");
-    has(v.validatePlanSupersession(), "must not exist");
   }));
 test("cap receipt discovers the dynamic capped roster and verifies policy digest", () =>
   fixture(({ write, page }) => {
@@ -653,9 +658,6 @@ function corpusFixture({ root, write }) {
   cpSync(path.join(ROOT, "data"), path.join(root, "data"), {
     recursive: true,
   });
-  for (const name of readdirSync(ROOT).filter((name) => /^plan-phase.*\.md$/.test(name))) {
-    symlinkSync(path.join(ROOT, name), path.join(root, name));
-  }
   write("scripts/lib/pr-policy.mjs", readFileSync(path.join(ROOT, "scripts/lib/pr-policy.mjs")));
   const digest = v.sha256OfFile(path.join(root, "scripts/lib/pr-policy.mjs"));
   for (const name of [

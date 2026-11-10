@@ -21,6 +21,7 @@ test("repository executables and tests contain no Python implementation", () => 
   const implementations = [
     ...files(path.join(root, "scripts")),
     ...files(path.join(root, "tests")),
+    ...files(path.join(root, "references")),
   ];
   assert.deepEqual(
     implementations.filter((file) => file.endsWith(".py")),

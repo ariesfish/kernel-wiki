@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** Validate every source/wiki frontmatter contract, audit receipt and asset bundle. */
-import { parseJson, readJson } from "./lib/json.mjs";
+import { parseJson, readJson, stringifyJson } from "./lib/json.mjs";
 import { createHash } from "node:crypto";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";
@@ -454,7 +454,7 @@ export function validateCapReconstructionReceipt() {
   }
   let receipt;
   try {
-    receipt = JSON.parse(text(PR_CAP_RECONSTRUCTION_RECEIPT));
+    receipt = readJson(PR_CAP_RECONSTRUCTION_RECEIPT);
   } catch (error) {
     return [
       `data/evidence/pr-file-cap-reconstruction.json: cannot parse receipt: ${error.message}`,
@@ -468,7 +468,7 @@ export function validateCapReconstructionReceipt() {
     byKey = new Map();
   for (const row of rows) {
     if (mapping(row)) {
-      byKey.set(JSON.stringify([get(row, "repo"), get(row, "pr")]), row);
+      byKey.set(stringifyJson([get(row, "repo"), get(row, "pr")]), row);
     }
   }
   if (byKey.size !== rows.length) {
@@ -479,15 +479,13 @@ export function validateCapReconstructionReceipt() {
     const data = loadDataFile(ledgerPath) || {};
     for (const candidate of data.prs || []) {
       if (Number(candidate.files_reviewed_count || 0) > 3000) {
-        expectedKeys.add(JSON.stringify([get(data, "repo"), Number(candidate.number)]));
+        expectedKeys.add(stringifyJson([get(data, "repo"), candidate.number]));
       }
     }
   }
-  const missing = difference(expectedKeys, new Set(byKey.keys()))
-    .map(JSON.parse)
-    .sort(tupleCompare);
+  const missing = difference(expectedKeys, new Set(byKey.keys())).map(parseJson).sort(tupleCompare);
   const unexpected = difference(new Set(byKey.keys()), expectedKeys)
-    .map(JSON.parse)
+    .map(parseJson)
     .sort(tupleCompare);
   if (missing.length || unexpected.length) {
     errors.push(
@@ -498,12 +496,12 @@ export function validateCapReconstructionReceipt() {
   for (const pagePath of prPages(path.join(SOURCES_DIR, "prs"))) {
     const fm = extractFrontmatter(pagePath);
     if (mapping(fm)) {
-      currentPages.set(JSON.stringify([get(fm, "repo"), get(fm, "pr")]), [fm, relpath(pagePath)]);
+      currentPages.set(stringifyJson([get(fm, "repo"), get(fm, "pr")]), [fm, relpath(pagePath)]);
     }
   }
-  for (const key of [...byKey.keys()].sort((a, b) => tupleCompare(JSON.parse(a), JSON.parse(b)))) {
+  for (const key of [...byKey.keys()].sort((a, b) => tupleCompare(parseJson(a), parseJson(b)))) {
     const row = byKey.get(key),
-      keyRepr = tuple(JSON.parse(key));
+      keyRepr = tuple(parseJson(key));
     errors.push(...capCompleteFileEvidenceErrors(row, `cap receipt ${keyRepr}`));
     const total = row.authoritative_changed_files;
     if (
@@ -1441,33 +1439,6 @@ export function validateInclusionPolicyScalars() {
   }
   return errors;
 }
-const plans = () =>
-  children(REPO_ROOT).filter((filename) => /^plan-phase.*\.md$/.test(path.basename(filename)));
-export function validatePlanSupersession() {
-  const errors = [];
-  for (const filename of plans()) {
-    const name = path.basename(filename),
-      has = text(filename)
-        .split("\n")
-        .slice(0, 3)
-        .some((line) => /^>\s*Superseded by/i.test(line));
-    if (name === "plan-phase4.md") {
-      if (has) {
-        errors.push(`${name}: current-round plan must not carry a supersession header`);
-      }
-    } else if (!has) {
-      errors.push(
-        `${name}: missing supersession header in first 3 lines (AC-9, DEC-7 per-file mode)`,
-      );
-    }
-  }
-  if (existsSync(path.join(REPO_ROOT, "references/supersession.md"))) {
-    errors.push(
-      "references/supersession.md: must not exist (DEC-7 chose per-file header mechanism, not the index)",
-    );
-  }
-  return errors;
-}
 export function validateSkipAuditCoverage() {
   const errors = [],
     filename = path.join(DATA_DIR, "pr-page-skipped.json");
@@ -1485,7 +1456,7 @@ export function validateSkipAuditCoverage() {
   const keys = new Set(
     rows
       .filter((row) => mapping(row) && "repo" in row && "pr_number" in row)
-      .map((row) => JSON.stringify([row.repo, row.pr_number])),
+      .map((row) => stringifyJson([row.repo, row.pr_number])),
   );
   for (const filename of ledgers()) {
     const ledger = loadDataFile(filename) || {},
@@ -1493,20 +1464,20 @@ export function validateSkipAuditCoverage() {
     if (!truth(repo)) {
       continue;
     }
-    const slug = repo.includes("/") ? repo.split("/")[1] : path.basename(filename, ".yaml");
+    const slug = repo.includes("/") ? repo.split("/")[1] : path.basename(filename, ".json");
     const pages = new Set(
       children(path.join(SOURCES_DIR, "prs", slug))
         .filter((p) => /^PR-.*\.md$/.test(path.basename(p)))
         .map((p) => path.basename(p, ".md").split("-")[1])
         .filter((n) => /^[+-]?\d+$/.test(n))
-        .map(Number),
+        .map((n) => BigInt(n).toString()),
     );
     for (const row of ledger.prs || []) {
       if (!mapping(row) || str(get(row, "decision", "")).toLowerCase() !== "include") {
         continue;
       }
       const num = get(row, "number");
-      if (pages.has(num) || keys.has(JSON.stringify([repo, num]))) {
+      if (pages.has(str(num)) || keys.has(stringifyJson([repo, num]))) {
         continue;
       }
       errors.push(
@@ -1575,7 +1546,7 @@ export function validateRefreshSubset() {
     const missing = difference(new Set(block.pr_numbers_seen || []), nums);
     if (missing.length) {
       errors.push(
-        `AC-5 subset: ${missing.length} pr_numbers_seen for ${slug} are NOT in candidates/${slug}.yaml::prs[*].number (first 5: ${repr(sorted(missing).slice(0, 5))})`,
+        `AC-5 subset: ${missing.length} pr_numbers_seen for ${slug} are NOT in candidates/${slug}.json::prs[*].number (first 5: ${repr(sorted(missing).slice(0, 5))})`,
       );
     }
   }
@@ -1727,28 +1698,6 @@ export function validateCutlassDevPinning() {
     ) {
       errors.push(
         `${rel}: mentions '4.5-dev' and version_sensitive resolves to ${repr(ptr)}, but the registry entry has no concrete dev_branch_sha (DEC-4)`,
-      );
-    }
-  }
-  return errors;
-}
-export function validatePlanBodyUnchanged() {
-  const errors = [],
-    directory = path.join(DATA_DIR, "plan-supersession-baselines");
-  if (!isDir(directory)) {
-    return errors;
-  }
-  for (const plan of plans()) {
-    if (path.basename(plan) === "plan-phase4.md") {
-      continue;
-    }
-    const baseline = path.join(directory, `${path.basename(plan, ".md")}.body.md`);
-    if (!isFile(baseline)) {
-      continue;
-    }
-    if (text(plan).replace(/^>\s*Superseded by[^\n]*\n(?:\n)?/m, "") !== text(baseline)) {
-      errors.push(
-        `${path.basename(plan)}: body content (excluding supersession header block) differs from data/plan-supersession-baselines/${path.basename(baseline)} (AC-9 body-immutability vs pre-refresh git revision)`,
       );
     }
   }
@@ -2101,13 +2050,11 @@ export function main() {
     validateCapReconstructionReceipt,
     validateAliasContract,
     validateInclusionPolicyScalars,
-    validatePlanSupersession,
     validateSkipAuditCoverage,
     validateRefreshCutoffAlignment,
     validateRefreshSubset,
     validateCapturedAtCutoff,
     validateClaimBearingPagesHavePointer,
-    validatePlanBodyUnchanged,
     validateCutlassDevPinning,
     validateDiscoverability,
   ]) {

@@ -5,6 +5,10 @@ import * as policy from "../scripts/lib/pr-policy.mjs";
 const baseline = JSON.parse(
   fs.readFileSync(new URL("./fixtures/pr-policy-cases.json", import.meta.url), "utf8"),
 );
+assert.ok(
+  baseline.cases.length >= 388,
+  "The frozen policy behavior bank must retain at least 388 cases",
+);
 const groups = Map.groupBy(baseline.cases, (row) => row.function);
 for (const [name, cases] of groups) {
   test(`${name} preserves ${cases.length} frozen policy cases`, () => {

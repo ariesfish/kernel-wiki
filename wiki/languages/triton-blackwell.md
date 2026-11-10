@@ -49,4 +49,4 @@ Use Triton when its programming model and supported operations fit the kernel an
 
 ## Evidence ledger
 
-The version claim is pinned in [`data/version-claims.yaml`](../../data/version-claims.yaml), and the retained-source boundary is summarized in [`data/triton-3.6-evidence.md`](../../data/triton-3.6-evidence.md).
+The version claim is pinned in [`data/version-claims.json`](../../data/version-claims.json), and the retained-source boundary is summarized in [`references/evidence/triton-blackwell-release.md`](../../references/evidence/triton-blackwell-release.md).

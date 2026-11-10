@@ -17,6 +17,7 @@ import { parse } from "../scripts/lib/yaml.mjs";
 const cases = JSON.parse(
   fs.readFileSync(new URL("./fixtures/pr-page-cases.json", import.meta.url), "utf8"),
 );
+assert.ok(cases.length >= 8, "The page behavior bank must retain at least eight cases");
 for (const fixture of cases) {
   test(`PR generation preserves captured metadata and body: ${fixture.name}`, () => {
     const result = generatePage(...structuredClone(fixture.args));

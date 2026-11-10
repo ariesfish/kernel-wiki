@@ -1,14 +1,13 @@
 .codex
 .humanize/
 .claude/
+# Local agent and development state
 .dev/
 __pycache__/
 *.pyc
 
-# skill evolve
+# Legacy local tool caches
 plan.md
-audit/claude-round-*.json
-audit/claude-findings-disposition.md
 .worklog/
 
 # Node.js

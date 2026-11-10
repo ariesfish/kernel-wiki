@@ -60,7 +60,7 @@ function countPrsByRepo() {
 function countArtifactModes() {
   const counts = new Map();
   for (const file of listFiles(path.join(WIKI_ROOT, "artifacts"))) {
-    if (path.basename(file) !== "PROVENANCE.json") {
+    if (path.basename(file) !== "PROVENANCE.yaml") {
       continue;
     }
     let mode = "unknown";

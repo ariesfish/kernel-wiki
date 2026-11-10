@@ -114,19 +114,6 @@ export function parseIso(value) {
   }
   throw new RangeError(`Invalid isoformat string: ${repr(text)}`);
 }
-export function isSuperseded(planPath) {
-  if (!isFile(planPath)) {
-    return false;
-  }
-  return (
-    fs
-      .readFileSync(planPath, "utf8")
-      // eslint-disable-next-line no-control-regex -- Supersession is bounded by the original line-separator rules.
-      .split(/\r\n|[\n\r\v\f\x1c-\x1e\x85\u2028\u2029]/)
-      .slice(0, 3)
-      .some((line) => /^>\s*Superseded by/i.test(line))
-  );
-}
 export function* checkToolVersions(toolVersions, today, versionStalenessDays) {
   today = parseIso(today);
   const threshold = +today - versionStalenessDays * DAY;
@@ -369,18 +356,6 @@ export function* checkLedgerFreshness(today, ledgerStalenessDays, refreshCutoff)
     }
   }
 }
-export function* checkSupersession(today) {
-  for (const name of entries(REPO_ROOT).filter((name) => /^plan-phase.*\.md$/.test(name))) {
-    const superseded = isSuperseded(path.join(REPO_ROOT, name));
-    if (name === "plan-phase4.md") {
-      if (superseded) {
-        yield ["warn", `${name}: current-round plan should not be superseded`];
-      }
-    } else if (!superseded) {
-      yield ["warn", `${name}: missing supersession header in first 3 lines (AC-9)`];
-    }
-  }
-}
 export function main(argv = process.argv.slice(2)) {
   let args, today, versionDays, ledgerDays;
   try {
@@ -465,7 +440,6 @@ export function main(argv = process.argv.slice(2)) {
     ...checkReleaseReceipt(toolVersions, receipt),
     ...checkVersionClaims(claims, toolVersions, today, versionDays),
     ...checkLedgerFreshness(today, ledgerDays, cutoff),
-    ...checkSupersession(today),
   ];
   const warns = findings.filter(([severity]) => severity === "warn").map(([, message]) => message);
   const infos = findings.filter(([severity]) => severity === "info").map(([, message]) => message);

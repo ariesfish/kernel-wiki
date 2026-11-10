@@ -52,5 +52,5 @@ The development-only minimatch override pins the fix for
 Remove the override once ESLint's dependency range includes the fixed release.
 
 The existing 29 corpus validation errors are documented in
-[javascript-migration.md](javascript-migration.md). They do not justify
+[maintenance.md](maintenance.md). They do not justify
 weakening the validator, lint rules, or test assertions.

@@ -345,13 +345,10 @@ test("reward hack post credits participant and scopes platform as host", () => {
     "participant post-mortem by Natalia Kokoromyti, published on GPU Mode's news page",
   );
   includes(
-    read("research-contests.md"),
+    read("references/research/contest-kernels.md"),
     "participant post-mortem published on GPU Mode's news page",
   );
-  const shipped = [
-    ...files("sources"),
-    ...readdirSync(ROOT).filter((name) => /^research-.*\.md$/.test(name)),
-  ];
+  const shipped = [...files("sources"), ...files("references/research")];
   const consumers = shipped
     .map((name) => [name, read(name)])
     .filter(([, text]) => text.toLowerCase().includes("post-mortem"));
@@ -389,12 +386,6 @@ test("size budget matches core manifest and artifact scope", () => {
   assert.equal(budget.artifacts_file_budget, 6000);
   assert.ok(!("pilot_entries" in budget));
   includes(read("scripts/repo-size-check.mjs"), "FILE_COUNT_BUDGET = 6000");
-});
-test("skill load memo scopes file budget to artifacts", () => {
-  const memo = read("data/phase3-skill-load.md");
-  includes(memo, "6,000-file budget applies only to files under `artifacts/`");
-  includes(memo, "not enforce a whole-working-tree file-count budget");
-  excludes(memo, "5002 files of headroom");
 });
 test("inclusion policy rejects obsolete Triton claims in descriptions", () => {
   assert.deepEqual(validate.validateInclusionPolicyScalars(), []);
@@ -435,31 +426,6 @@ test("source PR schema example matches its named page", () =>
     yamlBlockAfter("references/schema.md", "### source-pr"),
     fm("sources/prs/cutlass/PR-2472.md"),
   ));
-test("numeric receipt totals are recomputed and synchronized", () => {
-  const statuses = read("audit/numeric-claims-ledger.md")
-    .split("\n")
-    .filter((line) => line.startsWith("| comparison-base |") || line.startsWith("| current |"))
-    .map((line) => line.split("|")[4].trim());
-  const counts = {};
-  for (const status of statuses) {
-    counts[status] = (counts[status] || 0) + 1;
-  }
-  assert.equal(statuses.length, 3812);
-  assert.deepEqual(counts, {
-    supported: 1121,
-    corrected: 2,
-    removed: 1946,
-    "non-material": 743,
-  });
-  for (const name of [
-    "audit/factual-errors-fixed.md",
-    "audit/evidence-ledger.md",
-    "audit/validation-results.md",
-  ]) {
-    includes(read(name), "3,812");
-    excludes(read(name), "3,806 current terminal");
-  }
-});
 function splitCommand(command) {
   const words = [];
   let word = "",
@@ -652,10 +618,6 @@ test("flash attention locator and source ordering are evidence bounded", () => {
 });
 test("pipeline percentage receipt names reproducing rows", () => {
   const pipeline = read("wiki/techniques/pipeline-stages.md");
-  const receipt = read("audit/numeric-claims-ledger.md")
-    .split("\n")
-    .find((line) => line.includes("`wiki/techniques/pipeline-stages.md:21` | `35%`"));
-  includes(receipt, "v2b and v3 rows (939.61 / 695.43 = 1.35)");
   includes(pipeline, "695.43 TFLOPS");
   includes(pipeline, "939.61 TFLOPS");
   assert.equal(Math.round((939.61 / 695.43 - 1) * 100), 35);

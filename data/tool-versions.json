@@ -34,7 +34,7 @@
             "pr-sglang-22079",
             "pr-sglang-21019"
           ],
-          "notes": "First Triton release with native Blackwell tcgen05 + TMEM lowering\ninfrastructure. Strongest user-visible Blackwell paths: descriptor/TMA\nwarp-specialized matmul, Gluon multi-CTA / 2CTA, tl.dot_scaled / block\nscaled. See data/triton-3.6-evidence.md for the per-pathway breakdown.\n"
+          "notes": "First Triton release with native Blackwell tcgen05 + TMEM lowering\ninfrastructure. Strongest user-visible Blackwell paths: descriptor/TMA\nwarp-specialized matmul, Gluon multi-CTA / 2CTA, tl.dot_scaled / block\nscaled. See references/evidence/triton-blackwell-release.md for the per-pathway breakdown.\n"
         },
         {
           "name": "3.5.1",

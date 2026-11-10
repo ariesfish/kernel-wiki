@@ -16,7 +16,7 @@ release records at the audit cutoff.
 
 ## Date convention
 
-`data/tool-versions.yaml` uses GitHub's `published_at` calendar date. The
+`data/tool-versions.json` uses GitHub's `published_at` calendar date. The
 checked-in changelog often carries an earlier project date, so the two must
 not be silently interchanged:
 

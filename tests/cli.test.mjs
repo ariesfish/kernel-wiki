@@ -69,4 +69,7 @@ test("repo_status counts the generated query indices", () => {
   const output = run("repo_status.mjs", []);
   assert.match(output, /^Corpus counts:$/m);
   assert.match(output, /Query indices: 7/);
+  assert.match(output, /Candidate ledgers: 14/);
+  assert.match(output, /Artifact bundles: 37/);
+  assert.match(output, /verbatim: 37/);
 });

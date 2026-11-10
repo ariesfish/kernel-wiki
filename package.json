@@ -20,6 +20,7 @@
     "generate:core": "node scripts/compute-core-prs.mjs",
     "refresh:candidates": "node scripts/refresh-candidate-ledger.mjs",
     "check:dod": "node scripts/check-dod-fixtures.mjs",
+    "check:hygiene": "node scripts/check-hygiene.mjs",
     "check:core": "node scripts/verify-core-prs.mjs",
     "check:size": "node scripts/repo-size-check.mjs",
     "check:freshness": "node scripts/check-version-freshness.mjs",
