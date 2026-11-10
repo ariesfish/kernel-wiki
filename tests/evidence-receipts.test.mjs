@@ -7,7 +7,7 @@ const bytes = (file) => fs.readFileSync(new URL(file, root));
 const hash = (file) => createHash("sha256").update(bytes(file)).digest("hex");
 const json = (file) => JSON.parse(bytes(file));
 test("migrated receipts bind the current policy and its frozen Python parity evidence", () => {
-  const fixture = json("tests/fixtures/python-policy-baseline.json");
+  const fixture = json("tests/fixtures/pr-policy-cases.json");
   for (const file of [
     "audit/pr-file-cap-reconstruction.json",
     "data/pr-architecture-evidence.json",

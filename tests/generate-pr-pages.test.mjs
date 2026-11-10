@@ -14,7 +14,7 @@ import {
 import { bodyContractErrors } from "../scripts/lib/pr-policy.mjs";
 import { parse, stringify } from "../scripts/lib/yaml.mjs";
 const cases = JSON.parse(
-  fs.readFileSync(new URL("./fixtures/python-generation-baseline.json", import.meta.url), "utf8"),
+  fs.readFileSync(new URL("./fixtures/pr-page-cases.json", import.meta.url), "utf8"),
 );
 for (const fixture of cases) {
   test(`PR generation preserves Python metadata and body: ${fixture.name}`, () => {

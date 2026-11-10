@@ -458,6 +458,14 @@ test("contest submissions reject escape paths and require unavailable reasons", 
     );
     has(check("wrong"), "must be a mapping");
   }));
+test("candidate ledger fixtures exercise valid and missing-field contracts", () => {
+  assert.deepEqual(v.validateLedger(path.join(ROOT, "tests/fixtures/ledger-shape-valid.json")), []);
+  has(
+    v.validateLedger(path.join(ROOT, "tests/fixtures/ledger-shape-invalid.json")),
+    "missing required top-level field 'keywords_used'",
+  );
+});
+
 test("ledger summary, refresh coverage, subset and cutoff audits remain independent", () =>
   fixture(({ write, page }) => {
     const ledger = {

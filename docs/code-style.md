@@ -25,9 +25,9 @@ Place `*.test.mjs` files directly in `tests/`, reusable setup in
 from `node:test` and strict assertions from `node:assert/strict`.
 
 Test observable behavior and failure paths through public functions or CLI
-commands. Keep temporary state isolated and register its cleanup. Frozen
-Python inputs retain their original names and field keys; the parity test
-maps historical function names to current camelCase exports.
+commands. Keep temporary state isolated and register its cleanup. Fixture
+names describe domain behavior; provenance belongs in fixture metadata.
+Policy and page-generation cases preserve their captured inputs and results.
 
 ## Checks
 

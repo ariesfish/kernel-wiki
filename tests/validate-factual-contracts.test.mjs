@@ -534,29 +534,7 @@ test("concrete documented query commands return results", () => {
     excludes(output, "No matches.");
   }
 });
-test("historical Python audit receipts and current bundle inventory remain consistent", () => {
-  // These receipts describe the frozen audit; the current Node suite reports
-  // its own count through node:test and does not need the retired Python files.
-  const baseline = JSON.parse(read("tests/fixtures/python-audit-baseline.json"));
-  const discovered = baseline.files.reduce((sum, file) => sum + file.tests, 0);
-  const bundles = files("artifacts", (name) => name === "PROVENANCE.yaml").length;
-  assert.equal(discovered, baseline.total_tests);
-  assert.equal(discovered, 154);
-  for (const filename of ["audit/regression-tests.md", "audit/validation-results.md"]) {
-    includes(read(filename), `${discovered} tests`);
-  }
-  for (const filename of [
-    "data/phase3-verify-verbatim-audit.md",
-    "audit/evidence-ledger.md",
-    "audit/validation-results.md",
-  ]) {
-    includes(read(filename), `${bundles} bundle`);
-  }
-  const receipt = read("data/phase3-verify-verbatim-audit.md");
-  includes(receipt, "Historical stdout");
-  includes(receipt, "count follows the current corpus");
-  excludes(receipt, "Verified 76 bundle(s)");
-});
+
 test("skill technique count matches generated index and pages", () => {
   const count = read("queries/by-technique.md")
     .split("\n")

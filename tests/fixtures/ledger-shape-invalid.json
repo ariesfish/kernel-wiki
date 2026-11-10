@@ -1,0 +1,24 @@
+{
+  "repo": "example-org/example-repo",
+  "searched_at": "2026-04-27",
+  "total_candidates": 3,
+  "included": 1,
+  "excluded": 2,
+  "deferred": 0,
+  "prs": [
+    {
+      "number": 200,
+      "title": "Bad fixture include row",
+      "date": "2026-04-15",
+      "decision": "include",
+      "reason": "kernel file changes"
+    },
+    {
+      "number": 201,
+      "title": "Bad fixture exclude row",
+      "date": "2026-04-16",
+      "decision": "exclude",
+      "reason": "docs-only PR"
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 {
-  "description": "Frozen return values from the original Python PR policy, captured before the Node migration. Arrays represent both Python lists and tuples. No Python runtime is needed to replay.",
+  "description": "Frozen PR evidence policy behavior: inputs and expected results with the originating implementation digest.",
   "source_sha256": "aed6a1dd3520b894fda15be1382f6d8c64282fcf216ed23eebe0ff342c443f86",
   "cases": [
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         []
       ],
       "expected": []
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add SM87 and SM88 kernels",
         "",
@@ -25,7 +25,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Add SM87 and SM88 kernels",
         "",
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -73,14 +73,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         ""
       ],
       "expected": ""
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "FMHA update",
         "",
@@ -103,7 +103,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "FMHA update",
         "",
@@ -131,7 +131,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -150,28 +150,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void grouped() { auto status = GroupGEMMSM100(args); }"
       ],
       "expected": "__global__ void grouped() { auto status = GroupGEMMSM100(args); }"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void grouped() { auto status = GroupGEMMSM100(args); }"
       ],
       "expected": "__global__ void grouped() { auto status = GroupGEMMSM100(args); }"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void grouped() { auto status = GroupGEMMSM100(args); }"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/grouped_gemm.cu",
@@ -182,7 +182,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Grouped GEMM",
         "",
@@ -205,7 +205,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Grouped GEMM",
         "",
@@ -233,7 +233,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -252,14 +252,14 @@
       ]
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         ""
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm_sm120.cu",
@@ -270,7 +270,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Blackwell client kernel",
         "",
@@ -291,7 +291,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Blackwell client kernel",
         "",
@@ -319,7 +319,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -338,14 +338,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+// bool is_sm75 = props.major == 7 && props.minor == 5;\n+bool is_sm90 = props.major == 9 && props.minor == 0;"
       ],
       "expected": "// bool is_sm75 = props.major == 7 && props.minor == 5;\nbool is_sm90 = props.major == 9 && props.minor == 0;"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Hopper attention",
         "Runs on H100.",
@@ -366,7 +366,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Hopper attention",
         "Runs on H100.",
@@ -401,7 +401,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -420,21 +420,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+#include \"cutlass/arch/memory_sm80.h\"\n+using Copy = SM80_CP_ASYNC_CACHEALWAYS<int>;"
       ],
       "expected": "#include \"cutlass/arch/memory_sm80.h\"\nusing Copy = SM80_CP_ASYNC_CACHEALWAYS<int>;"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+#include \"cutlass/arch/memory_sm80.h\"\n+using Copy = SM80_CP_ASYNC_CACHEALWAYS<int>;"
       ],
       "expected": "#include \"cutlass/arch/memory_sm80.h\"\nusing Copy = SM80_CP_ASYNC_CACHEALWAYS<int>;"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Blackwell attention",
         "",
@@ -457,7 +457,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Blackwell attention",
         "",
@@ -485,7 +485,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "CPU offloading",
         "This can be slow, unless in GH200 systems, where coherence can help.",
@@ -500,7 +500,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "CPU offloading",
         "This can be slow, unless in GH200 systems, where coherence can help.",
@@ -520,7 +520,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "B200 benchmark",
         "Also measured on GB200.",
@@ -535,7 +535,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "B200 benchmark",
         "Also measured on GB200.",
@@ -565,7 +565,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "SM90 and Blackwell",
         "",
@@ -580,7 +580,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "SM90 and Blackwell",
         "",
@@ -609,7 +609,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -628,28 +628,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+#if defined(CUTE_ARCH_MMA_SM100_ENABLED)\n+run_kernel();\n+#endif"
       ],
       "expected": "#if defined(CUTE_ARCH_MMA_SM100_ENABLED)\nrun_kernel();\n#endif"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+#if defined(CUTE_ARCH_MMA_SM100_ENABLED)\n+run_kernel();\n+#endif"
       ],
       "expected": "#if defined(CUTE_ARCH_MMA_SM100_ENABLED)\nrun_kernel();\n#endif"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "#if defined(CUTE_ARCH_MMA_SM100_ENABLED)\nrun_kernel();\n#endif"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel.cu",
@@ -660,7 +660,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Dispatch kernel",
         "",
@@ -681,7 +681,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Dispatch kernel",
         "",
@@ -709,7 +709,7 @@
       ]
     },
     {
-      "function": "parse_git_diff_files",
+      "function": "parseGitDiffFiles",
       "args": [
         "diff --git a/src/host.cpp b/src/host.cpp\nindex 111..222 100644\n--- a/src/host.cpp\n+++ b/src/host.cpp\n@@ -1 +1 @@\n-old();\n+host();\ndiff --git a/src/kernel.h b/src/kernel.h\nnew file mode 100644\nindex 000..333\n--- /dev/null\n+++ b/src/kernel.h\n@@ -0,0 +1 @@\n+CUTLASS_DEVICE void kernel();\n"
       ],
@@ -731,7 +731,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -768,21 +768,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "diff --git a/src/host.cpp b/src/host.cpp\nindex 111..222 100644\n--- a/src/host.cpp\n+++ b/src/host.cpp\n@@ -1 +1 @@\n-old();\n+host();"
       ],
       "expected": "host();"
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "diff --git a/src/kernel.h b/src/kernel.h\nnew file mode 100644\nindex 000..333\n--- /dev/null\n+++ b/src/kernel.h\n@@ -0,0 +1 @@\n+CUTLASS_DEVICE void kernel();"
       ],
       "expected": "CUTLASS_DEVICE void kernel();"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Kernel update",
         "",
@@ -814,7 +814,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -833,7 +833,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/blackwell/gemm.cu",
@@ -844,7 +844,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Blackwell kernel",
         "Blackwell kernel work.\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\nCI example: run on H100\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->\n## GitHub Bot Help\nTry H200 if CI fails.\n",
@@ -865,7 +865,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Blackwell kernel",
         "Blackwell kernel work.\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\nCI example: run on H100\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->\n## GitHub Bot Help\nTry H200 if CI fails.\n",
@@ -893,7 +893,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Blackwell tuning",
         "",
@@ -908,7 +908,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Blackwell tuning",
         "",
@@ -930,7 +930,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune for turing",
         "",
@@ -945,7 +945,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune for turing",
         "",
@@ -967,7 +967,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune for hopper",
         "",
@@ -982,7 +982,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune for hopper",
         "",
@@ -1004,7 +1004,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune for ampere",
         "",
@@ -1019,7 +1019,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune for ampere",
         "",
@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune for ada",
         "",
@@ -1056,7 +1056,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune for ada",
         "",
@@ -1078,7 +1078,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "H100 and H200",
         "Hopper path",
@@ -1093,7 +1093,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "H100 and H200",
         "Hopper path",
@@ -1123,7 +1123,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1152,28 +1152,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void kernel() {}"
       ],
       "expected": "__global__ void kernel() {}"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void kernel() {}"
       ],
       "expected": "__global__ void kernel() {}"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void kernel() {}"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel.cu",
@@ -1184,7 +1184,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Fix parser",
         "",
@@ -1212,14 +1212,14 @@
       }
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+gpu = \"B200\""
       ],
       "expected": "gpu = \"B200\""
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Fix parser",
         "",
@@ -1250,7 +1250,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune sm80a",
         "",
@@ -1265,7 +1265,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune sm80a",
         "",
@@ -1285,7 +1285,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune sm90f",
         "",
@@ -1300,7 +1300,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune sm90f",
         "",
@@ -1320,7 +1320,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune sm100x",
         "",
@@ -1335,7 +1335,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune sm100x",
         "",
@@ -1355,7 +1355,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune SM100X",
         "",
@@ -1370,7 +1370,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune SM100X",
         "",
@@ -1390,7 +1390,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune sm1000",
         "",
@@ -1405,7 +1405,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Tune sm1000",
         "",
@@ -1425,7 +1425,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1444,7 +1444,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/sm120/kernel.cu",
@@ -1455,7 +1455,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "SM90 and SM100 kernels",
         "",
@@ -1476,7 +1476,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "SM90 and SM100 kernels",
         "",
@@ -1518,7 +1518,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1537,7 +1537,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -1548,7 +1548,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Improve GEMM",
         "No hardware is named.",
@@ -1569,7 +1569,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Improve GEMM",
         "No hardware is named.",
@@ -1595,7 +1595,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1614,28 +1614,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)\n+run_kernel();\n+#endif"
       ],
       "expected": "#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)\nrun_kernel();\n#endif"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)\n+run_kernel();\n+#endif"
       ],
       "expected": "#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)\nrun_kernel();\n#endif"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 1000)\nrun_kernel();\n#endif"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel.cu",
@@ -1646,7 +1646,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Dispatch kernel",
         "",
@@ -1669,7 +1669,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Dispatch kernel",
         "",
@@ -1697,7 +1697,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1716,21 +1716,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+using Copy = SM80_CP_ASYNC_CACHEALWAYS_ZFILL;"
       ],
       "expected": "using Copy = SM80_CP_ASYNC_CACHEALWAYS_ZFILL;"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+using Copy = SM80_CP_ASYNC_CACHEALWAYS_ZFILL;"
       ],
       "expected": "using Copy = SM80_CP_ASYNC_CACHEALWAYS_ZFILL;"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Hopper attention",
         "Use BatchPrefillWithPagedKVCacheSM90Run.",
@@ -1753,7 +1753,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Hopper attention",
         "Use BatchPrefillWithPagedKVCacheSM90Run.",
@@ -1781,7 +1781,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Compare 8xH100, 1xB200, B300, and GB300",
         "",
@@ -1796,7 +1796,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Compare 8xH100, 1xB200, B300, and GB300",
         "",
@@ -1842,7 +1842,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1861,28 +1861,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+DISPATCH_COMPUTE_CAP_NUM_THREADS(...);"
       ],
       "expected": "DISPATCH_COMPUTE_CAP_NUM_THREADS(...);"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+DISPATCH_COMPUTE_CAP_NUM_THREADS(...);"
       ],
       "expected": "DISPATCH_COMPUTE_CAP_NUM_THREADS(...);"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "DISPATCH_COMPUTE_CAP_NUM_THREADS(...);"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/sampling.cu",
@@ -1893,7 +1893,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Fix compatibility dispatch",
         "The macro covers kernels less than sm80; this repairs compatibility with sm75.",
@@ -1914,7 +1914,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Fix compatibility dispatch",
         "The macro covers kernels less than sm80; this repairs compatibility with sm75.",
@@ -1942,7 +1942,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -1961,7 +1961,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/group_gemm_sm120_binding.cu",
@@ -1972,7 +1972,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "MXFP4 group GEMM on GeForce",
         "",
@@ -1993,7 +1993,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "MXFP4 group GEMM on GeForce",
         "",
@@ -2021,7 +2021,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2040,14 +2040,14 @@
       ]
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         ""
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "python/sglang/srt/models/deepseek_v2.py",
@@ -2058,7 +2058,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Avoid conversions for DeepSeek-V3 on Blackwell",
         "Tested measurements on B200.",
@@ -2079,7 +2079,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Avoid conversions for DeepSeek-V3 on Blackwell",
         "Tested measurements on B200.",
@@ -2108,7 +2108,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2127,21 +2127,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+# Tuned on B200 for this bandwidth-bound kernel\n+run_kernel()"
       ],
       "expected": "# Tuned on B200 for this bandwidth-bound kernel\nrun_kernel()"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "# Tuned on B200 for this bandwidth-bound kernel\nrun_kernel()"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel.py",
@@ -2152,7 +2152,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Transpose kernel",
         "",
@@ -2173,7 +2173,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Transpose kernel",
         "",
@@ -2202,7 +2202,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2221,14 +2221,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+select_sm75_mma();"
       ],
       "expected": "select_sm75_mma();"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add native SM75 MMA support",
         "T.gemm could lower to SM80-only instructions on Turing GPUs.",
@@ -2249,7 +2249,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Add native SM75 MMA support",
         "T.gemm could lower to SM80-only instructions on Turing GPUs.",
@@ -2283,7 +2283,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2302,21 +2302,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+from utils import is_sm_100f\n+# Tuned on B200 for Blackwell\n+if is_sm_100f(): run_kernel()"
       ],
       "expected": "from utils import is_sm_100f\n# Tuned on B200 for Blackwell\nif is_sm_100f(): run_kernel()"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "from utils import is_sm_100f\n# Tuned on B200 for Blackwell\nif is_sm_100f(): run_kernel()"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel.py",
@@ -2327,7 +2327,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Dispatch kernel",
         "",
@@ -2348,7 +2348,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Dispatch kernel",
         "",
@@ -2376,7 +2376,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2395,28 +2395,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+TORCH_LIBRARY_IMPL(...);"
       ],
       "expected": "TORCH_LIBRARY_IMPL(...);"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+TORCH_LIBRARY_IMPL(...);"
       ],
       "expected": "TORCH_LIBRARY_IMPL(...);"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "TORCH_LIBRARY_IMPL(...);"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/registration.cu",
@@ -2427,7 +2427,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Fix registration on unsupported architectures",
         "The extension fails to link on architectures like SM121.",
@@ -2448,7 +2448,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Fix registration on unsupported architectures",
         "The extension fails to link on architectures like SM121.",
@@ -2476,7 +2476,7 @@
       ]
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100"
@@ -2487,7 +2487,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "blackwell"
@@ -2498,7 +2498,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100"
@@ -2509,7 +2509,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100a"
@@ -2520,7 +2520,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm120"
@@ -2531,7 +2531,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "blackwell"
@@ -2542,7 +2542,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm90"
@@ -2553,7 +2553,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [],
         "unknown",
@@ -2562,7 +2562,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100"
@@ -2573,7 +2573,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100a"
@@ -2584,7 +2584,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm120"
@@ -2595,7 +2595,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "blackwell"
@@ -2606,7 +2606,7 @@
       "expected": true
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm90"
@@ -2617,7 +2617,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [],
         "unknown",
@@ -2626,7 +2626,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100"
@@ -2637,7 +2637,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm100a"
@@ -2648,7 +2648,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm120"
@@ -2659,7 +2659,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "blackwell"
@@ -2670,7 +2670,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [
           "sm90"
@@ -2681,7 +2681,7 @@
       "expected": false
     },
     {
-      "function": "architecture_matches_filter",
+      "function": "architectureMatchesFilter",
       "args": [
         [],
         "unknown",
@@ -2690,7 +2690,7 @@
       "expected": true
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -2709,7 +2709,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -2720,7 +2720,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Large kernel update",
         "Upstream body.",
@@ -2743,7 +2743,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "Large kernel update",
         "Upstream body.",
@@ -2769,7 +2769,7 @@
       ]
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Large kernel update",
         "Upstream body.",
@@ -2801,14 +2801,14 @@
       }
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "Upstream body."
       ],
       "expected": "Upstream body."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "Upstream body.",
         [
@@ -2822,7 +2822,7 @@
       ]
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -2833,7 +2833,7 @@
       "expected": false
     },
     {
-      "function": "upstream_files_sha256",
+      "function": "upstreamFilesSha256",
       "args": [
         [
           {
@@ -2846,14 +2846,14 @@
       "expected": "f1abb3c139a1983c6ad65d0477e4912c617a3613a9f26284a1c91fdb33ab915b"
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "Upstream only."
       ],
       "expected": "Upstream only."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "Upstream only.",
         [
@@ -2867,7 +2867,7 @@
       ]
     },
     {
-      "function": "body_contract_errors",
+      "function": "bodyContractErrors",
       "args": [
         {
           "body_contract": "upstream-pr-v1",
@@ -2886,7 +2886,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "CRLF kernel body",
         "First line.\r\n\r\nSecond line.",
@@ -2909,7 +2909,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "CRLF kernel body",
         "First line.\r\n\r\nSecond line.",
@@ -2935,7 +2935,7 @@
       ]
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "CRLF kernel body",
         "First line.\r\n\r\nSecond line.",
@@ -2967,14 +2967,14 @@
       }
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "First line.\r\n\r\nSecond line."
       ],
       "expected": "First line.\n\nSecond line."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "First line.\r\n\r\nSecond line.",
         [
@@ -2988,14 +2988,14 @@
       ]
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "First line.\n\nSecond line."
       ],
       "expected": "First line.\n\nSecond line."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "First line.\n\nSecond line.",
         [
@@ -3009,7 +3009,7 @@
       ]
     },
     {
-      "function": "body_contract_errors",
+      "function": "bodyContractErrors",
       "args": [
         {
           "id": "pr-project-8",
@@ -3066,7 +3066,7 @@
       "expected": []
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -3085,7 +3085,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel_sm120.cu",
@@ -3096,7 +3096,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "A title that must not become a Problem section",
         "Upstream sentence with 12.5 GB/s exactly.",
@@ -3119,7 +3119,7 @@
       }
     },
     {
-      "function": "derive_architectures",
+      "function": "deriveArchitectures",
       "args": [
         "A title that must not become a Problem section",
         "Upstream sentence with 12.5 GB/s exactly.",
@@ -3147,7 +3147,7 @@
       ]
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "A title that must not become a Problem section",
         "Upstream sentence with 12.5 GB/s exactly.",
@@ -3179,14 +3179,14 @@
       }
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "Upstream sentence with 12.5 GB/s exactly."
       ],
       "expected": "Upstream sentence with 12.5 GB/s exactly."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "Upstream sentence with 12.5 GB/s exactly.",
         [
@@ -3200,7 +3200,7 @@
       ]
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel_sm120.cu",
@@ -3211,7 +3211,7 @@
       "expected": false
     },
     {
-      "function": "upstream_files_sha256",
+      "function": "upstreamFilesSha256",
       "args": [
         [
           {
@@ -3224,7 +3224,7 @@
       "expected": "1047dfd85b6af8e5976f0d0360b401cf6b36706076a035aafe8c18954a624e99"
     },
     {
-      "function": "body_contract_errors",
+      "function": "bodyContractErrors",
       "args": [
         {
           "id": "pr-project-7",
@@ -3283,14 +3283,14 @@
       "expected": []
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail more"
       ],
       "expected": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail"
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail more",
         [
@@ -3304,14 +3304,14 @@
       ]
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail"
       ],
       "expected": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail"
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail",
         [
@@ -3325,7 +3325,7 @@
       ]
     },
     {
-      "function": "body_contract_errors",
+      "function": "bodyContractErrors",
       "args": [
         {
           "body_contract": "upstream-pr-v1",
@@ -3342,14 +3342,14 @@
       "expected": []
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "```\n======= 4 passed in 1.66s =======\n```"
       ],
       "expected": "```\n\\======= 4 passed in 1.66s =======\n```"
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "```\n======= 4 passed in 1.66s =======\n```",
         [
@@ -3363,14 +3363,14 @@
       ]
     },
     {
-      "function": "upstream_excerpt",
+      "function": "upstreamExcerpt",
       "args": [
         "First line.  \nSecond line.\t\n"
       ],
       "expected": "First line.\nSecond line."
     },
     {
-      "function": "render_generated_body",
+      "function": "renderGeneratedBody",
       "args": [
         "First line.  \nSecond line.\t\n",
         [
@@ -3384,7 +3384,7 @@
       ]
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -3513,7 +3513,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_0.cu",
@@ -3524,7 +3524,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_1.cu",
@@ -3535,7 +3535,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_2.cu",
@@ -3546,7 +3546,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_3.cu",
@@ -3557,7 +3557,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_4.cu",
@@ -3568,7 +3568,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_5.cu",
@@ -3579,7 +3579,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_6.cu",
@@ -3590,7 +3590,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_7.cu",
@@ -3601,7 +3601,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_8.cu",
@@ -3612,7 +3612,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_9.cu",
@@ -3623,7 +3623,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_10.cu",
@@ -3634,7 +3634,7 @@
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/kernel_11.cu",
@@ -3645,7 +3645,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add kernels",
         "",
@@ -3734,7 +3734,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -3753,7 +3753,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/fused_moe/gemm.cu",
@@ -3764,7 +3764,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Implement GEMM",
         "",
@@ -3785,7 +3785,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Implement GEMM",
         "",
@@ -3813,7 +3813,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -3832,28 +3832,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void scan() { using Scan = cub::BlockScan<int, 128>; }"
       ],
       "expected": "__global__ void scan() { using Scan = cub::BlockScan<int, 128>; }"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void scan() { using Scan = cub::BlockScan<int, 128>; }"
       ],
       "expected": "__global__ void scan() { using Scan = cub::BlockScan<int, 128>; }"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void scan() { using Scan = cub::BlockScan<int, 128>; }"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/moe.cu",
@@ -3864,7 +3864,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize MoE",
         "",
@@ -3887,7 +3887,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Optimize MoE",
         "",
@@ -3925,12 +3925,12 @@
       }
     },
     {
-      "function": "device_code_pattern_sha256",
+      "function": "deviceCodePatternSha256",
       "args": [],
       "expected": "07f6f8bdf90ee2dcae5100acad1b938dd84560d1886510c9fc1a45a2db53681d"
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -3957,28 +3957,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+update_dispatch();"
       ],
       "expected": "update_dispatch();"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+update_dispatch();"
       ],
       "expected": "update_dispatch();"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "update_dispatch();"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/launcher.cu",
@@ -3993,7 +3993,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune launcher",
         "",
@@ -4018,7 +4018,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4037,7 +4037,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "CPU AMX GEMM",
         "",
@@ -4058,7 +4058,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "CPU AMX GEMM",
         "",
@@ -4086,7 +4086,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4105,7 +4105,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "CPU GEMM adapter",
         "",
@@ -4126,7 +4126,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "CPU GEMM adapter",
         "",
@@ -4154,28 +4154,28 @@
       }
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "int i = blockIdx.x * blockDim.x + threadIdx.x;"
       ],
       "expected": true
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "// threadIdx.x\nconst char* s = \"__global__\";"
       ],
       "expected": false
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "int main() { launch<GemmType::Normal>(); }"
       ],
       "expected": false
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4194,28 +4194,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+gemm_kernel<<<grid, block, 0, stream>>>(input, output);"
       ],
       "expected": "gemm_kernel<<<grid, block, 0, stream>>>(input, output);"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+gemm_kernel<<<grid, block, 0, stream>>>(input, output);"
       ],
       "expected": "gemm_kernel<<<grid, block, 0, stream>>>(input, output);"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "gemm_kernel<<<grid, block, 0, stream>>>(input, output);"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/launcher.cu",
@@ -4226,7 +4226,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune launcher",
         "",
@@ -4247,14 +4247,14 @@
       }
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "config.gridDim = grid;\nconfig.blockDim = block;\ncudaLaunchKernelEx(&config, fn);"
       ],
       "expected": false
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4273,21 +4273,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+config.gridDim = grid;\n+config.blockDim = block;\n+cudaLaunchKernelEx(&config, fn);"
       ],
       "expected": "config.gridDim = grid;\nconfig.blockDim = block;\ncudaLaunchKernelEx(&config, fn);"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+config.gridDim = grid;\n+config.blockDim = block;\n+cudaLaunchKernelEx(&config, fn);"
       ],
       "expected": "config.gridDim = grid;\nconfig.blockDim = block;\ncudaLaunchKernelEx(&config, fn);"
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/launcher.cu",
@@ -4298,7 +4298,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune launcher",
         "",
@@ -4319,7 +4319,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4338,28 +4338,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+int64_t block_k = weights.sizes()[3];\n+int num_warps = 4;"
       ],
       "expected": "int64_t block_k = weights.sizes()[3];\nint num_warps = 4;"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+int64_t block_k = weights.sizes()[3];\n+int num_warps = 4;"
       ],
       "expected": "int64_t block_k = weights.sizes()[3];\nint num_warps = 4;"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "int64_t block_k = weights.sizes()[3];\nint num_warps = 4;"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/launcher.cu",
@@ -4370,7 +4370,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune launcher",
         "",
@@ -4391,7 +4391,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4410,14 +4410,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+acc_pipeline.consumer_release(state)"
       ],
       "expected": "acc_pipeline.consumer_release(state)"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Fix accumulator overlap",
         "",
@@ -4440,7 +4440,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4459,7 +4459,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Build GEMM collective",
         "",
@@ -4482,7 +4482,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4501,7 +4501,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize kernels",
         "",
@@ -4524,7 +4524,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4543,7 +4543,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize kernels",
         "",
@@ -4566,7 +4566,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4585,7 +4585,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize kernels",
         "",
@@ -4608,7 +4608,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4627,7 +4627,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize kernels",
         "",
@@ -4650,7 +4650,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4669,14 +4669,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+griddepcontrol_wait()\n+griddepcontrol_launch_dependents()"
       ],
       "expected": "griddepcontrol_wait()\ngriddepcontrol_launch_dependents()"
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Enable PDL in top-k",
         "",
@@ -4699,7 +4699,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4718,28 +4718,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void gemm() {}"
       ],
       "expected": "__global__ void gemm() {}"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void gemm() {}"
       ],
       "expected": "__global__ void gemm() {}"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void gemm() {}"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -4750,7 +4750,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add fused kernel for GEMM",
         "",
@@ -4773,7 +4773,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Add fused kernel for GEMM",
         "",
@@ -4811,7 +4811,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4830,21 +4830,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+def configure():\n+    pass"
       ],
       "expected": "def configure():\n    pass"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "def configure():\n    pass"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "python/kernels/fused_moe.py",
@@ -4855,7 +4855,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Update routing",
         "",
@@ -4876,12 +4876,12 @@
       }
     },
     {
-      "function": "python_dsl_pattern_sha256",
+      "function": "pythonDslPatternSha256",
       "args": [],
       "expected": "782e8e05929de589d3e20db1a89bc732c34d9728c1654700e0c4fbce55d17877"
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4910,21 +4910,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+num_blocks = (n + block_n - 1) // block_n"
       ],
       "expected": "num_blocks = (n + block_n - 1) // block_n"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "num_blocks = (n + block_n - 1) // block_n"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "layers/quantization/fp8.py",
@@ -4940,7 +4940,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Update FP8 shapes",
         "",
@@ -4966,7 +4966,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -4985,21 +4985,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+def place_experts():\n+    pass"
       ],
       "expected": "def place_experts():\n    pass"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "def place_experts():\n    pass"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "vllm/model_executor/layers/fused_moe/layer.py",
@@ -5010,7 +5010,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Static placement",
         "",
@@ -5031,7 +5031,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Static placement",
         "",
@@ -5059,7 +5059,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5088,7 +5088,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/gemm.cu",
@@ -5099,7 +5099,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize local GEMM",
         "Benchmark command: --backend deepep",
@@ -5127,7 +5127,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5146,21 +5146,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+// SPDX-License-Identifier: Apache-2.0\n-// Copyright 2025\n+// Copyright 2026"
       ],
       "expected": "// SPDX-License-Identifier: Apache-2.0\n// Copyright 2026"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+// SPDX-License-Identifier: Apache-2.0\n-// Copyright 2025\n+// Copyright 2026"
       ],
       "expected": ""
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Update license",
         "",
@@ -5181,7 +5181,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5200,28 +5200,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+// subsequent tokens use linear scan because experts are sorted\n+expert = findTotalEltsLessThanTarget(token);"
       ],
       "expected": "// subsequent tokens use linear scan because experts are sorted\nexpert = findTotalEltsLessThanTarget(token);"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+// subsequent tokens use linear scan because experts are sorted\n+expert = findTotalEltsLessThanTarget(token);"
       ],
       "expected": "expert = findTotalEltsLessThanTarget(token);"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "// subsequent tokens use linear scan because experts are sorted\nexpert = findTotalEltsLessThanTarget(token);"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/moe.cu",
@@ -5232,7 +5232,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize MoE",
         "",
@@ -5253,7 +5253,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Optimize MoE",
         "",
@@ -5281,7 +5281,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5390,7 +5390,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/sm103/tcgen05_kernel.cu",
@@ -5401,7 +5401,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add kernels",
         "",
@@ -5478,7 +5478,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Add kernels",
         "",
@@ -5568,7 +5568,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5597,28 +5597,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void layernorm() {}"
       ],
       "expected": "__global__ void layernorm() {}"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void layernorm() {}"
       ],
       "expected": "__global__ void layernorm() {}"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void layernorm() {}"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "src/layernorm.cu",
@@ -5629,7 +5629,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Optimize kernels",
         "",
@@ -5657,7 +5657,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5684,7 +5684,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -5699,7 +5699,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune GEMM",
         "",
@@ -5726,7 +5726,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5745,7 +5745,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -5756,7 +5756,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Implement GEMM",
         "",
@@ -5779,7 +5779,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5798,28 +5798,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+m.def(\"gemm\", &gemm, \"GEMM (CUDA)\");"
       ],
       "expected": "m.def(\"gemm\", &gemm, \"GEMM (CUDA)\");"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+m.def(\"gemm\", &gemm, \"GEMM (CUDA)\");"
       ],
       "expected": "m.def(\"gemm\", &gemm, \"GEMM (CUDA)\");"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "m.def(\"gemm\", &gemm, \"GEMM (CUDA)\");"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/ops.cu",
@@ -5830,7 +5830,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Register GEMM",
         "",
@@ -5851,7 +5851,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5870,7 +5870,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "EPLB CUDA kernel",
         "",
@@ -5891,7 +5891,7 @@
       }
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "DeepEP CUDA kernel",
         "",
@@ -5912,7 +5912,7 @@
       }
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "DualPipe CUDA kernel",
         "",
@@ -5933,7 +5933,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -5952,7 +5952,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "CPU offloading",
         "",
@@ -5975,7 +5975,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "CPU offloading",
         "The implementation is not compatible with quantization, LoRA, MLA, etc.",
@@ -6007,7 +6007,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6026,28 +6026,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+__global__ void gemm_kernel() {}"
       ],
       "expected": "__global__ void gemm_kernel() {}"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+__global__ void gemm_kernel() {}"
       ],
       "expected": "__global__ void gemm_kernel() {}"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "__global__ void gemm_kernel() {}"
       ],
       "expected": true
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -6058,7 +6058,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add GEMM",
         "",
@@ -6081,7 +6081,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6100,28 +6100,28 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+torch::Tensor view(torch::Tensor x) {\n+  cudaHostGetDevicePointer(&ptr, x.data_ptr(), 0);\n+  return torch::from_blob(ptr, x.sizes());\n+}"
       ],
       "expected": "torch::Tensor view(torch::Tensor x) {\n  cudaHostGetDevicePointer(&ptr, x.data_ptr(), 0);\n  return torch::from_blob(ptr, x.sizes());\n}"
     },
     {
-      "function": "changed_implementation_text",
+      "function": "changedImplementationText",
       "args": [
         "+torch::Tensor view(torch::Tensor x) {\n+  cudaHostGetDevicePointer(&ptr, x.data_ptr(), 0);\n+  return torch::from_blob(ptr, x.sizes());\n+}"
       ],
       "expected": "torch::Tensor view(torch::Tensor x) {\ncudaHostGetDevicePointer(&ptr, x.data_ptr(), 0);\nreturn torch::from_blob(ptr, x.sizes());\n}"
     },
     {
-      "function": "cuda_translation_unit_device_signal",
+      "function": "cudaTranslationUnitDeviceSignal",
       "args": [
         "torch::Tensor view(torch::Tensor x) {\n  cudaHostGetDevicePointer(&ptr, x.data_ptr(), 0);\n  return torch::from_blob(ptr, x.sizes());\n}"
       ],
       "expected": false
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/cuda_view.cu",
@@ -6132,7 +6132,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Add UVA tensor view",
         "",
@@ -6153,7 +6153,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6172,7 +6172,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "SM-constraint Communication Kernels",
         "Add cross-device all-reduce.",
@@ -6193,7 +6193,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6212,21 +6212,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+# Align block_n before loading weights."
       ],
       "expected": "# Align block_n before loading weights."
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "# Align block_n before loading weights."
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "python/sglang/srt/configs/update_config.py",
@@ -6237,7 +6237,7 @@
       "expected": false
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Update configuration",
         "",
@@ -6258,7 +6258,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6277,14 +6277,14 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+@triton.jit\n+def softmax_kernel(x):\n+    pid = tl.program_id(0)"
       ],
       "expected": "@triton.jit\ndef softmax_kernel(x):\n    pid = tl.program_id(0)"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "@triton.jit\ndef softmax_kernel(x):\n    pid = tl.program_id(0)"
       ],
@@ -6293,7 +6293,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Triton softmax",
         "",
@@ -6316,7 +6316,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Triton softmax",
         "",
@@ -6348,7 +6348,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6375,7 +6375,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/gemm.cu",
@@ -6390,7 +6390,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune GEMM",
         "",
@@ -6415,7 +6415,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6448,21 +6448,21 @@
       ]
     },
     {
-      "function": "added_patch_text",
+      "function": "addedPatchText",
       "args": [
         "+num_warps = 8"
       ],
       "expected": "num_warps = 8"
     },
     {
-      "function": "python_dsl_languages",
+      "function": "pythonDslLanguages",
       "args": [
         "num_warps = 8"
       ],
       "expected": []
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "ops/mamba_ssm.py",
@@ -6480,7 +6480,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune Mamba kernel",
         "",
@@ -6508,7 +6508,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6537,7 +6537,7 @@
       ]
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Benchmark GEMM",
         "",
@@ -6563,7 +6563,7 @@
       }
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6582,7 +6582,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -6593,7 +6593,7 @@
       "expected": false
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -6604,7 +6604,7 @@
       "expected": false
     },
     {
-      "function": "upstream_files_sha256",
+      "function": "upstreamFilesSha256",
       "args": [
         [
           {
@@ -6617,7 +6617,7 @@
       "expected": "2e29295f09236f3547eb16b62fc6e945a69096d65058dd58e1b0ea1c5b06b79c"
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6644,7 +6644,7 @@
       ]
     },
     {
-      "function": "cuda_requires_complete_evidence",
+      "function": "cudaRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -6659,7 +6659,7 @@
       "expected": false
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "csrc/kernel.cu",
@@ -6674,7 +6674,7 @@
       "expected": false
     },
     {
-      "function": "upstream_files_sha256",
+      "function": "upstreamFilesSha256",
       "args": [
         [
           {
@@ -6691,7 +6691,7 @@
       "expected": "2e29295f09236f3547eb16b62fc6e945a69096d65058dd58e1b0ea1c5b06b79c"
     },
     {
-      "function": "normalize_files",
+      "function": "normalizeFiles",
       "args": [
         [
           {
@@ -6724,7 +6724,7 @@
       ]
     },
     {
-      "function": "python_requires_complete_evidence",
+      "function": "pythonRequiresCompleteEvidence",
       "args": [
         {
           "filename": "ops/mamba_ssm.py",
@@ -6742,7 +6742,7 @@
       "expected": true
     },
     {
-      "function": "classify_scope",
+      "function": "classifyScope",
       "args": [
         "Tune Mamba kernel",
         "",
@@ -6772,7 +6772,7 @@
       }
     },
     {
-      "function": "derive_metadata",
+      "function": "deriveMetadata",
       "args": [
         "Tune Mamba kernel",
         "",

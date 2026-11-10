@@ -1,0 +1,36 @@
+{
+  "repo": "example-org/example-repo",
+  "searched_at": "2026-04-27",
+  "keywords_used": [
+    "blackwell",
+    "sm100",
+    "tcgen05"
+  ],
+  "total_candidates": 3,
+  "included": 1,
+  "excluded": 1,
+  "deferred": 1,
+  "prs": [
+    {
+      "number": 100,
+      "title": "Fixture include row",
+      "date": "2026-04-15",
+      "decision": "include",
+      "reason": "kernel file changes"
+    },
+    {
+      "number": 101,
+      "title": "Fixture exclude row",
+      "date": "2026-04-16",
+      "decision": "exclude",
+      "reason": "docs-only PR"
+    },
+    {
+      "number": 102,
+      "title": "Fixture defer row",
+      "date": "2026-04-17",
+      "decision": "defer",
+      "reason": "needs-investigation"
+    }
+  ]
+}
