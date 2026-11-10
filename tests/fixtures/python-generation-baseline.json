@@ -1,0 +1,849 @@
+[
+  {
+    "name": "closed",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly."
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  },
+  {
+    "name": "merged",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly.",
+        "merged": true
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "merged",
+      "merge_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  },
+  {
+    "name": "unicode-crlf",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "First line.\r\n\r\n中文 🚀 @triton.jit"
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "621ccd1c0ee66436dabb95e6e4b9234c9f5a1bad064bb1b394a15b5926855213",
+      "upstream_excerpt_sha256": "a82ebe3b1985cc50bfb9535b552cdf907e3fd011da91703221c2ed0f30dec04d",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nFirst line.\n\n中文 🚀 @triton.jit\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  },
+  {
+    "name": "authoritative-total",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly.",
+        "changed_files": 3750
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 3750,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": false,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": false,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n- _3749 additional changed file(s) omitted from this display._\n"
+  },
+  {
+    "name": "artifact-preservation",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly."
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      {
+        "artifact_dir": "artifacts/prs/example/PR-7"
+      }
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true,
+      "artifact_dir": "artifacts/prs/example/PR-7"
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  },
+  {
+    "name": "display-cap",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly."
+      },
+      [
+        {
+          "filename": "src/host0.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host1.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host2.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host3.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host4.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host5.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host6.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host7.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host8.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host9.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host10.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host11.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host12.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host13.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host14.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host15.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host16.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host17.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host18.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host19.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host20.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host21.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host22.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host23.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host24.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host25.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host26.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host27.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host28.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "src/host29.cpp",
+          "patch": "+host();"
+        },
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 31,
+      "changed_files_enumerated_count": 31,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "src/host0.cpp",
+        "src/host1.cpp",
+        "src/host2.cpp",
+        "src/host3.cpp",
+        "src/host4.cpp",
+        "src/host5.cpp",
+        "src/host6.cpp",
+        "src/host7.cpp",
+        "src/host8.cpp",
+        "src/host9.cpp",
+        "src/host10.cpp",
+        "src/host11.cpp",
+        "src/host12.cpp",
+        "src/host13.cpp",
+        "src/host14.cpp",
+        "src/host15.cpp",
+        "src/host16.cpp",
+        "src/host17.cpp",
+        "src/host18.cpp",
+        "src/host19.cpp",
+        "src/host20.cpp",
+        "src/host21.cpp",
+        "src/host22.cpp",
+        "src/host23.cpp",
+        "src/host24.cpp",
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": false,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "8dd6fd134a8c2635119eac89a04c61620f4a56184282f83ac11bf025fc0d0d78",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `src/host0.cpp`\n- `src/host1.cpp`\n- `src/host2.cpp`\n- `src/host3.cpp`\n- `src/host4.cpp`\n- `src/host5.cpp`\n- `src/host6.cpp`\n- `src/host7.cpp`\n- `src/host8.cpp`\n- `src/host9.cpp`\n- `src/host10.cpp`\n- `src/host11.cpp`\n- `src/host12.cpp`\n- `src/host13.cpp`\n- `src/host14.cpp`\n- `src/host15.cpp`\n- `src/host16.cpp`\n- `src/host17.cpp`\n- `src/host18.cpp`\n- `src/host19.cpp`\n- `src/host20.cpp`\n- `src/host21.cpp`\n- `src/host22.cpp`\n- `src/host23.cpp`\n- `src/host24.cpp`\n- `csrc/kernel_sm100.cu`\n- _5 additional changed file(s) omitted from this display._\n"
+  },
+  {
+    "name": "complete-evidence",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "Upstream sentence with 12.5 GB/s exactly.",
+        "changed_files": 1,
+        "changed_files_evidence_method": "complete-pull-diff",
+        "changed_files_evidence_receipt": "audit/receipt.json"
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ],
+        "path_source": "complete-pull-diff"
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_excerpt_sha256": "8e6140092c101f87f4647633d54da18a460d80d632feb9c079230ee942872ddf",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true,
+      "changed_files_evidence_count": 1,
+      "changed_files_evidence_complete": true,
+      "changed_files_evidence_method": "complete-pull-diff",
+      "changed_files_evidence_receipt": "audit/receipt.json"
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nUpstream sentence with 12.5 GB/s exactly.\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  },
+  {
+    "name": "truncated-body",
+    "args": [
+      "example/project",
+      {
+        "number": 7,
+        "title": "SM100 kernel update",
+        "user": {
+          "login": "author"
+        },
+        "created_at": "2026-01-02T03:04:05Z",
+        "html_url": "https://github.com/example/project/pull/7",
+        "merge_commit_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail more"
+      },
+      [
+        {
+          "filename": "csrc/kernel_sm100.cu",
+          "patch": "+__global__ void kernel() {}",
+          "status": "modified"
+        }
+      ],
+      "ignored legacy reason",
+      "2026-08-18",
+      null
+    ],
+    "frontmatter": {
+      "id": "pr-project-7",
+      "repo": "example/project",
+      "pr": 7,
+      "title": "SM100 kernel update",
+      "author": "author",
+      "date": "2026-01-02",
+      "url": "https://github.com/example/project/pull/7",
+      "source_category": "upstream-code",
+      "architectures": [
+        "sm100"
+      ],
+      "architecture_disposition": "exact",
+      "architecture_evidence": [
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "PR title",
+          "evidence": "SM100"
+        },
+        {
+          "architecture": "sm100",
+          "basis": "exact-sm-token",
+          "locator": "changed-path:csrc/kernel_sm100.cu",
+          "evidence": "sm100"
+        }
+      ],
+      "tags": [],
+      "techniques": [],
+      "hardware_features": [],
+      "kernel_types": [],
+      "languages": [
+        "cuda-cpp"
+      ],
+      "captured_at": "2026-08-18",
+      "status": "closed",
+      "inclusion_reason": "retain: CUDA/CuTe/PTX device implementation path(s): csrc/kernel_sm100.cu",
+      "scope_disposition": "retained",
+      "scope_evidence": {
+        "rule": "cuda-cute-ptx-device-source",
+        "paths": [
+          "csrc/kernel_sm100.cu"
+        ]
+      },
+      "changed_files_count": 1,
+      "changed_files_enumerated_count": 1,
+      "changed_files_listing_complete": true,
+      "changed_paths": [
+        "csrc/kernel_sm100.cu"
+      ],
+      "changed_paths_complete": true,
+      "body_contract": "upstream-pr-v1",
+      "upstream_body_locator": "https://github.com/example/project/pull/7 (PR description)",
+      "upstream_body_sha256": "bbb90653ac95ddb7d4ced93bb9150436f104431758ff359ccfd2d4332a4f063d",
+      "upstream_excerpt_sha256": "a9ba72069b51dabbc13616fcb51671516983cc3377750e5c24877c544977b7aa",
+      "upstream_files_sha256": "c2b02c583be5d52dad0f7f335c5a32e916ca28471e8c4ff87c13cfc82b5977f2",
+      "upstream_patches_complete": true
+    },
+    "body": "## Upstream PR description (verbatim excerpt)\n\n<!-- upstream-excerpt-start -->\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tail\n<!-- upstream-excerpt-end -->\n\n## Changed files (upstream)\n\n- `csrc/kernel_sm100.cu`\n"
+  }
+]
