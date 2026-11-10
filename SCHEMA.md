@@ -6,9 +6,9 @@ A structured knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM1
 
 ### Recommended: use the skill scripts
 ```bash
-python3 scripts/query.py "<keywords>" [--tag X --type Y]
-python3 scripts/get_page.py <id-or-path> [--follow-sources]
-python3 scripts/grep_wiki.py "<pattern>" [--only wiki]
+node scripts/query.mjs "<keywords>" [--tag X --type Y]
+node scripts/get_page.mjs <id-or-path> [--follow-sources]
+node scripts/grep_wiki.mjs "<pattern>" [--only wiki]
 ```
 See `SKILL.md` (skill entry point) and `references/examples.md` for query patterns.
 
@@ -110,8 +110,8 @@ performance_claims:
 
 - `scripts/validate.py` — Validates all frontmatter against `data/schemas.yaml`
 - `scripts/generate-indices.py` — Regenerates `queries/*.md` from frontmatter
-- Setup: no Python package is required; scripts prefer host PyYAML and fall back to the bundled pure-Python implementation. `pip install -r requirements.txt` is optional.
-- Run: `python3 scripts/validate.py` then `python3 scripts/generate-indices.py`
+- Setup: queries need Node.js >= 22 and no install step; the YAML parser is vendored. Maintenance is a uv project (`pyproject.toml`), with a bundled pure-Python PyYAML fallback for hosts without PyYAML.
+- Run: `uv run scripts/validate.py` then `uv run scripts/generate-indices.py`
 
 ## Scope Rules
 

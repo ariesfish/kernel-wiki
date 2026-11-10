@@ -26,14 +26,14 @@ Claude Code's skill-discovery phase reads **only `SKILL.md`** at boot (and the Y
 
 Even the pathological worst case — enumerating every file in the checkout — takes ~25 ms and touches under 10 MiB of apparent bytes. That is well inside Claude Code's typical startup budget and is a one-time cost per session.
 
-When the skill is actually engaged, a typical query reads `SKILL.md` plus one or more files from `references/` (primer, schema, examples) — the measured sum is under 1 ms. Artifact files are only read on explicit `get_page.py --include-code` or `grep_wiki.py --ext` calls, and those are user-driven, not boot-time.
+When the skill is actually engaged, a typical query reads `SKILL.md` plus one or more files from `references/` (primer, schema, examples) — the measured sum is under 1 ms. Artifact files are only read on explicit `get_page.mjs --include-code` or `grep_wiki.mjs --ext` calls, and those are user-driven, not boot-time.
 
 ## Recommendation
 
 **No exclude mechanism is needed.** The `artifacts/` tree does not participate in skill-boot scanning:
 
 1. The Claude Code skill manifest is `SKILL.md` only; its `allowed-tools` / `description` fields are the boot payload.
-2. Artifact contents reach the model only when the user explicitly asks for them (via `get_page.py --include-code`, `grep_wiki.py --ext`, or a direct `Read` call).
+2. Artifact contents reach the model only when the user explicitly asks for them (via `get_page.mjs --include-code`, `grep_wiki.mjs --ext`, or a direct `Read` call).
 3. No `.claude-skill-ignore` file exists in the official Claude Code feature set; inventing one would be a phantom fix.
 
 ## Bound Compliance

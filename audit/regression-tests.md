@@ -10,7 +10,8 @@ body, scope, metadata, query, and provenance guards were absent.
 
 Command: `python3 -m unittest discover -s tests -p 'test_*.py'`
 
-Result: **pass — 158 tests**.
+Result: **pass — 154 tests** (Python). The Node query layer has a separate
+suite: `npm test` runs 20 tests under `tests/js/`.
 
 Coverage includes:
 

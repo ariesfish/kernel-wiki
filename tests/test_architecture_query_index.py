@@ -1,15 +1,10 @@
 import importlib.util
-import sys
 import unittest
 from pathlib import Path
-from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-sys.path.insert(0, str(SCRIPTS))
-
-import query  # noqa: E402
 
 
 def load_hyphenated(name, path):
@@ -30,27 +25,10 @@ def page(path, architectures, disposition=None):
     }
     if disposition is not None:
         frontmatter["architecture_disposition"] = disposition
-    return {
-        "path": path,
-        "body": "",
-        "fm": frontmatter,
-    }
+    return frontmatter
 
 
-def args(architecture):
-    return SimpleNamespace(
-        type=None,
-        tag=None,
-        repo=None,
-        language=None,
-        architecture=architecture,
-        symptom=None,
-        confidence=None,
-        has_code=False,
-    )
-
-
-class QueryIndexConsistencyTests(unittest.TestCase):
+class ArchitectureIndexConsistencyTests(unittest.TestCase):
     def setUp(self):
         self.pages = [
             page("exact-sm100", ["sm100"], "exact"),
@@ -64,36 +42,13 @@ class QueryIndexConsistencyTests(unittest.TestCase):
             page("non-pr-empty", []),
         ]
 
-    def paths(self, architecture):
-        return {p["path"] for p in query.filter_pages(self.pages, args(architecture))}
-
     def index_pages(self):
         rows = []
         for value in self.pages:
-            fm = dict(value["fm"])
-            fm["_path"] = value["path"]
+            fm = dict(value)
+            fm["_path"] = value["id"]
             rows.append(fm)
         return rows
-
-    def test_exact_query_has_no_family_false_positive(self):
-        self.assertEqual({"exact-sm100", "mixed"}, self.paths("sm100"))
-
-    def test_blackwell_query_is_family_hierarchy(self):
-        self.assertEqual(
-            {"exact-sm100", "exact-sm100a", "exact-sm120", "family", "hand-authored-family", "mixed"},
-            self.paths("blackwell"),
-        )
-
-    def test_unknown_query_exposes_every_validated_unknown(self):
-        self.assertEqual({"unknown"}, self.paths("unknown"))
-
-    def test_exact_query_discloses_excluded_family_and_unknown_counts(self):
-        self.assertEqual(
-            (1, 1), query.architecture_filter_exclusion_counts(self.pages, "sm100")
-        )
-        self.assertIsNone(
-            query.architecture_filter_exclusion_counts(self.pages, "blackwell")
-        )
 
     def test_index_membership_equals_declared_metadata_sets(self):
         exact, family, unknown = indices.architecture_index_sets(self.index_pages())
@@ -111,15 +66,6 @@ class QueryIndexConsistencyTests(unittest.TestCase):
         self.assertIn("validated source-PR unknowns", rendered)
         self.assertIn("Source-PR pages whose validated evidence review", rendered)
         self.assertIn("### `sm100`", rendered)
-
-    def test_documented_architecture_aliases_match_family_and_product_semantics(self):
-        query._ALIAS_CACHE = None
-        aliases = query.load_alias_expansions()
-        self.assertEqual("blackwell", aliases["blackwell"])
-        for product in ("b200", "gb200"):
-            self.assertEqual("sm100", aliases[product])
-        for product in ("b300", "gb300", "sm103"):
-            self.assertEqual("sm103", aliases[product])
 
 
 if __name__ == "__main__":

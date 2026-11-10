@@ -65,7 +65,7 @@ def is_extractable_block(lang, body):
       NOT misclassified as code. Blogs like `amandeep-nvfp4-attempts`
       use unlabeled fences for formatted notes; without this check the
       extractor would ship `01-attempts-1-3-getting-the-basics-right.txt`
-      as a `.txt` "code" file and pollute `query.py --has-code`
+      as a `.txt` "code" file and pollute `query.mjs --has-code`
       (Codex R26 P2).
     """
     if not body.strip():
@@ -296,7 +296,7 @@ def extract_one_blog(blog_md, force=False):
     if not code_blocks:
         # Blog has no supported fenced code. If a previous extraction left a
         # code/ subtree on disk, remove it entirely — otherwise validate.py,
-        # query.py --has-code, and get_page.py --include-code will continue
+        # query.mjs --has-code, and get_page.mjs --include-code will continue
         # to treat the blog as if it had extractable code.
 
         if code_dir.is_dir():

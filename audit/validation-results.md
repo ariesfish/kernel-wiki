@@ -23,7 +23,8 @@ The initial size was 24.72 MiB / 25 MiB and core manifests contained 252 PRs.
 | `python3 scripts/verify_core_prs.py` | 0 | pass | all 3 manifests byte-consistent; checksum `cde1aab41b70…`; 110 core PRs |
 | `python3 scripts/repo_size_check.py` | 0 | pass | 24.68 MiB across 1,601 reviewable files; 422 artifact files; ceiling 25 MiB |
 | `python3 scripts/generate-indices.py` | 0 | pass | 1,041 pages; all 7 query indices regenerated |
-| `python3 -m unittest discover -s tests -p 'test_*.py'` | 0 | pass | 158 tests |
+| `python3 -m unittest discover -s tests -p 'test_*.py'` | 0 | pass | 154 tests |
+| `npm test` | 0 | pass | 20 Node tests for the query layer |
 | `bash tests/check_freshness_offline.sh` | 0 | pass | freshness checker remains network-free |
 | `git diff --check` | 0 | pass | no whitespace or conflict-marker errors |
 

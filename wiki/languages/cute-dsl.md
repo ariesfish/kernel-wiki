@@ -45,7 +45,7 @@ barrier participants, TMA partitioning, and epilogue.
 
 ## Full Examples (verbatim upstream code shipped locally)
 
-The following CuTe DSL files ship **verbatim** in this repository under `artifacts/prs/cutlass/` (pinned at each PR's merge SHA). Open them with `python3 scripts/get_page.py <pr-id> --include-code` or read them directly.
+The following CuTe DSL files ship **verbatim** in this repository under `artifacts/prs/cutlass/` (pinned at each PR's merge SHA). Open them with `node scripts/get_page.mjs <pr-id> --include-code` or read them directly.
 
 | File | Purpose | Size |
 |---|---|---|

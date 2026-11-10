@@ -115,8 +115,8 @@ def collect_one(contest_page, sub_idx, sub, manifest, contest_page_id=None):
         # No manifest entry — remain unavailable with structural reason.
         # R28: also delete any previously-collected bundle directory.
         # Without this, a manifest entry that's removed leaves stale
-        # code under artifacts/contests/... which `query.py --has-code`
-        # and `get_page.py --include-code` would still surface even
+        # code under artifacts/contests/... which `query.mjs --has-code`
+        # and `get_page.mjs --include-code` would still surface even
         # though the contest page declares the submission unavailable.
         if bundle_dir.is_dir():
             shutil.rmtree(bundle_dir)

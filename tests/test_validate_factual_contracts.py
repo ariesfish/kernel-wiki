@@ -514,7 +514,7 @@ class ShippedDocumentationContractTests(unittest.TestCase):
         )
         bundles = len(list((ROOT / "artifacts").rglob("PROVENANCE.yaml")))
 
-        self.assertEqual(158, discovered_tests)
+        self.assertEqual(154, discovered_tests)
         for path in (ROOT / "audit/regression-tests.md", ROOT / "audit/validation-results.md"):
             self.assertIn(f"{discovered_tests} tests", path.read_text(encoding="utf-8"))
         for path in (

@@ -9,3 +9,9 @@ plan.md
 audit/claude-round-*.json
 audit/claude-findings-disposition.md
 .worklog/
+
+# Node.js
+node_modules/
+
+# uv
+.venv/

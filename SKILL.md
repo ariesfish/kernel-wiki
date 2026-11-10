@@ -1,7 +1,7 @@
 ---
 name: kernel-wiki
 license: MIT
-compatibility: "python3 >= 3.8; no third-party packages required (bundled pure-Python YAML fallback)"
+compatibility: "node >= 22 for queries (no install step); python3 >= 3.8 + uv for corpus maintenance only"
 metadata:
   upstream: mit-han-lab/KernelWiki
   upstream_revision: b6b4301f15e8ce6955a56776690643ce5db369e6
@@ -13,7 +13,7 @@ allowed-tools: "bash read grep find"
 
 # kernel-wiki — Blackwell & Hopper Kernel Optimization Wiki
 
-Query a structured, cross-referenced knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90). The repository update date is recorded in `README.md`; run `python3 scripts/repo_status.py` for current corpus counts.
+Query a structured, cross-referenced knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90). The repository update date is recorded in `README.md`; run `node scripts/repo_status.mjs` for current corpus counts.
 
 ## When To Use This Skill
 
@@ -39,20 +39,23 @@ All commands below run from the skill directory (the clone root — the director
 
 ### Runtime dependencies
 
-The query and maintenance scripts are self-contained. They use the host
-PyYAML package when present and fall back to the bundled pure-Python loader and
-dumper when it is missing. Invoke them directly with `python3`; do not assume
-that `pip`, a virtualenv, network access, or a pre-installed PyYAML package is
-available. `requirements.txt` is optional and only installs the faster host
-implementation.
+The query layer is Node.js (>= 22) and self-contained: `scripts/query.mjs`,
+`get_page.mjs`, `grep_wiki.mjs`, and `repo_status.mjs` use only Node built-ins
+plus the YAML parser vendored in `scripts/_vendor/yaml.mjs`. A cloned skill
+needs no `npm install`, no Python interpreter, and no network access.
+
+Corpus maintenance (validation, page generation, index generation) is Python.
+It is not needed to query. Use `uv run` so the PyYAML version is reproducible;
+the scripts still fall back to the bundled pure-Python loader when PyYAML is
+missing, including under `python3 -S`.
 
 ### Path 1: Unified search (preferred for natural language)
 
 ```bash
-python3 scripts/query.py "how to fuse gate-up dual GEMM on Blackwell"
-python3 scripts/query.py --tag nvfp4 --type kernel
-python3 scripts/query.py --repo cutlass --limit 20
-python3 scripts/query.py --symptom tail-effect --compact
+node scripts/query.mjs "how to fuse gate-up dual GEMM on Blackwell"
+node scripts/query.mjs --tag nvfp4 --type kernel
+node scripts/query.mjs --repo cutlass --limit 20
+node scripts/query.mjs --symptom tail-effect --compact
 ```
 
 Filters: `--type`, `--tag`, `--repo`, `--language`, `--architecture`,
@@ -63,18 +66,18 @@ and `--architecture` accept aliases — `--tag UMMA` matches `tcgen05`,
 ### Path 2: Fetch a specific page by id or path
 
 ```bash
-python3 scripts/get_page.py kernel-flash-attention-4
-python3 scripts/get_page.py pr-cutlass-2472
-python3 scripts/get_page.py kernel-flash-attention-4 --follow-sources
-python3 scripts/get_page.py kernel-flash-attention-4 --body-only
+node scripts/get_page.mjs kernel-flash-attention-4
+node scripts/get_page.mjs pr-cutlass-2472
+node scripts/get_page.mjs kernel-flash-attention-4 --follow-sources
+node scripts/get_page.mjs kernel-flash-attention-4 --body-only
 ```
 
 ### Path 3: Regex text search across wiki bodies and PR pages
 
 ```bash
-python3 scripts/grep_wiki.py "tcgen05" --only wiki
-python3 scripts/grep_wiki.py "two-CTA" --only wiki
-python3 scripts/grep_wiki.py "nvfp4" "block_scale" --any
+node scripts/grep_wiki.mjs "tcgen05" --only wiki
+node scripts/grep_wiki.mjs "two-CTA" --only wiki
+node scripts/grep_wiki.mjs "nvfp4" "block_scale" --any
 ```
 
 ### Path 4: Pre-built cross-reference indices
@@ -114,11 +117,11 @@ When answering from this KB:
 - **Auto-generated query indices** in `queries/`
 - **Controlled vocabulary** (80+ tags) in `data/tags.yaml`, alias map in `data/aliases.yaml`
 - **Hybrid version-claim registry** — per-page `version_sensitive: <id>` pointers + `data/version-claims.yaml` central registry, validated for bidirectional consistency
-- **Status script** `scripts/repo_status.py` — current corpus counts
+- **Status script** `scripts/repo_status.mjs` — current corpus counts
 - **Validator** `scripts/validate.py` — schema, link, artifact, and ledger checks
 - **Blackwell-first** — Hopper-only wiki pages carry explicit `blackwell_relevance`; source pages preserve upstream evidence and are exempt
 
-To refresh the corpus: run `scripts/refresh_candidate_ledger.py`, regenerate PR pages and query indices, then validate.
+To refresh the corpus: run `uv run scripts/refresh_candidate_ledger.py`, regenerate PR pages and query indices, then validate.
 
 ## Quality Guarantees
 

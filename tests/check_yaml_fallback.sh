@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# Verify that the skill's read paths work with a Python interpreter that has
-# no site-packages. `-S` disables the system site directory, including PyYAML.
+# Verify that the Python maintenance tooling works with an interpreter that
+# has no site-packages. `-S` disables the system site directory, including
+# PyYAML, so this exercises scripts/_vendor/yaml and scripts/_yaml_compat.py.
+#
+# The query layer is Node.js and has its own tests under tests/js/.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -28,12 +31,11 @@ assert isinstance(policy["cute-dsl"]["description"], str)
 
 round_trip = yaml.safe_load(yaml.safe_dump({"date": data["id"], "tags": data["tags"]}))
 assert round_trip["tags"] == data["tags"]
+
+import pr_policy  # noqa: E402
+
+assert pr_policy.architecture_matches_filter(["sm100"], "exact", "B200")
+assert pr_policy.architecture_matches_filter(["blackwell"], "family", "blackwell")
 PY
 
-query_output="$(python3 -S scripts/query.py --tag nvfp4 --type kernel --compact)"
-grep -q "kernel-nvfp4-gemm" <<<"$query_output"
-
-page_output="$(python3 -S scripts/get_page.py kernel-flash-attention-4 --frontmatter-only)"
-grep -q "id: kernel-flash-attention-4" <<<"$page_output"
-
-echo "OK: KernelWiki works without host PyYAML"
+echo "OK: Python maintenance tooling works without host PyYAML"

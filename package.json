@@ -1,0 +1,19 @@
+{
+  "name": "kernel-wiki",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Query layer for the kernel-wiki Agent Skill. The corpus is read-only; maintenance tooling lives in Python.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/js/*.test.mjs",
+    "build:yaml": "node scripts/build_yaml_vendor.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "yaml": "^2.9.1"
+  }
+}

@@ -1,5 +1,6 @@
 import hashlib
 import importlib.util
+import json
 import re
 import sys
 import unittest
@@ -12,6 +13,8 @@ sys.path.insert(0, str(SCRIPTS))
 from _yaml_compat import yaml  # noqa: E402
 
 from pr_policy import (  # noqa: E402
+    ARCHITECTURE_FAMILY_PREFIXES,
+    PRODUCT_ARCHITECTURE_MAPPINGS,
     SUPPORTED_EXACT_ARCHITECTURES,
     architecture_matches_filter,
     body_contract_errors,
@@ -770,6 +773,21 @@ class ArchitectureQuerySemanticsTests(unittest.TestCase):
     def test_documented_product_alias_is_exact(self):
         self.assertTrue(architecture_matches_filter(["sm100"], "exact", "B200"))
         self.assertFalse(architecture_matches_filter(["blackwell"], "family", "B200"))
+
+    def test_shared_architecture_json_matches_policy_constants(self):
+        data = json.loads((ROOT / "data" / "architectures.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            dict(ARCHITECTURE_FAMILY_PREFIXES),
+            {family: tuple(values) for family, values in data["families"].items()},
+        )
+        self.assertEqual(SUPPORTED_EXACT_ARCHITECTURES, tuple(data["exact"]))
+        self.assertEqual(
+            PRODUCT_ARCHITECTURE_MAPPINGS,
+            {
+                product: (row["architecture"], row["source"])
+                for product, row in data["products"].items()
+            },
+        )
 
 
 if __name__ == "__main__":

@@ -24,7 +24,7 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
 echo "[pre-commit] validate.py"
-python3 scripts/validate.py
+uv run scripts/validate.py
 status=$?
 if [ $status -ne 0 ]; then
   echo "[pre-commit] validate.py failed"; exit $status
@@ -32,7 +32,7 @@ fi
 
 if [ -f "data/phase3-size-budget.yaml" ]; then
   echo "[pre-commit] repo_size_check.py"
-  python3 scripts/repo_size_check.py
+  uv run scripts/repo_size_check.py
   status=$?
   if [ $status -ne 0 ]; then
     echo "[pre-commit] repo_size_check.py failed"; exit $status
@@ -41,7 +41,7 @@ fi
 
 if [ -f "data/phase3-dod-fixtures.yaml" ]; then
   echo "[pre-commit] check_dod_fixtures.py"
-  python3 scripts/check_dod_fixtures.py
+  uv run scripts/check_dod_fixtures.py
   status=$?
   if [ $status -ne 0 ]; then
     echo "[pre-commit] check_dod_fixtures.py failed"; exit $status

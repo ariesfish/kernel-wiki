@@ -7,7 +7,7 @@ version_sensitive:
 
 A compact, authoritative map of the knowledge base. Use this as a fast lookup table when the user's question is broad — each row tells you exactly which page to open.
 
-All page IDs below resolve via `get_page.py <id>`. All paths are relative to the wiki root (the directory containing `data/`, `wiki/`, `sources/`, `queries/`).
+All page IDs below resolve via `get_page.mjs <id>`. All paths are relative to the wiki root (the directory containing `data/`, `wiki/`, `sources/`, `queries/`).
 
 ---
 
@@ -116,7 +116,7 @@ All page IDs below resolve via `get_page.py <id>`. All paths are relative to the
 | NVIDIA/TensorRT-LLM | 88 | `candidates/tensorrt-llm.yaml` |
 | tile-ai/tilelang | 19 | `candidates/tilelang.yaml` |
 
-Query by repo: `python3 scripts/query.py --repo <name>`.
+Query by repo: `node scripts/query.mjs --repo <name>`.
 
 ---
 
@@ -153,7 +153,7 @@ When the user types one of these, match to the canonical term shown:
 | GDN, GatedDeltaNet, gated delta rule | `gated-delta-net` |
 | NSA, native sparse attention | `sparse-attention` |
 
-The `query.py` tool applies these automatically when scoring and when using `--tag`.
+The `query.mjs` tool applies these automatically when scoring and when using `--tag`.
 
 ---
 

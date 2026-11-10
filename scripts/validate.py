@@ -63,8 +63,8 @@ BUNDLE_SIZE_CAP_BYTES = 5 * 1024 * 1024
 # emits shell / yaml / json fences into bundles, and orphan + manifest-
 # drift detection must cover them too — otherwise a stale `deploy.sh`
 # under artifacts/blogs/<slug>/code/ would pass validate.py silently).
-# Keep this set identical to the code-ext subset of get_page.py
-# --include-code and query.py --has-code; the three together are the
+# Keep this set identical to the code-ext subset of get_page.mjs
+# --include-code and query.mjs --has-code; the three together are the
 # Phase-3 asset-source contract.
 ASSET_SOURCE_EXTS = {
     ".cu", ".cuh", ".ptx",
@@ -85,7 +85,7 @@ def load_yaml_file(path):
 def validate_alias_contract(raw=None):
     """Reject ambiguous aliases and product-to-architecture drift.
 
-    `query.py` resolves the first case-insensitive alias it sees. Without this
+    `query.mjs` resolves the first case-insensitive alias it sees. Without this
     check, a duplicate family/product term can silently canonicalize to the
     wrong exact architecture even when pr_policy's authoritative product map
     is correct.
@@ -1017,7 +1017,7 @@ def validate_file(filepath, schemas, valid_tags, all_source_ids, code_langs):
                 # containment under REPO_ROOT/artifacts. A raw
                 # startswith('artifacts/') check accepts strings like
                 # 'artifacts/../sources/prs' that escape the quarantine.
-                # get_page.py --include-code and query.py --has-code
+                # get_page.mjs --include-code and query.mjs --has-code
                 # both follow the resolved path, so the validator must
                 # compare resolved-vs-resolved too.
                 try:
