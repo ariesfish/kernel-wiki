@@ -9,8 +9,8 @@ const json = (file) => JSON.parse(bytes(file));
 test("migrated receipts bind the current policy and its frozen Python parity evidence", () => {
   const fixture = json("tests/fixtures/pr-policy-cases.json");
   for (const file of [
-    "audit/pr-file-cap-reconstruction.json",
-    "data/pr-architecture-evidence.json",
+    "data/evidence/pr-file-cap-reconstruction.json",
+    "data/evidence/pr-architecture.json",
   ]) {
     const receipt = json(file),
       migration = receipt.policy_migration;
@@ -22,7 +22,7 @@ test("migrated receipts bind the current policy and its frozen Python parity evi
     assert.equal(receipt.policy_sha256, hash(migration.to_implementation));
   }
   assert.equal(
-    json("data/pr-architecture-evidence.json").capped_file_correction_receipt_sha256,
-    hash("audit/pr-file-cap-reconstruction.json"),
+    json("data/evidence/pr-architecture.json").capped_file_correction_receipt_sha256,
+    hash("data/evidence/pr-file-cap-reconstruction.json"),
   );
 });

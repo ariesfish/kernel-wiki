@@ -12,7 +12,7 @@ test("vendored YAML reads corpus and maintenance policy without installed packag
   const frontmatter = parse(/^---\s*\n([\s\S]*?)\n---/.exec(text)[1]);
   assert.equal(frontmatter.id, "kernel-flash-attention-4");
   assert.ok(frontmatter.tags.includes("tcgen05"));
-  const policy = parse(fs.readFileSync(path.join(root, "data/inclusion-policy.yaml"), "utf8"));
+  const policy = parse(fs.readFileSync(path.join(root, "data/inclusion-policy.json"), "utf8"));
   assert.ok(Array.isArray(policy["cute-dsl"].capture_criteria));
   assert.equal(typeof policy["cute-dsl"].description, "string");
   assert.deepEqual(

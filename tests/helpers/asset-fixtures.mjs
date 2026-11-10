@@ -11,8 +11,8 @@ export function fixture(t) {
     }),
   );
   mkdirSync(path.join(root, "wiki"));
-  put(root, "data/tags.yaml", "tags: []\n");
-  put(root, "data/inclusion-policy.yaml", "{}\n");
+  put(root, "data/tags.json", '{\n  "tags": []\n}\n');
+  put(root, "data/inclusion-policy.json", "{}\n");
   return root;
 }
 export function put(root, relative, content) {

@@ -12,12 +12,13 @@ import {
   writeSkipAudit,
 } from "../scripts/generate-pr-pages.mjs";
 import { bodyContractErrors } from "../scripts/lib/pr-policy.mjs";
-import { parse, stringify } from "../scripts/lib/yaml.mjs";
+import { parseJson, stringifyJson as stringify } from "../scripts/lib/json.mjs";
+import { parse } from "../scripts/lib/yaml.mjs";
 const cases = JSON.parse(
   fs.readFileSync(new URL("./fixtures/pr-page-cases.json", import.meta.url), "utf8"),
 );
 for (const fixture of cases) {
-  test(`PR generation preserves Python metadata and body: ${fixture.name}`, () => {
+  test(`PR generation preserves captured metadata and body: ${fixture.name}`, () => {
     const result = generatePage(...structuredClone(fixture.args));
     const match = /^---\n([\s\S]*?)\n---\n\n([\s\S]*)$/.exec(result);
     assert.ok(match);
@@ -83,7 +84,7 @@ test("ledger generation skips existing pages, records failures and writes only r
     recursive: true,
   });
   fs.writeFileSync(path.join(dir, "PR-1.md"), "existing evidence\n");
-  const ledger = path.join(root, "ledger.yaml");
+  const ledger = path.join(root, "ledger.json");
   fs.writeFileSync(
     ledger,
     stringify({
@@ -124,11 +125,18 @@ test("ledger generation skips existing pages, records failures and writes only r
   assert.ok(!fs.existsSync(path.join(dir, "PR-3.md")));
   assert.equal(audit.get("example/project#2").stage, "pre-fetch");
   assert.equal(audit.get("example/project#3").stage, "is-kernel-related");
-  const auditFile = path.join(root, "audit.yaml");
+  const auditFile = path.join(root, "audit.json");
   recordSkip(audit, "abc/project", 9, "pre-fetch", "failed", "2026-08-18");
+  recordSkip(audit, "abc/project", 9007199254740993n, "pre-fetch", "failed", "2026-08-18");
   writeSkipAudit(audit, auditFile);
   const first = fs.readFileSync(auditFile, "utf8");
   writeSkipAudit(loadSkipAudit(auditFile), auditFile);
   assert.equal(fs.readFileSync(auditFile, "utf8"), first);
-  assert.equal(parse(first).rows[0].repo, "abc/project");
+  assert.equal(parseJson(first).rows[0].repo, "abc/project");
+  assert.deepEqual(
+    parseJson(first)
+      .rows.filter((row) => row.repo === "abc/project")
+      .map((row) => row.pr_number),
+    [9, 9007199254740993n],
+  );
 });

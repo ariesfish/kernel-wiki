@@ -115,8 +115,8 @@ When answering from this KB:
 - Source PR pages, synthesized wiki pages, blog/doc/contest summaries, candidate ledgers, query indices, and artifact bundles.
 - **Verbatim upstream asset bundles** in `artifacts/` (PR patches and complete kernel files or excerpts) — pinned to upstream SHAs via `PROVENANCE.yaml`
 - **Auto-generated query indices** in `queries/`
-- **Controlled vocabulary** (80+ tags) in `data/tags.yaml`, alias map in `data/aliases.yaml`
-- **Hybrid version-claim registry** — per-page `version_sensitive: <id>` pointers + `data/version-claims.yaml` central registry, validated for bidirectional consistency
+- **Controlled vocabulary** (80+ tags) in `data/tags.json`, alias map in `data/aliases.json`
+- **Hybrid version-claim registry** — per-page `version_sensitive: <id>` pointers + `data/version-claims.json` central registry, validated for bidirectional consistency
 - **Status script** `scripts/repo_status.mjs` — current corpus counts
 - **Validator** `scripts/validate.mjs` — schema, link, artifact, and ledger checks
 - **Blackwell-first** — Hopper-only wiki pages carry explicit `blackwell_relevance`; source pages preserve upstream evidence and are exempt

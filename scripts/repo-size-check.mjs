@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 /** Report working-tree size and artifact file count, enforcing the active budget. */
+import { readJson } from "./lib/json.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { parseMaintenance as parse } from "./lib/yaml.mjs";
 const configuredRoot = process.env.BLACKWELL_WIKI_ROOT;
 export const REPO_ROOT = configuredRoot
   ? path.resolve(
       configuredRoot === "~" ? os.homedir() : configuredRoot.replace(/^~\//, `${os.homedir()}/`),
     )
   : path.resolve(fileURLToPath(new URL("../", import.meta.url)));
-export const BUDGET_PATH = path.join(REPO_ROOT, "data", "phase3-size-budget.yaml");
+export const BUDGET_PATH = path.join(REPO_ROOT, "data", "repository-budget.json");
 export const ARTIFACTS_DIR = path.join(REPO_ROOT, "artifacts");
 export const EXCLUDE_TOP = new Set([
   ".git",
@@ -91,14 +91,19 @@ export function loadBudget() {
   if (!isFile(BUDGET_PATH)) {
     return null;
   }
-  try {
-    return parse(fs.readFileSync(BUDGET_PATH, "utf8")) || {};
-  } catch (e) {
-    if (e.name === "YAMLParseError") {
-      return {};
-    }
-    throw e;
+  const budget = readJson(BUDGET_PATH);
+  if (!budget || typeof budget !== "object" || Array.isArray(budget)) {
+    throw new TypeError("Repository budget must be a JSON object");
   }
+  const ceiling = budget.active_ceiling_mib;
+  const valid =
+    typeof ceiling === "bigint"
+      ? ceiling >= 0n
+      : typeof ceiling === "number" && Number.isFinite(ceiling) && ceiling >= 0;
+  if (!Object.hasOwn(budget, "active_ceiling_mib") || !valid) {
+    throw new TypeError("active_ceiling_mib must be a non-negative numeric ceiling");
+  }
+  return budget;
 }
 export function main(argv = process.argv.slice(2)) {
   let args;
@@ -143,7 +148,13 @@ export function main(argv = process.argv.slice(2)) {
   const [total, totalFiles] = workingTreeBytes();
   const artifactsFiles = artifactsFileCount();
   const mib = total / (1024 * 1024);
-  const budget = loadBudget();
+  let budget;
+  try {
+    budget = loadBudget();
+  } catch (error) {
+    console.error(`ERROR: data/repository-budget.json: ${error.message}`);
+    return 2;
+  }
   let ceilingMib = null,
     ceilingSrc = null;
   if (args["ceiling-mib"] !== undefined) {
@@ -151,7 +162,7 @@ export function main(argv = process.argv.slice(2)) {
     ceilingSrc = "CLI override";
   } else if (budget && Object.hasOwn(budget, "active_ceiling_mib")) {
     ceilingMib = budget.active_ceiling_mib;
-    ceilingSrc = "data/phase3-size-budget.yaml";
+    ceilingSrc = "data/repository-budget.json";
   }
   console.log(
     `Working tree: ${mib.toFixed(2)} MiB across ${totalFiles} files (artifacts/: ${artifactsFiles} files)`,

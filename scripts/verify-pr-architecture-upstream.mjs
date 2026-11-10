@@ -252,7 +252,7 @@ export function deriveUpstreamRecord(pull, files, listingComplete = null, eviden
       changed_files_evidence_count: evidenceFiles.length,
       changed_files_evidence_complete: evidenceFiles.length === total,
       changed_files_evidence_method: "github-pull-diff",
-      changed_files_evidence_receipt: "audit/pr-file-cap-reconstruction.json",
+      changed_files_evidence_receipt: "data/evidence/pr-file-cap-reconstruction.json",
       scope_path_source: "github-pull-diff",
     });
   }

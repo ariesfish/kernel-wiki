@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Check Phase 3 Definition-of-Done fixtures (AC-7), including contract-v3 identities. */
+import { readJson } from "./lib/json.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -12,7 +13,7 @@ export const REPO_ROOT = configuredRoot
       configuredRoot === "~" ? os.homedir() : configuredRoot.replace(/^~\//, `${os.homedir()}/`),
     )
   : path.resolve(fileURLToPath(new URL("../", import.meta.url)));
-export const FIXTURES_PATH = path.join(REPO_ROOT, "data", "phase3-dod-fixtures.yaml");
+export const FIXTURES_PATH = path.join(REPO_ROOT, "data", "asset-contracts.json");
 export const EXPECTED_V3_FIXTURE_ROSTER = Object.freeze({
   "blackwell-warp-specialization": "active",
   "deepgemm-nc128-promotion": "active",
@@ -341,7 +342,7 @@ export function main(argv = process.argv.slice(2)) {
   }
   let data;
   try {
-    data = parse(fs.readFileSync(FIXTURES_PATH, "utf8")) || {};
+    data = readJson(FIXTURES_PATH) || {};
   } catch (e) {
     console.error(`ERROR: could not parse ${FIXTURES_PATH}: ${e.message}`);
     return 2;

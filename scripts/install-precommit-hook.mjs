@@ -19,8 +19,8 @@ if (git.error || git.status !== 0) {
 const root = git.stdout.trim();
 const checks = [
   ["validate.mjs", null],
-  ["repo-size-check.mjs", "data/phase3-size-budget.yaml"],
-  ["check-dod-fixtures.mjs", "data/phase3-dod-fixtures.yaml"],
+  ["repo-size-check.mjs", "data/repository-budget.json"],
+  ["check-dod-fixtures.mjs", "data/asset-contracts.json"],
 ];
 for (const [script, condition] of checks) {
   if (condition && !fs.existsSync(path.join(root, condition))) continue;

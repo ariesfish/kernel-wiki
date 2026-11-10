@@ -47,7 +47,7 @@ Auto-generated cross-referenced indices. **Do not edit manually** — regenerate
 
 ## Page Types and Required Fields
 
-See `data/schemas.yaml` for full schema definitions. Summary:
+See `data/schemas.json` for full schema definitions. Summary:
 
 | Page Type | ID Prefix | Key Required Fields |
 |-----------|-----------|---------------------|
@@ -64,9 +64,9 @@ See `data/schemas.yaml` for full schema definitions. Summary:
 
 ## Controlled Vocabulary
 
-All tags must appear in `data/tags.yaml`. Unknown tags are rejected by the validator.
+All tags must appear in `data/tags.json`. Unknown tags are rejected by the validator.
 
-Alias mappings in `data/aliases.yaml` map canonical terms to known synonyms:
+Alias mappings in `data/aliases.json` map canonical terms to known synonyms:
 - `tcgen05` = UMMA = tensor_core_gen05
 - `tmem` = tensor-memory = TMEM
 - `clc` = Cluster Launch Control = CLC
@@ -108,7 +108,7 @@ performance_claims:
 
 ## Tooling
 
-- `scripts/validate.mjs` — Validates all frontmatter against `data/schemas.yaml`
+- `scripts/validate.mjs` — Validates all frontmatter against `data/schemas.json`
 - `scripts/generate-indices.mjs` — Regenerates `queries/*.md` from frontmatter
 - Setup: all tooling needs Node.js >= 22 and no install step; the YAML parser is vendored. Live upstream maintenance additionally needs `gh` and network access.
 - Run: `node scripts/validate.mjs` then `node scripts/generate-indices.mjs`

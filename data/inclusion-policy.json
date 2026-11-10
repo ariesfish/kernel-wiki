@@ -1,0 +1,101 @@
+{
+  "cute-dsl": {
+    "description": "CuTe DSL is a first-class Blackwell code lane. Every PR tagged cute-dsl\n(in tags or languages) that touches kernel or example directories is\ncaptured. CuTe DSL tutorial PRs are captured even when the PR is\nprimarily documentation, because the tutorial code itself is the\nteaching material.\n",
+    "capture_criteria": [
+      {
+        "languages_contains": "cute-dsl"
+      },
+      {
+        "tags_contains": "cute-dsl"
+      },
+      {
+        "changed_paths_match_documented_in": "scripts/compute_core_prs.py (R27 two-tier globs)"
+      }
+    ],
+    "skip_criteria": [
+      {
+        "changed_paths_match_only": [
+          "docs/**",
+          "**/CHANGELOG*",
+          "**/release_notes*"
+        ]
+      },
+      {
+        "language_tag_only_without_kernel_path": true
+      }
+    ],
+    "examples": {
+      "captured": [
+        "pr-cutlass-3106"
+      ],
+      "skipped": [
+        "PRs that only touch CUTLASS docs and happen to mention CuTe"
+      ]
+    }
+  },
+  "triton": {
+    "description": "Triton is a scoped Blackwell lane. As of Triton 3.6 (released\n2026-01-21), Triton has native SM100 lowering through tcgen05 + TMEM\nvia descriptor/TMA + warp_specialize, tl.dot_scaled, and Gluon\nmulti-CTA / 2CTA. Those compiler capabilities do not establish a\nuniversal lowering form or performance result for every tl.dot shape.\nWe therefore capture Triton PRs in three sub-scopes\nthat remain genuinely useful on Blackwell rather than mirroring the\nfull CuTe-DSL lane.\n\nSee data/version-claims.json::vs-triton-3.6-blackwell-tcgen05 for the\nversion-sensitive claim record this rationale references.\n",
+    "capture_criteria": [
+      {
+        "sub_scope": "memory-bound-kernel",
+        "match": {
+          "languages_contains": "triton",
+          "symptoms_intersects": [
+            "memory-bound",
+            "low-sm-utilization"
+          ]
+        }
+      },
+      {
+        "sub_scope": "sm100-integration",
+        "match": {
+          "languages_contains": "triton",
+          "architectures_contains": "sm100",
+          "changed_paths_match": [
+            "**/triton_kernels/**",
+            "**/triton/**",
+            "**/triton_*.py",
+            "**/*_triton.py",
+            "**/*_triton_*.py"
+          ]
+        }
+      },
+      {
+        "sub_scope": "backend-fallback",
+        "match": {
+          "languages_contains": "triton",
+          "description_contains_any": [
+            "fallback",
+            "fall back",
+            "fall-back",
+            "falls back",
+            "falling back",
+            "SM100 path",
+            "when cuBLAS/CUTLASS is unavailable"
+          ]
+        }
+      }
+    ],
+    "skip_criteria": [
+      {
+        "pure_hopper_only": "languages_contains triton AND architectures_contains_only sm90"
+      },
+      {
+        "runtime_config_only": "changed_paths_match_only ['**/config/**', '**/__init__.py']"
+      },
+      {
+        "benchmark_only": "changed_paths_match_only ['benchmark/**', '**/benchmark/**', 'benchmarks/**', '**/benchmarks/**', 'bench/**', '**/bench/**']"
+      }
+    ],
+    "examples": {
+      "captured": [
+        "Triton PRs delivering FP8 memory-bound attention on B200",
+        "Triton PRs wiring new SM100 backend dispatch"
+      ],
+      "skipped": [
+        "Pure SM90/Hopper Triton tuning PRs with no Blackwell relevance",
+        "Triton runtime config-file-only PRs"
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Generate query index pages from source and wiki frontmatter. */
+import { readJson } from "./lib/json.mjs";
 import {
   existsSync,
   lstatSync,
@@ -53,8 +54,8 @@ function* walk(directory) {
   }
 }
 const tags = (category) => {
-  const filename = path.join(REPO_ROOT, "data/tags.yaml");
-  return new Set(existsSync(filename) ? yaml(text(filename))[category] || [] : []);
+  const filename = path.join(REPO_ROOT, "data/tags.json");
+  return new Set(existsSync(filename) ? readJson(filename)[category] || [] : []);
 };
 const header = (title) => [`# Query: ${title}`, "", "> Auto-generated. Do not edit manually.", ""];
 const output = (lines) => lines.join("\n") + "\n";

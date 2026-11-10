@@ -1,6 +1,6 @@
 # Schema Reference
 
-Condensed reference for the wiki's controlled vocabulary and page schemas. Full definitions live in `data/schemas.yaml`.
+Condensed reference for the wiki's controlled vocabulary and page schemas. Full definitions live in `data/schemas.json`.
 
 ## Page Types and IDs
 
@@ -170,14 +170,14 @@ For `wiki-technique`, `wiki-kernel`, `wiki-language`, must be ≥ `snippet`.
 
 ## Controlled Vocabulary
 
-`data/tags.yaml` is the single source of truth for every controlled value in
+`data/tags.json` is the single source of truth for every controlled value in
 `architectures`, `hardware_features`, `techniques`, `kernel_types`, `languages`,
 `source_categories`, `confidence`, and `reproducibility`. The validator rejects
 values absent from that file. This reference deliberately does not duplicate
 the lists, so vocabulary additions and removals cannot leave a stale schema
 summary behind.
 
-## Canonical Aliases (from data/aliases.yaml)
+## Canonical Aliases (from data/aliases.json)
 
 When asking about:
 - UMMA → canonical tag is `tcgen05`

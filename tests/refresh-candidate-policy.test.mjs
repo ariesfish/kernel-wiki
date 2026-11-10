@@ -11,7 +11,7 @@ import {
   updateLedger,
   writeSearchResults,
 } from "../scripts/refresh-candidate-ledger.mjs";
-import { parse, parseMaintenance, stringify } from "../scripts/lib/yaml.mjs";
+import { parseJson as parse, stringifyJson as stringify } from "../scripts/lib/json.mjs";
 const kernel = [
   {
     filename: "csrc/kernel.cu",
@@ -145,22 +145,39 @@ test("refresh without new rows preserves existing numeric and timestamp metadata
       force: true,
     }),
   );
-  const file = path.join(dir, "ledger.yaml");
+  const file = path.join(dir, "ledger.json");
   fs.writeFileSync(
     file,
-    "repo: example/project\nprs:\n- number: 1\n  decision: defer\n  score: 0.0000001\n  receipt_id: 9007199254740993\n  timestamp: 2026-08-18T12:34:56.123456+02:00\n  midnight: 2026-08-18T00:00:00Z\n",
+    '{\n  "repo": "example/project",\n  "prs": [\n    {\n      "number": 1,\n      "decision": "defer",\n      "score": 1e-7,\n      "receipt_id": 9007199254740993,\n      "timestamp": "2026-08-18T12:34:56.123456+02:00",\n      "midnight": "2026-08-18T00:00:00Z"\n    }\n  ]\n}\n',
   );
   assert.equal(updateLedger(file, "2026-08-18", []), 0);
   const once = fs.readFileSync(file, "utf8");
-  const row = parseMaintenance(once).prs[0];
+  const row = parse(once).prs[0];
   assert.equal(row.score, 1e-7);
   assert.equal(typeof row.score, "number");
   assert.equal(row.receipt_id, 9007199254740993n);
-  assert.match(once, /timestamp: 2026-08-18T12:34:56\.123456\+02:00/);
-  assert.match(once, /midnight: 2026-08-18T00:00:00Z/);
+  assert.equal(row.timestamp, "2026-08-18T12:34:56.123456+02:00");
+  assert.equal(row.midnight, "2026-08-18T00:00:00Z");
   assert.equal(updateLedger(file, "2026-08-18", []), 0);
   assert.equal(fs.readFileSync(file, "utf8"), once);
 });
+test("refresh results sort mixed safe and exact integer IDs without coercion", (t) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "kernel-wiki-refresh-ids-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const output = path.join(dir, "results.json");
+  const numbers = parse("[9007199254740994,1,9007199254740993]");
+  writeSearchResults(
+    "2026-08-18",
+    { demo: numbers.map((number) => ({ number, closedAt: "2026-08-17" })) },
+    output,
+  );
+  assert.deepEqual(parse(fs.readFileSync(output, "utf8")).repos[0].pr_numbers_seen, [
+    1,
+    9007199254740993n,
+    9007199254740994n,
+  ]);
+});
+
 test("refresh preserves existing triage and emits deterministic ledgers/results", (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "kernel-wiki-refresh-"));
   t.after(() =>
@@ -169,7 +186,7 @@ test("refresh preserves existing triage and emits deterministic ledgers/results"
       force: true,
     }),
   );
-  const file = path.join(dir, "ledger.yaml");
+  const file = path.join(dir, "ledger.json");
   const existing = {
     number: 1,
     decision: "defer",
@@ -203,7 +220,7 @@ test("refresh preserves existing triage and emits deterministic ledgers/results"
   const first = fs.readFileSync(file, "utf8");
   assert.equal(updateLedger(file, "2026-08-18", hits, null, fetcher), 0);
   assert.equal(fs.readFileSync(file, "utf8"), first);
-  const output = path.join(dir, "results.yaml");
+  const output = path.join(dir, "results.json");
   const repos = {
     z: [
       {

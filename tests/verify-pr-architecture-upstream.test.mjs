@@ -423,7 +423,7 @@ test("page comparison accepts matching metadata and flags missing pages, receipt
     changed_files_evidence_count: 1,
     changed_files_evidence_complete: true,
     changed_files_evidence_method: "github-pull-diff",
-    changed_files_evidence_receipt: "audit/pr-file-cap-reconstruction.json",
+    changed_files_evidence_receipt: "data/evidence/pr-file-cap-reconstruction.json",
     scope_path_source: "github-pull-diff",
   };
   const matching = localPage(extended);

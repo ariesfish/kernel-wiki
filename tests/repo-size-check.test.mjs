@@ -61,7 +61,7 @@ test("working-tree counts file symlinks, skips broken links, and avoids director
   assert.deepEqual(size.workingTreeBytes(), [6, 2]);
   assert.equal(size.artifactsFileCount(), 1);
 });
-test("size budget missing or malformed is advisory; valid budget and CLI override enforce ceilings", async (t) => {
+test("missing size budget is advisory, malformed JSON fails, and valid ceilings apply", async (t) => {
   const root = tempRoot(t);
   put(root, "a.txt", "reviewable bytes");
   const size = await importInRoot("repo-size-check.mjs", root);
@@ -70,10 +70,12 @@ test("size budget missing or malformed is advisory; valid budget and CLI overrid
   let result = run("repo-size-check.mjs", [], root);
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /no budget file present; skip size gate/);
-  put(root, "data/phase3-size-budget.yaml", "active_ceiling_mib: [\n");
-  assert.deepEqual(size.loadBudget(), {});
-  assert.equal(run("repo-size-check.mjs", [], root).status, 0);
-  put(root, "data/phase3-size-budget.yaml", "active_ceiling_mib: 0\n");
+  put(root, "data/repository-budget.json", "active_ceiling_mib: [\n");
+  assert.throws(() => size.loadBudget(), SyntaxError);
+  const malformed = run("repo-size-check.mjs", [], root);
+  assert.equal(malformed.status, 2);
+  assert.match(malformed.stderr, /repository-budget\.json/);
+  put(root, "data/repository-budget.json", '{\n  "active_ceiling_mib": 0\n}\n');
   result = run("repo-size-check.mjs", [], root);
   assert.equal(result.status, 1);
   assert.match(result.stderr, /exceeds ceiling 0 MiB/);
@@ -92,6 +94,32 @@ test("size budget missing or malformed is advisory; valid budget and CLI overrid
   }
   assert.equal(run("repo-size-check.mjs", ["--help"], root).status, 0);
 });
+test("invalid budget structure and field types cannot silently disable size limits", async (t) => {
+  const root = tempRoot(t);
+  put(root, "a.txt", "reviewable bytes");
+  const size = await importInRoot("repo-size-check.mjs", root);
+  for (const value of [
+    null,
+    [],
+    "wrong",
+    {},
+    { active_ceiling_mib: null },
+    { active_ceiling_mib: "oops" },
+    { active_ceiling_mib: {} },
+    { active_ceiling_mib: true },
+    { active_ceiling_mib: -1 },
+  ]) {
+    put(root, "data/repository-budget.json", JSON.stringify(value));
+    assert.throws(() => size.loadBudget(), TypeError);
+    const result = run("repo-size-check.mjs", [], root);
+    assert.equal(result.status, 2, JSON.stringify(value));
+    assert.match(result.stderr, /repository-budget\.json/);
+  }
+  put(root, "data/repository-budget.json", '{"active_ceiling_mib":9007199254740993}');
+  assert.equal(size.loadBudget().active_ceiling_mib, 9007199254740993n);
+  assert.equal(run("repo-size-check.mjs", [], root).status, 0);
+});
+
 test("artifact file-count budget is enforced independently of a missing byte-size budget", async (t) => {
   const root = tempRoot(t);
   const size = await importInRoot("repo-size-check.mjs", root);

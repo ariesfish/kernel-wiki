@@ -1,3 +1,4 @@
+import { stringifyJson } from "../scripts/lib/json.mjs";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
@@ -17,7 +18,7 @@ import { spawnSync } from "node:child_process";
 import { stringify } from "../scripts/lib/yaml.mjs";
 import * as v from "../scripts/validate.mjs";
 const ROOT = fileURLToPath(new URL("../", import.meta.url));
-const corpusYaml = (name) => v.loadYamlFile(path.join(ROOT, name));
+const corpusData = (name) => v.loadDataFile(path.join(ROOT, name));
 function fixture(callback) {
   const root = mkdtempSync(path.join(tmpdir(), "wiki-audit-")),
     previous = v.REPO_ROOT;
@@ -28,7 +29,11 @@ function fixture(callback) {
     });
     writeFileSync(
       filename,
-      typeof data === "string" || Buffer.isBuffer(data) ? data : stringify(data),
+      typeof data === "string" || Buffer.isBuffer(data)
+        ? data
+        : filename.endsWith(".json")
+          ? stringifyJson(data)
+          : stringify(data),
     );
     return filename;
   };
@@ -58,7 +63,7 @@ test("implicit YAML values retain PyYAML SHA, boolean, octal and exponent contra
       "values.yaml",
       "sha: 0e026982\ny: y\nn: n\nyes: yes\nno: no\noctal: 012\nnot_octal: 08\nexponent: 1e3\nfloat: 1.0e+3\nbase60: 1:20\nnot_base60: 0:20\n",
     );
-    assert.deepEqual(v.loadYamlFile(filename), {
+    assert.deepEqual(v.loadDataFile(filename), {
       sha: "0e026982",
       y: "y",
       n: "n",
@@ -113,7 +118,9 @@ test("aliases reject collisions, product drift and family collapse", () => {
     "aliases must be non-empty strings",
   );
   fixture(({ write }) => {
-    write("data/aliases.yaml", "123: [numeric-key]\n");
+    write("data/aliases.json", {
+      "": ["empty-canonical-key"],
+    });
     has(v.validateAliasContract(), "canonical terms must be non-empty strings");
   });
 });
@@ -144,8 +151,8 @@ test("PR evidence, scope and upstream body contracts remain enforced together", 
   const original = path.join(ROOT, "sources/prs/cutlass/PR-2472.md");
   const base = v.extractFrontmatter(original),
     body = v.readBody(original);
-  const schemas = corpusYaml("data/schemas.yaml"),
-    tags = corpusYaml("data/tags.yaml");
+  const schemas = corpusData("data/schemas.json"),
+    tags = corpusData("data/tags.json");
   fixture(({ root, page }) => {
     mkdirSync(path.join(root, base.artifact_dir), {
       recursive: true,
@@ -465,7 +472,6 @@ test("candidate ledger fixtures exercise valid and missing-field contracts", () 
     "missing required top-level field 'keywords_used'",
   );
 });
-
 test("ledger summary, refresh coverage, subset and cutoff audits remain independent", () =>
   fixture(({ write, page }) => {
     const ledger = {
@@ -486,10 +492,10 @@ test("ledger summary, refresh coverage, subset and cutoff audits remain independ
         },
       ],
     };
-    const filename = write("candidates/project.yaml", ledger);
+    const filename = write("candidates/project.json", ledger);
     assert.deepEqual(v.validateLedger(filename), []);
     has(v.validateSkipAuditCoverage(), "neither sources/prs/project/PR-1.md");
-    write("data/pr-page-skipped.yaml", {
+    write("data/pr-page-skipped.json", {
       rows: [
         {
           repo: "example/project",
@@ -498,12 +504,12 @@ test("ledger summary, refresh coverage, subset and cutoff audits remain independ
       ],
     });
     assert.deepEqual(v.validateSkipAuditCoverage(), []);
-    write("data/refresh-cutoff.yaml", {
+    write("data/refresh-cutoff.json", {
       cutoff_date: "2026-02-01",
       previous_pages_manifest: ["sources/prs/project/PR-1.md"],
     });
     has(v.validateRefreshCutoffAlignment(), "searched_at");
-    write("data/refresh-search-results.yaml", {
+    write("data/refresh-search-results.json", {
       repos: [
         {
           repo_slug: "project",
@@ -520,7 +526,7 @@ test("ledger summary, refresh coverage, subset and cutoff audits remain independ
       captured_at: "2026-01-01",
     });
     has(v.validateCapturedAtCutoff(), "page is new this round");
-    write("candidates/project.yaml", {
+    write("candidates/project.json", {
       ...ledger,
       included: 2,
     });
@@ -535,7 +541,7 @@ test("registry pointers, obsolete claims, dev pinning and plan immutability all 
       applies_to: ["wiki/languages/example.md"],
       dev_branch_sha: "a".repeat(40),
     };
-    write("data/version-claims.yaml", {
+    write("data/version-claims.json", {
       claims: [claim],
     });
     page(
@@ -588,7 +594,7 @@ test("cap receipt discovers the dynamic capped roster and verifies policy digest
   fixture(({ write, page }) => {
     const policy = readFileSync(path.join(ROOT, "scripts/lib/pr-policy.mjs"));
     write("scripts/lib/pr-policy.mjs", policy);
-    write("candidates/project.yaml", {
+    write("candidates/project.json", {
       repo: "example/project",
       prs: [
         {
@@ -616,7 +622,7 @@ test("cap receipt discovers the dynamic capped roster and verifies policy digest
       policy_sha256: v.sha256OfFile(path.join(v.REPO_ROOT, "scripts/lib/pr-policy.mjs")),
       rows: [row],
     };
-    write("audit/pr-file-cap-reconstruction.json", JSON.stringify(receipt));
+    write("data/evidence/pr-file-cap-reconstruction.json", JSON.stringify(receipt));
     assert.deepEqual(v.validateCapReconstructionReceipt(), []);
     page("sources/prs/project/PR-1.md", {
       repo: "example/project",
@@ -624,7 +630,7 @@ test("cap receipt discovers the dynamic capped roster and verifies policy digest
     });
     has(v.validateCapReconstructionReceipt(), "removed page exists");
     write(
-      "audit/pr-file-cap-reconstruction.json",
+      "data/evidence/pr-file-cap-reconstruction.json",
       JSON.stringify({
         ...receipt,
         rows: [],
@@ -632,7 +638,7 @@ test("cap receipt discovers the dynamic capped roster and verifies policy digest
     );
     has(v.validateCapReconstructionReceipt(), "capped candidate roster mismatch");
     write(
-      "audit/pr-file-cap-reconstruction.json",
+      "data/evidence/pr-file-cap-reconstruction.json",
       JSON.stringify({
         ...receipt,
         policy_sha256: "old",
@@ -653,8 +659,8 @@ function corpusFixture({ root, write }) {
   write("scripts/lib/pr-policy.mjs", readFileSync(path.join(ROOT, "scripts/lib/pr-policy.mjs")));
   const digest = v.sha256OfFile(path.join(root, "scripts/lib/pr-policy.mjs"));
   for (const name of [
-    "data/pr-architecture-evidence.json",
-    "audit/pr-file-cap-reconstruction.json",
+    "data/evidence/pr-architecture.json",
+    "data/evidence/pr-file-cap-reconstruction.json",
   ]) {
     const receipt = JSON.parse(readFileSync(path.join(ROOT, name), "utf8"));
     receipt.policy_sha256 = digest;
@@ -682,7 +688,7 @@ test("validator CLI preserves all 29 known errors after fixture receipt migratio
       ).length,
       10,
     );
-    const sanitized = corpusYaml("SANITIZED.yaml");
+    const sanitized = corpusData("SANITIZED.yaml");
     assert.equal(sanitized.removed, 19);
     const missing = errors.filter((line) => line.includes("does not exist in bundle"));
     assert.equal(missing.length, 19);

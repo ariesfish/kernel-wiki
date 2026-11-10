@@ -1,14 +1,13 @@
+import { readJson } from "./json.mjs";
 /**
  * Alias expansion for search keywords and tags.
  *
- * data/aliases.yaml maps a canonical term to its variants. Both directions
+ * data/aliases.json maps a canonical term to its variants. Both directions
  * resolve to the canonical term so `--tag UMMA` finds pages tagged tcgen05,
  * and `--architecture B200` can be normalized by the architecture matcher.
  */
 
-import { readFileSync } from "node:fs";
 import { WIKI_ROOT } from "./root.mjs";
-import { parse } from "./yaml.mjs";
 let cache;
 export function loadAliasExpansions() {
   if (cache) {
@@ -16,7 +15,7 @@ export function loadAliasExpansions() {
   }
   const out = new Map();
   try {
-    const raw = parse(readFileSync(`${WIKI_ROOT}/data/aliases.yaml`, "utf8")) ?? {};
+    const raw = readJson(`${WIKI_ROOT}/data/aliases.json`) ?? {};
     for (const [canonical, variants] of Object.entries(raw)) {
       out.set(canonical.toLowerCase(), canonical);
       for (const variant of variants ?? []) {

@@ -1,9 +1,10 @@
+import { stringifyJson } from "../scripts/lib/json.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import { parse } from "../scripts/lib/yaml.mjs";
-import { computeManifests, dumpSorted } from "../scripts/compute-core-prs.mjs";
+import { computeManifests } from "../scripts/compute-core-prs.mjs";
 import { EnvError, main } from "../scripts/verify-core-prs.mjs";
 import { fixture, page, pr, put, quiet } from "./helpers/asset-fixtures.mjs";
 function corpus(t) {
@@ -28,11 +29,11 @@ test("read-only manifest verification succeeds without changing bytes", async (t
 });
 test("missing core input is environment failure; missing companion and drift are content failures", async (t) => {
   const root = corpus(t);
-  unlinkSync(path.join(root, "data/triton-universe.yaml"));
+  unlinkSync(path.join(root, "data/triton-universe.json"));
   assert.equal(await main([], quiet(root)), 1);
-  put(root, "data/triton-universe.yaml", "drift\n");
+  put(root, "data/triton-universe.json", "drift\n");
   assert.equal(await main([], quiet(root)), 1);
-  unlinkSync(path.join(root, "data/core-prs.yaml"));
+  unlinkSync(path.join(root, "data/core-prs.json"));
   assert.equal(await main([], quiet(root)), 2);
 });
 test("generator failure is inconclusive and incomplete generator output is content failure", async (t) => {
@@ -61,7 +62,7 @@ test("generator failure is inconclusive and incomplete generator output is conte
 test("internal count and checksum are checked even when committed bytes match regeneration", async (t) => {
   const root = corpus(t),
     fresh = computeManifests(root),
-    initial = parse(fresh["core-prs.yaml"].toString());
+    initial = parse(fresh["core-prs.json"].toString());
   for (const change of [
     {
       total_captured: 99,
@@ -71,19 +72,19 @@ test("internal count and checksum are checked even when committed bytes match re
     },
   ]) {
     const core = Buffer.from(
-      dumpSorted({
+      stringifyJson({
         ...initial,
         ...change,
       }),
     );
-    put(root, "data/core-prs.yaml", core);
+    put(root, "data/core-prs.json", core);
     assert.equal(
       await main(
         [],
         quiet(root, {
           computeManifests: () => ({
             ...fresh,
-            "core-prs.yaml": core,
+            "core-prs.json": core,
           }),
         }),
       ),
@@ -165,9 +166,9 @@ test("strict mode flags missing source pages and incomplete source metadata", as
     merge_sha: null,
   });
   const fresh = {
-    "core-prs.yaml": readFileSync(path.join(root, "data/core-prs.yaml")),
-    "cute-dsl-universe.yaml": readFileSync(path.join(root, "data/cute-dsl-universe.yaml")),
-    "triton-universe.yaml": readFileSync(path.join(root, "data/triton-universe.yaml")),
+    "core-prs.json": readFileSync(path.join(root, "data/core-prs.json")),
+    "cute-dsl-universe.json": readFileSync(path.join(root, "data/cute-dsl-universe.json")),
+    "triton-universe.json": readFileSync(path.join(root, "data/triton-universe.json")),
   };
   assert.equal(
     await main(

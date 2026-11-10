@@ -123,8 +123,8 @@ test("structured language and kernel fields override fallback tags while hardwar
   fixture((root) => {
     mkdirSync(path.join(root, "data"));
     writeFileSync(
-      path.join(root, "data/tags.yaml"),
-      "languages: [cuda, triton]\nkernel_types: [gemm, attention]\nhardware_features: [tma, tmem]\n",
+      path.join(root, "data/tags.json"),
+      '{\n  "languages": [\n    "cuda",\n    "triton"\n  ],\n  "kernel_types": [\n    "gemm",\n    "attention"\n  ],\n  "hardware_features": [\n    "tma",\n    "tmem"\n  ]\n}\n',
     );
     const page = {
       id: "p",

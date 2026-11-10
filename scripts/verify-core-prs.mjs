@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Verify manifest bytes in memory, optionally resolving pinned merge SHAs upstream. */
+import { parseJson, stringifyJson } from "./lib/json.mjs";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
@@ -7,7 +8,6 @@ import { parseMaintenance as parse } from "./lib/yaml.mjs";
 import {
   computeManifests,
   computeSha256OfText,
-  dumpSorted,
   isFile,
   isMain,
   REPO_ROOT,
@@ -15,7 +15,7 @@ import {
 } from "./compute-core-prs.mjs";
 import { EnvError, runGh } from "./verify-verbatim.mjs";
 export { REPO_ROOT, EnvError, runGh };
-export const CORE_PATH = path.join(REPO_ROOT, "data", "core-prs.yaml");
+export const CORE_PATH = path.join(REPO_ROOT, "data", "core-prs.json");
 export async function main(argv = process.argv.slice(2), options = {}) {
   const log = options.log || console.log,
     warn = options.warn || console.error;
@@ -39,11 +39,11 @@ export async function main(argv = process.argv.slice(2), options = {}) {
       return 0;
     }
     const root = options.root || REPO_ROOT;
-    if (!isFile(path.join(root, "data", "core-prs.yaml"))) {
-      warn("ERROR: data/core-prs.yaml does not exist; run scripts/compute-core-prs.mjs first");
+    if (!isFile(path.join(root, "data", "core-prs.json"))) {
+      warn("ERROR: data/core-prs.json does not exist; run scripts/compute-core-prs.mjs first");
       return 2;
     }
-    const generatedNames = ["core-prs.yaml", "cute-dsl-universe.yaml", "triton-universe.yaml"];
+    const generatedNames = ["core-prs.json", "cute-dsl-universe.json", "triton-universe.json"];
     const committedBytes = Object.fromEntries(
       generatedNames.map((name) => {
         const file = path.join(root, "data", name);
@@ -53,10 +53,10 @@ export async function main(argv = process.argv.slice(2), options = {}) {
     const freshBytes = await (options.computeManifests || computeManifests)(root);
     const missing = generatedNames.filter((name) => !Object.hasOwn(freshBytes, name));
     if (missing.length) {
-      warn(`ERROR: compute_manifests() did not produce ${JSON.stringify(missing)}`);
+      warn(`ERROR: computeManifests() did not produce ${JSON.stringify(missing)}`);
       return 1;
     }
-    const fresh = parse(freshBytes["core-prs.yaml"].toString());
+    const fresh = parseJson(freshBytes["core-prs.json"].toString());
     const untracked = generatedNames.filter((name) => committedBytes[name] === null);
     if (untracked.length) {
       warn(`FAIL: generated file(s) missing from data/: ${JSON.stringify(untracked)}`);
@@ -81,11 +81,11 @@ export async function main(argv = process.argv.slice(2), options = {}) {
     const prsList = fresh.prs || [];
     if (fresh.total_captured !== prsList.length) {
       warn(
-        `FAIL: data/core-prs.yaml total_captured=${fresh.total_captured} does not match len(prs)=${prsList.length}`,
+        `FAIL: data/core-prs.json total_captured=${fresh.total_captured} does not match len(prs)=${prsList.length}`,
       );
       return 1;
     }
-    const expected = computeSha256OfText(dumpSorted(prsList));
+    const expected = computeSha256OfText(stringifyJson(prsList));
     if (fresh.checksum_sha256 !== expected) {
       warn(
         `FAIL: embedded checksum_sha256 does not match re-computed hash\n  embedded   : ${(fresh.checksum_sha256 || "").slice(0, 20)}...\n  re-computed: ${expected.slice(0, 20)}...`,

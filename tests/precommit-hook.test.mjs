@@ -49,7 +49,7 @@ test("hook runs size and DoD checks when policies exist", (t) => {
   for (const name of ["validate.mjs", "repo-size-check.mjs", "check-dod-fixtures.mjs"]) {
     script(root, name);
   }
-  for (const name of ["phase3-size-budget.yaml", "phase3-dod-fixtures.yaml"]) {
+  for (const name of ["repository-budget.json", "asset-contracts.json"]) {
     fs.writeFileSync(path.join(root, "data", name), "{}\n");
   }
   const result = runHook(root, installHook(root));
@@ -62,7 +62,7 @@ test("hook runs size and DoD checks when policies exist", (t) => {
 test("hook propagates validation failures and stops subsequent checks", (t) => {
   const root = repository(t);
   script(root, "validate.mjs", 7);
-  fs.writeFileSync(path.join(root, "data", "phase3-size-budget.yaml"), "{}\n");
+  fs.writeFileSync(path.join(root, "data", "repository-budget.json"), "{}\n");
   const result = runHook(root, installHook(root));
   assert.equal(result.status, 7);
   assert.match(result.stderr, /validate\.mjs failed/);

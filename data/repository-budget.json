@@ -1,0 +1,7 @@
+{
+  "core_prs_total": 110,
+  "core_prs_checksum_sha256": "5017b84a10f8f028ae4fc43155d459bb5977380d8194d844df38663403be148c",
+  "active_ceiling_mib": 25,
+  "artifacts_file_budget": 6000,
+  "notes": "The size ceiling applies to the reviewable working tree; the file-count budget applies only to artifacts/."
+}

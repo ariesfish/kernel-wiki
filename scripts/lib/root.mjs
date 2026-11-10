@@ -4,7 +4,7 @@
  * The skill is a flat repository: SKILL.md, data/, wiki/, sources/, and
  * queries/ share one root, so the default is the parent of scripts/.
  * BLACKWELL_WIKI_ROOT overrides it for advanced setups. A root that does not
- * contain data/tags.yaml and wiki/ is a configuration error, not a fallback.
+ * contain data/tags.json and wiki/ is a configuration error, not a fallback.
  */
 
 import { statSync } from "node:fs";
@@ -27,7 +27,7 @@ function isDir(p) {
   }
 }
 export function looksLikeWikiRoot(candidate) {
-  return isFile(path.join(candidate, "data", "tags.yaml")) && isDir(path.join(candidate, "wiki"));
+  return isFile(path.join(candidate, "data", "tags.json")) && isDir(path.join(candidate, "wiki"));
 }
 function fail(message) {
   console.error(`ERROR: ${message}`);
@@ -51,7 +51,7 @@ export function resolveWikiRoot(env = process.env, cwd = process.cwd()) {
     }
     fail(
       `BLACKWELL_WIKI_ROOT='${configured}' does not point at a valid ` +
-        "Blackwell kernel wiki (missing data/tags.yaml or wiki/).",
+        "Blackwell kernel wiki (missing data/tags.json or wiki/).",
     );
   }
   const defaultRoot = path.resolve(HERE, "../..");
@@ -77,7 +77,7 @@ export function resolveWikiRoot(env = process.env, cwd = process.cwd()) {
   }
   fail(
     "Could not locate the Blackwell kernel wiki root.\n" +
-      "       Expected a directory containing `data/tags.yaml` and `wiki/`.\n" +
+      "       Expected a directory containing `data/tags.json` and `wiki/`.\n" +
       "       Fix: run scripts from inside the cloned skill directory, or\n" +
       "       set BLACKWELL_WIKI_ROOT to its absolute path.",
   );

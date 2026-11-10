@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /** Generate source PR pages from candidate ledgers and authoritative GitHub evidence. */
+import { readJson, writeJson } from "./lib/json.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { WIKI_ROOT } from "./lib/root.mjs";
-import { parseMaintenance as parse, stringifyMaintenance as stringify } from "./lib/yaml.mjs";
+import { stringifyMaintenance as stringify } from "./lib/yaml.mjs";
 import {
   BODY_CONTRACT,
   classifyScope,
@@ -18,8 +19,8 @@ import {
 } from "./lib/pr-policy.mjs";
 import { ghJson, isoDate, REPO_SLUG_TO_FULL } from "./refresh-candidate-ledger.mjs";
 export const REPO_ROOT = WIKI_ROOT;
-export const TAGS_PATH = path.join(REPO_ROOT, "data/tags.yaml");
-export const PR_PAGE_SKIPPED_PATH = path.join(REPO_ROOT, "data/pr-page-skipped.yaml");
+export const TAGS_PATH = path.join(REPO_ROOT, "data/tags.json");
+export const PR_PAGE_SKIPPED_PATH = path.join(REPO_ROOT, "data/pr-page-skipped.json");
 const sha256 = (value) => createHash("sha256").update(value, "utf8").digest("hex");
 const dump = (value, lineWidth = 80) =>
   stringify(value, {
@@ -174,25 +175,24 @@ export function loadSkipAudit(file = PR_PAGE_SKIPPED_PATH) {
   if (!fs.existsSync(file)) {
     return new Map();
   }
-  const data = parse(fs.readFileSync(file, "utf8")) || {};
+  const data = readJson(file) || {};
   return new Map((data.rows || []).map((row) => [`${row.repo}#${row.pr_number}`, row]));
 }
 export function writeSkipAudit(auditMap, file = PR_PAGE_SKIPPED_PATH) {
   const rows = [...auditMap.values()].sort((a, b) =>
-    a.repo < b.repo ? -1 : a.repo > b.repo ? 1 : a.pr_number - b.pr_number,
+    a.repo < b.repo
+      ? -1
+      : a.repo > b.repo
+        ? 1
+        : a.pr_number < b.pr_number
+          ? -1
+          : a.pr_number > b.pr_number
+            ? 1
+            : 0,
   );
-  const header =
-    "## AC-4 PR-page skip audit. Schema: data/schemas.yaml ::\n## pr-page-skipped-audit. Sort key: (repo, pr_number) ascending.\n## Byte-stable for identical inputs (regen-deterministic).\n##\n## Stages owned by scripts/generate-pr-pages.mjs:\n##   pre-fetch         -> gh PR fetch returned no data\n##   is-kernel-related -> file-allowlist check excluded the PR\n##\n";
-  fs.writeFileSync(
-    file,
-    header +
-      dump(
-        {
-          rows,
-        },
-        200,
-      ),
-  );
+  writeJson(file, {
+    rows,
+  });
 }
 export function recordSkip(auditMap, repo, prNumber, stage, reason, capturedAt) {
   auditMap.set(`${repo}#${prNumber}`, {
@@ -212,7 +212,7 @@ export function processLedger(
   dependencies = {},
 ) {
   const root = dependencies.root || REPO_ROOT;
-  const ledger = parse(fs.readFileSync(ledgerPath, "utf8"));
+  const ledger = readJson(ledgerPath);
   const slug = path.basename(ledgerPath, path.extname(ledgerPath));
   const repo = ledger.repo || REPO_SLUG_TO_FULL[slug] || `unknown/${slug}`;
   const outdir = path.join(root, "sources/prs", repo.split("/")[1]);
@@ -310,7 +310,7 @@ export function main(argv = process.argv.slice(2)) {
     });
     if (values.help || (!values.all && !positionals.length)) {
       console.log(
-        "Usage: node scripts/generate-pr-pages.mjs candidates/cutlass.yaml [--max=N] [--captured-at=YYYY-MM-DD]\n       node scripts/generate-pr-pages.mjs --all [--max=N] [--captured-at=YYYY-MM-DD]",
+        "Usage: node scripts/generate-pr-pages.mjs candidates/cutlass.json [--max=N] [--captured-at=YYYY-MM-DD]\n       node scripts/generate-pr-pages.mjs --all [--max=N] [--captured-at=YYYY-MM-DD]",
       );
       return 0;
     }
@@ -323,7 +323,7 @@ export function main(argv = process.argv.slice(2)) {
     if (values.all) {
       for (const file of fs
         .readdirSync(path.join(REPO_ROOT, "candidates"))
-        .filter((name) => name.endsWith(".yaml"))
+        .filter((name) => name.endsWith(".json"))
         .sort()) {
         processLedger(path.join(REPO_ROOT, "candidates", file), maxPages, capturedAt, audit);
       }

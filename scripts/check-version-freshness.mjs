@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /** Offline freshness checker. Reads checked-in inputs only; no network or subprocess APIs. */
+import { readJson } from "./lib/json.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { parseMaintenance as parse } from "./lib/yaml.mjs";
 const configuredRoot = process.env.BLACKWELL_WIKI_ROOT;
 export const REPO_ROOT = configuredRoot
   ? path.resolve(
@@ -61,11 +61,11 @@ const sortedPairs = (pairs) =>
       y = JSON.parse(b);
     return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0;
   });
-export function loadYaml(filePath) {
+export function loadJson(filePath) {
   if (!isFile(filePath)) {
     return null;
   }
-  return parse(fs.readFileSync(filePath, "utf8"));
+  return readJson(filePath);
 }
 
 /** Return a UTC-midnight Date. Reject impossible dates instead of rolling them over. */
@@ -325,7 +325,7 @@ export function* checkVersionClaims(claimsData, toolVersions, today, versionStal
     if (release && !known.has(release)) {
       yield [
         "warn",
-        `version-claims: ${cid} last_verified_release=${repr(release)} not in data/tool-versions.yaml`,
+        `version-claims: ${cid} last_verified_release=${repr(release)} not in data/tool-versions.json`,
       ];
     }
   }
@@ -336,8 +336,8 @@ export function* checkLedgerFreshness(today, ledgerStalenessDays, refreshCutoff)
     refreshCutoff = parseIso(refreshCutoff);
   }
   const threshold = +today - ledgerStalenessDays * DAY;
-  for (const name of entries(CANDIDATES_DIR).filter((name) => name.endsWith(".yaml"))) {
-    const data = loadYaml(path.join(CANDIDATES_DIR, name));
+  for (const name of entries(CANDIDATES_DIR).filter((name) => name.endsWith(".json"))) {
+    const data = loadJson(path.join(CANDIDATES_DIR, name));
     if (!mapping(data)) {
       continue;
     }
@@ -443,10 +443,10 @@ export function main(argv = process.argv.slice(2)) {
     console.error(`ERROR: ${e.message}`);
     return 1;
   }
-  const toolVersions = loadYaml(path.join(DATA_DIR, "tool-versions.yaml")) || {};
-  const receipt = loadYaml(path.join(DATA_DIR, "tool-release-receipt.yaml"));
-  const claims = loadYaml(path.join(DATA_DIR, "version-claims.yaml")) || {};
-  const cutoffData = loadYaml(path.join(DATA_DIR, "refresh-cutoff.yaml"));
+  const toolVersions = loadJson(path.join(DATA_DIR, "tool-versions.json")) || {};
+  const receipt = loadJson(path.join(DATA_DIR, "tool-release-receipt.json"));
+  const claims = loadJson(path.join(DATA_DIR, "version-claims.json")) || {};
+  const cutoffData = loadJson(path.join(DATA_DIR, "refresh-cutoff.json"));
   let cutoff = null;
   if (cutoffData && Object.hasOwn(cutoffData, "cutoff_date")) {
     try {
@@ -456,7 +456,7 @@ export function main(argv = process.argv.slice(2)) {
         throw e;
       }
       console.error(
-        `WARN: data/refresh-cutoff.yaml::cutoff_date is unparseable: ${repr(cutoffData.cutoff_date)}`,
+        `WARN: data/refresh-cutoff.json::cutoff_date is unparseable: ${repr(cutoffData.cutoff_date)}`,
       );
     }
   }

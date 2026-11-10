@@ -441,13 +441,17 @@ function corpus(t, count = 2) {
   }
   put(
     root,
-    "data/core-prs.yaml",
-    `prs:\n${Array.from(
-      {
-        length: count,
-      },
-      (_, i) => `- id: pr-demo-${i + 1}\n`,
-    ).join("")}`,
+    "data/core-prs.json",
+    JSON.stringify({
+      prs: Array.from(
+        {
+          length: count,
+        },
+        (_, i) => ({
+          id: `pr-demo-${i + 1}`,
+        }),
+      ),
+    }),
   );
   return root;
 }
@@ -487,7 +491,7 @@ test("dry-run CLI counts previews including absent paths and --dry-run-live take
 });
 test("partial pilot exits 1, leaves budget untouched and does not update a failed page", async (t) => {
   const root = corpus(t);
-  put(root, "data/phase3-size-budget.yaml", "prior-budget\n");
+  put(root, "data/repository-budget.json", "prior-budget\n");
   const before = readFileSync(path.join(root, "sources/prs/demo/PR-2.md"));
   const code = await fetcher.main(
     ["--pilot"],
@@ -511,7 +515,7 @@ test("partial pilot exits 1, leaves budget untouched and does not update a faile
   );
   assert.equal(code, 1);
   assert.equal(
-    readFileSync(path.join(root, "data/phase3-size-budget.yaml"), "utf8"),
+    readFileSync(path.join(root, "data/repository-budget.json"), "utf8"),
     "prior-budget\n",
   );
   assert.deepEqual(readFileSync(path.join(root, "sources/prs/demo/PR-2.md")), before);
@@ -534,7 +538,7 @@ test("successful pilot tolerates diff failure, writes budget and updates artifac
     }),
   );
   assert.equal(code, 0);
-  const budget = parse(readFileSync(path.join(root, "data/phase3-size-budget.yaml"), "utf8"));
+  const budget = parse(readFileSync(path.join(root, "data/repository-budget.json"), "utf8"));
   assert.equal(budget.pilot_size, 1);
   assert.equal(budget.pilot_total_bytes, 4);
   assert.equal(budget.avg_bundle_bytes, 4);
@@ -560,6 +564,6 @@ test("CLI invocation and requested target errors remain nonzero", async (t) => {
   );
   assert.throws(
     () => fetcher.loadCorePrs(path.join(root, "missing")),
-    /missing data\/core-prs.yaml/,
+    /missing data\/core-prs.json/,
   );
 });

@@ -1,9 +1,9 @@
+import { stringifyJson } from "../scripts/lib/json.mjs";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import * as F from "../scripts/check-version-freshness.mjs";
-import { stringify } from "../scripts/lib/yaml.mjs";
 import { importInRoot, put, ROOT, run, tempRoot } from "./helpers/maintenance-fixtures.mjs";
 const today = F.parseIso("2026-08-18");
 const warnings = (findings) =>
@@ -213,7 +213,7 @@ test("version claims require a verification date and a known release", () => {
     "missing last_verified_at",
     "unparseable",
     "ago",
-    "not in data/tool-versions.yaml",
+    "not in data/tool-versions.json",
   ]) {
     assert.ok(messages.some((m) => m.includes(text)));
   }
@@ -221,10 +221,10 @@ test("version claims require a verification date and a known release", () => {
 });
 test("ledger cutoff disagreement remains info and supersession is limited to the first three lines", async (t) => {
   const root = tempRoot(t);
-  put(root, "candidates/a.yaml", "searched_at: 2025-01-01\n");
-  put(root, "candidates/b.yaml", "{}\n");
-  put(root, "candidates/c.yaml", "searched_at: bad\n");
-  put(root, "candidates/d.yaml", "[]\n");
+  put(root, "candidates/a.json", '{\n  "searched_at": "2025-01-01"\n}\n');
+  put(root, "candidates/b.json", "{}\n");
+  put(root, "candidates/c.json", '{\n  "searched_at": "bad"\n}\n');
+  put(root, "candidates/d.json", "[]\n");
   put(root, "plan-phase1.md", "# Plan\n\n> sUpErSeDeD by phase4\n");
   put(root, "plan-phase2.md", "# Plan\n\nbody\n> Superseded by phase4\n");
   put(root, "plan-phase4.md", "> Superseded by future\n");
@@ -240,11 +240,11 @@ test("ledger cutoff disagreement remains info and supersession is limited to the
     ["plan-phase2.md", "plan-phase4.md"],
   );
   assert.equal(f.isSuperseded(path.join(root, "missing.md")), false);
-  assert.equal(f.loadYaml(path.join(root, "missing.yaml")), null);
+  assert.equal(f.loadJson(path.join(root, "missing.yaml")), null);
 });
 test("freshness CLI is advisory by default, strict on warnings, and validates every flag", (t) => {
   const root = tempRoot(t);
-  put(root, "data/tool-versions.yaml", stringify(fixtures()[0]));
+  put(root, "data/tool-versions.json", stringifyJson(fixtures()[0]));
   let result = run("check-version-freshness.mjs", ["--today", "2026-08-18"], root);
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /missing or invalid receipt/);
@@ -252,7 +252,7 @@ test("freshness CLI is advisory by default, strict on warnings, and validates ev
     run("check-version-freshness.mjs", ["--today", "2026-08-18", "--strict"], root).status,
     1,
   );
-  put(root, "data/tool-release-receipt.yaml", stringify(fixtures()[1]));
+  put(root, "data/tool-release-receipt.json", stringifyJson(fixtures()[1]));
   result = run(
     "check-version-freshness.mjs",
     [
@@ -290,14 +290,10 @@ test("freshness remains offline with network and subprocess APIs trapped and an 
   const root = tempRoot(t);
   const source = fs.readFileSync(path.join(ROOT, "scripts/check-version-freshness.mjs"), "utf8");
   const imports = [...source.matchAll(/^import .*? from ["']([^"']+)["'];/gm)].map((m) => m[1]);
-  assert.deepEqual(imports, [
-    "node:fs",
-    "node:os",
-    "node:path",
-    "node:url",
-    "node:util",
-    "./lib/yaml.mjs",
-  ]);
+  assert.deepEqual(
+    new Set(imports),
+    new Set(["node:fs", "node:os", "node:path", "node:url", "node:util", "./lib/json.mjs"]),
+  );
   assert.doesNotMatch(
     source,
     /\b(?:fetch|require|import)\s*\(|(?<![.\w])(?:exec|execFile|spawn|spawnSync|execSync|execFileSync)\s*\(/,

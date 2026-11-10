@@ -1,3 +1,4 @@
+import { stringifyJson } from "../scripts/lib/json.mjs";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -53,8 +54,8 @@ function fixture(t) {
 function manifest(root, entry) {
   put(
     root,
-    "data/contest-sources.yaml",
-    stringify({
+    "data/contest-sources.json",
+    stringifyJson({
       contest: {
         problem: {
           "rank-1-author": entry,

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Fetch pinned, size-capped PR bundles with atomic replacement and provenance. */
+import { readJson, writeJson } from "./lib/json.mjs";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
@@ -17,8 +18,8 @@ import { parseMaintenance as parse } from "./lib/yaml.mjs";
 import { dumpSorted, fnmatch, isFile, isMain, REPO_ROOT, walkFiles } from "./compute-core-prs.mjs";
 export { REPO_ROOT };
 export const ARTIFACTS = path.join(REPO_ROOT, "artifacts", "prs");
-export const CORE_PATH = path.join(REPO_ROOT, "data", "core-prs.yaml");
-export const BUDGET_PATH = path.join(REPO_ROOT, "data", "phase3-size-budget.yaml");
+export const CORE_PATH = path.join(REPO_ROOT, "data", "core-prs.json");
+export const BUDGET_PATH = path.join(REPO_ROOT, "data", "repository-budget.json");
 export const SOURCES_PRS = path.join(REPO_ROOT, "sources", "prs");
 export const FILE_SIZE_CAP = 1024 ** 2;
 export const BUNDLE_SIZE_CAP = 5 * 1024 ** 2;
@@ -107,11 +108,11 @@ export function runGh(args, capture = true, { exec = execFileSync } = {}) {
   }
 }
 export function loadCorePrs(root = REPO_ROOT) {
-  const file = path.join(root, "data", "core-prs.yaml");
+  const file = path.join(root, "data", "core-prs.json");
   if (!isFile(file)) {
-    throw new Error("missing data/core-prs.yaml; run scripts/compute-core-prs.mjs first");
+    throw new Error("missing data/core-prs.json; run scripts/compute-core-prs.mjs first");
   }
-  const data = parse(readFileSync(file, "utf8"));
+  const data = readJson(file);
   return (data.prs || []).filter((e) => e && Object.hasOwn(e, "id")).map((e) => e.id);
 }
 function* prPages(root) {
@@ -688,13 +689,13 @@ export async function main(argv = process.argv.slice(2), options = {}) {
               : Math.floor(projUpper / 1024 ** 2) + 10,
         pilot_entries: pilotStats,
       };
-      writeFileSync(path.join(root, "data", "phase3-size-budget.yaml"), dumpSorted(budget), "utf8");
+      writeJson(path.join(root, "data", "repository-budget.json"), budget);
       log(
-        `\nWrote data/phase3-size-budget.yaml\n  Avg bundle: ${(avgBundle / 1024).toFixed(1)} KiB\n  Lower-bound projection: ${budget.lower_bound_projection_mib} MiB\n  Upper-bound projection: ${budget.upper_bound_projection_mib} MiB\n  Active ceiling: ${budget.active_ceiling_mib} MiB`,
+        `\nWrote data/repository-budget.json\n  Avg bundle: ${(avgBundle / 1024).toFixed(1)} KiB\n  Lower-bound projection: ${budget.lower_bound_projection_mib} MiB\n  Upper-bound projection: ${budget.upper_bound_projection_mib} MiB\n  Active ceiling: ${budget.active_ceiling_mib} MiB`,
       );
     } else if (args.pilot && partialFailure) {
       warn(
-        `\nSkipping data/phase3-size-budget.yaml write: pilot fetch was partial (${ok}/${targets.length}). Re-run after resolving the gh / upstream issue.`,
+        `\nSkipping data/repository-budget.json write: pilot fetch was partial (${ok}/${targets.length}). Re-run after resolving the gh / upstream issue.`,
       );
     }
     if (partialFailure) {

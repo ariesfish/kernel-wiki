@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Collect author-published contest code, preserving the installed bundle on failure. */
+import { readJson } from "./lib/json.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -16,7 +17,7 @@ export const REPO = configuredRoot
   : path.resolve(fileURLToPath(new URL("../", import.meta.url)));
 export const CONTESTS_SRC = path.join(REPO, "sources", "contests");
 export const CONTESTS_ART = path.join(REPO, "artifacts", "contests");
-export const MANIFEST = path.join(REPO, "data", "contest-sources.yaml");
+export const MANIFEST = path.join(REPO, "data", "contest-sources.json");
 const GENERATED_BY = "scripts/collect_contest_code.py";
 const isFile = (p) => {
   try {
@@ -93,7 +94,7 @@ export function saveMd(filePath, originalMatch, fm) {
   );
 }
 export function loadManifest() {
-  return isFile(MANIFEST) ? parse(fs.readFileSync(MANIFEST, "utf8")) || {} : {};
+  return isFile(MANIFEST) ? readJson(MANIFEST) || {} : {};
 }
 export function resolveCanonicalFile(entry, filesList) {
   const declared = mapping(entry) ? entry.canonical_file : null;
@@ -176,7 +177,7 @@ export function collectOne(contestPage, subIdx, sub, manifest, contestPageId = n
     }
     newSub.submission_truth = "unavailable";
     newSub.code_unavailable_reason =
-      "No public author-republished source declared in data/contest-sources.yaml; add an entry if a public URL becomes available.";
+      "No public author-republished source declared in data/contest-sources.json; add an entry if a public URL becomes available.";
     delete newSub.code_path;
     return [newSub, false, null];
   }
@@ -398,7 +399,7 @@ export function main(argv = process.argv.slice(2)) {
   }
   if (args.help) {
     console.log(
-      "Usage: collect-contest-code.mjs [-h] [--dry-run]\nCollect contest submission code from data/contest-sources.yaml.",
+      "Usage: collect-contest-code.mjs [-h] [--dry-run]\nCollect contest submission code from data/contest-sources.json.",
     );
     return 0;
   }

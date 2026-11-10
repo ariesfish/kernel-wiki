@@ -60,7 +60,7 @@ function countPrsByRepo() {
 function countArtifactModes() {
   const counts = new Map();
   for (const file of listFiles(path.join(WIKI_ROOT, "artifacts"))) {
-    if (path.basename(file) !== "PROVENANCE.yaml") {
+    if (path.basename(file) !== "PROVENANCE.json") {
       continue;
     }
     let mode = "unknown";
@@ -90,7 +90,7 @@ function main() {
   console.log(`  Blog summaries: ${countFiles("sources", "blogs")}`);
   console.log(`  Doc summaries: ${countFiles("sources", "docs")}`);
   console.log(`  Contest pages: ${countFiles("sources", "contests")}`);
-  console.log(`  Candidate ledgers: ${countTopLevelFiles(["candidates"], ".yaml")}`);
+  console.log(`  Candidate ledgers: ${countTopLevelFiles(["candidates"], ".json")}`);
   console.log(
     `  Artifact bundles: ${[...artifactModes.values()].reduce((sum, value) => sum + value, 0)}`,
   );

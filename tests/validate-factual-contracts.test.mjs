@@ -121,7 +121,10 @@ for (const [name, language, body, expected] of [
 }
 function cutoff(captured) {
   return fixture(({ write }) => {
-    write("data/refresh-cutoff.yaml", "cutoff_date: 2026-08-01\nprevious_pages_manifest: []\n");
+    write(
+      "data/refresh-cutoff.json",
+      '{\n  "cutoff_date": "2026-08-01",\n  "previous_pages_manifest": []\n}\n',
+    );
     write("sources/prs/example/PR-1.md", `---\nid: pr-example-1\ncaptured_at: ${captured}\n---\n`);
     return validate.validateCapturedAtCutoff();
   });
@@ -178,7 +181,7 @@ test("reconstructed evidence requires full count and receipt", () => {
     changed_files_evidence_count: 3298,
     changed_files_evidence_complete: true,
     changed_files_evidence_method: "github-pull-diff",
-    changed_files_evidence_receipt: "audit/pr-file-cap-reconstruction.json",
+    changed_files_evidence_receipt: "data/evidence/pr-file-cap-reconstruction.json",
     changed_paths: ["src/tail_kernel.cu"],
     changed_paths_complete: false,
   };
@@ -209,7 +212,7 @@ test("reconstructed page must match policy receipt", () => {
     changed_files_evidence_count: 3001,
     changed_files_evidence_complete: true,
     changed_files_evidence_method: "github-pull-diff",
-    changed_files_evidence_receipt: "audit/pr-file-cap-reconstruction.json",
+    changed_files_evidence_receipt: "data/evidence/pr-file-cap-reconstruction.json",
     upstream_files_sha256: "a".repeat(64),
   };
   const row = {
@@ -379,8 +382,8 @@ test("reward hack post credits participant and scopes platform as host", () => {
   );
 });
 test("size budget matches core manifest and artifact scope", () => {
-  const budget = fm("data/phase3-size-budget.yaml"),
-    core = fm("data/core-prs.yaml");
+  const budget = fm("data/repository-budget.json"),
+    core = fm("data/core-prs.json");
   assert.equal(core.total_captured, budget.core_prs_total);
   assert.equal(core.checksum_sha256, budget.core_prs_checksum_sha256);
   assert.equal(budget.artifacts_file_budget, 6000);
@@ -393,14 +396,14 @@ test("skill load memo scopes file budget to artifacts", () => {
   includes(memo, "not enforce a whole-working-tree file-count budget");
   excludes(memo, "5002 files of headroom");
 });
-test("inclusion policy rejects obsolete Triton claim in comments", () => {
+test("inclusion policy rejects obsolete Triton claims in descriptions", () => {
   assert.deepEqual(validate.validateInclusionPolicyScalars(), []);
   fixture(({ write }) => {
     write(
-      "data/inclusion-policy.yaml",
-      "## Triton on SM100 has no direct tcgen05/TMEM access\ntriton:\n  description: Triton 3.6 supports SM100 lowering.\n",
+      "data/inclusion-policy.json",
+      '{"triton":{"description":"Triton on SM100 has no direct tcgen05/TMEM access"}}',
     );
-    includes(validate.validateInclusionPolicyScalars().join("\n"), "including comments");
+    includes(validate.validateInclusionPolicyScalars().join("\n"), "including descriptions");
   });
 });
 test("examples Triton navigation matches current page structure", () => {
@@ -534,7 +537,6 @@ test("concrete documented query commands return results", () => {
     excludes(output, "No matches.");
   }
 });
-
 test("skill technique count matches generated index and pages", () => {
   const count = read("queries/by-technique.md")
     .split("\n")
@@ -870,8 +872,8 @@ test("known invalid pattern retains all ten validator errors", () => {
   const sourceIds = new Set(files("sources").map((filename) => fm(filename).id));
   const errors = validate.validateFile(
     path.join(ROOT, filename),
-    fm("data/schemas.yaml"),
-    fm("data/tags.yaml"),
+    fm("data/schemas.json"),
+    fm("data/tags.json"),
     sourceIds,
     validate.loadCodeLangs(),
   );

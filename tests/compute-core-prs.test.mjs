@@ -1,3 +1,4 @@
+import { stringifyJson } from "../scripts/lib/json.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
@@ -276,8 +277,8 @@ test("manifest derivation uses structured contest references, inclusion preceden
   );
   put(
     root,
-    "data/core-prs-allowlist.yaml",
-    core.dumpSorted({
+    "data/core-prs-allowlist.json",
+    stringifyJson({
       additions: [
         {
           pr: "pr-demo-5",
@@ -298,7 +299,7 @@ test("manifest derivation uses structured contest references, inclusion preceden
   );
   const bytes = core.computeManifests(root);
   assert.deepEqual(bytes, core.computeManifests(root));
-  const doc = parse(bytes["core-prs.yaml"].toString());
+  const doc = parse(bytes["core-prs.json"].toString());
   assert.deepEqual(doc.prs, [
     {
       id: "pr-demo-1",
@@ -321,21 +322,25 @@ test("manifest derivation uses structured contest references, inclusion preceden
       source_of_inclusion: "allowlist",
     },
   ]);
-  assert.equal(doc.checksum_sha256, core.computeSha256OfText(core.dumpSorted(doc.prs)));
+  assert.equal(doc.checksum_sha256, core.computeSha256OfText(stringifyJson(doc.prs)));
   assert.ok(Object.values(bytes).every(Buffer.isBuffer));
   assert.deepEqual([...core.contestReferencedPrs(root)], ["pr-demo-1", "pr-demo-2"]);
   assert.equal(core.loadAllPrs(root)["pr-demo-1"]._path, "sources/prs/demo/PR-1.md");
 });
 test("missing policy errors; malformed allowlist collections are ignored", (t) => {
   const root = fixture(t);
-  put(root, "data/core-prs-allowlist.yaml", "additions: wrong\nexclusions: wrong\n");
-  assert.equal(parse(core.computeManifests(root)["core-prs.yaml"].toString()).total_captured, 0);
+  put(
+    root,
+    "data/core-prs-allowlist.json",
+    '{\n  "additions": "wrong",\n  "exclusions": "wrong"\n}\n',
+  );
+  assert.equal(parse(core.computeManifests(root)["core-prs.json"].toString()).total_captured, 0);
   assert.throws(
     () => core.computeManifests(path.join(root, "absent")),
-    /inclusion-policy.yaml not found/,
+    /inclusion-policy.json not found/,
   );
 });
-test("current corpus preserves semantic manifests and Python's prs checksum", () => {
+test("current corpus matches committed JSON manifests and the selection checksum", () => {
   for (const [name, bytes] of Object.entries(core.computeManifests())) {
     const actual = parse(bytes.toString()),
       existing = parse(readFileSync(path.join(core.DATA, name), "utf8"));
@@ -358,9 +363,9 @@ test("CLI root override works outside the corpus and stdout preserves marker ord
   assert.equal(result.status, 0, result.stderr);
   assert.deepEqual(
     [...result.stdout.matchAll(/^### FILE: (.+)$/gm)].map((m) => m[1]),
-    ["core-prs.yaml", "cute-dsl-universe.yaml", "triton-universe.yaml"],
+    ["core-prs.json", "cute-dsl-universe.json", "triton-universe.json"],
   );
-  assert.ok(result.stdout.startsWith("### FILE: core-prs.yaml\n## Auto-generated"));
+  assert.ok(result.stdout.startsWith("### FILE: core-prs.json\n{"));
   const output = path.join(root, "output");
   const writer = spawnSync(process.execPath, [script, "--output-dir", output], {
     env: {
@@ -371,8 +376,8 @@ test("CLI root override works outside the corpus and stdout preserves marker ord
   });
   assert.equal(writer.status, 0, writer.stderr);
   assert.deepEqual(
-    readFileSync(path.join(output, "core-prs.yaml")),
-    core.computeManifests(root)["core-prs.yaml"],
+    readFileSync(path.join(output, "core-prs.json")),
+    core.computeManifests(root)["core-prs.json"],
   );
 });
 test("importing the migrated local tools has no CLI effects", () => {

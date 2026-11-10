@@ -5,8 +5,7 @@ import { test } from "node:test";
 import * as DOD from "../scripts/check-dod-fixtures.mjs";
 import { parse, stringify } from "../scripts/lib/yaml.mjs";
 import { importInRoot, put, ROOT, run, tempRoot } from "./helpers/maintenance-fixtures.mjs";
-const current = () =>
-  parse(fs.readFileSync(path.join(ROOT, "data/phase3-dod-fixtures.yaml"), "utf8"));
+const current = () => parse(fs.readFileSync(path.join(ROOT, "data/asset-contracts.json"), "utf8"));
 test("current active and retired DoD contracts are valid", () => {
   const data = current();
   assert.equal(data.contract_version, 3);
@@ -171,11 +170,11 @@ test("missing, malformed, or empty fixture input is an invocation error", (t) =>
   let result = run("check-dod-fixtures.mjs", [], root);
   assert.equal(result.status, 2);
   assert.match(result.stderr, /AC-7 DoD fixture gate requires/);
-  put(root, "data/phase3-dod-fixtures.yaml", "fixtures: [");
+  put(root, "data/asset-contracts.json", "fixtures: [");
   result = run("check-dod-fixtures.mjs", [], root);
   assert.equal(result.status, 2);
   assert.match(result.stderr, /could not parse/);
-  put(root, "data/phase3-dod-fixtures.yaml", "fixtures: []\n");
+  put(root, "data/asset-contracts.json", '{\n  "fixtures": []\n}\n');
   result = run("check-dod-fixtures.mjs", [], root);
   assert.equal(result.status, 2);
   assert.match(result.stderr, /has no `fixtures:` entries/);

@@ -105,16 +105,16 @@ All page IDs below resolve via `get_page.mjs <id>`. All paths are relative to th
 
 | Repo | PR pages | Ledger |
 |---|---:|---|
-| NVIDIA/cutlass | 36 | `candidates/cutlass.yaml` |
-| sgl-project/sglang | 169 | `candidates/sglang.yaml` |
-| vllm-project/vllm | 205 | `candidates/vllm.yaml` |
-| flashinfer-ai/flashinfer | 322 | `candidates/flashinfer.yaml` |
-| pytorch/pytorch | 4 | `candidates/pytorch.yaml` |
-| deepseek-ai/DeepGEMM | 8 | `candidates/deepgemm.yaml` |
-| NVIDIA/cccl | 60 | `candidates/cccl-cub.yaml` |
-| Dao-AILab/flash-attention | 33 | `candidates/flash-attention.yaml` |
-| NVIDIA/TensorRT-LLM | 88 | `candidates/tensorrt-llm.yaml` |
-| tile-ai/tilelang | 19 | `candidates/tilelang.yaml` |
+| NVIDIA/cutlass | 36 | `candidates/cutlass.json` |
+| sgl-project/sglang | 169 | `candidates/sglang.json` |
+| vllm-project/vllm | 205 | `candidates/vllm.json` |
+| flashinfer-ai/flashinfer | 322 | `candidates/flashinfer.json` |
+| pytorch/pytorch | 4 | `candidates/pytorch.json` |
+| deepseek-ai/DeepGEMM | 8 | `candidates/deepgemm.json` |
+| NVIDIA/cccl | 60 | `candidates/cccl-cub.json` |
+| Dao-AILab/flash-attention | 33 | `candidates/flash-attention.json` |
+| NVIDIA/TensorRT-LLM | 88 | `candidates/tensorrt-llm.json` |
+| tile-ai/tilelang | 19 | `candidates/tilelang.json` |
 
 Query by repo: `node scripts/query.mjs --repo <name>`.
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /** Validate every source/wiki frontmatter contract, audit receipt and asset bundle. */
+import { parseJson, readJson } from "./lib/json.mjs";
 import { createHash } from "node:crypto";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";
@@ -32,8 +33,11 @@ export function configureRoot(
   DATA_DIR = path.join(REPO_ROOT, "data");
   ARTIFACTS_DIR = path.join(REPO_ROOT, "artifacts");
   CANDIDATES_DIR = path.join(REPO_ROOT, "candidates");
-  PR_ARCHITECTURE_RECEIPT = path.join(DATA_DIR, "pr-architecture-evidence.json");
-  PR_CAP_RECONSTRUCTION_RECEIPT = path.join(REPO_ROOT, "audit/pr-file-cap-reconstruction.json");
+  PR_ARCHITECTURE_RECEIPT = path.join(DATA_DIR, "evidence/pr-architecture.json");
+  PR_CAP_RECONSTRUCTION_RECEIPT = path.join(
+    REPO_ROOT,
+    "data/evidence/pr-file-cap-reconstruction.json",
+  );
 }
 configureRoot();
 export const REPRO_ORDER = ["concept", "pseudocode", "snippet", "runnable", "benchmarked"];
@@ -204,7 +208,7 @@ const markdown = (directory) =>
   sorted([...walk(directory)].filter((filename) => path.basename(filename).endsWith(".md")));
 const prPages = (directory) =>
   sorted([...walk(directory)].filter((filename) => /^PR-.*\.md$/.test(path.basename(filename))));
-const ledgers = () => children(CANDIDATES_DIR).filter((filename) => filename.endsWith(".yaml"));
+const ledgers = () => children(CANDIDATES_DIR).filter((filename) => filename.endsWith(".json"));
 function resolved(filename) {
   filename = path.resolve(filename);
   try {
@@ -230,47 +234,44 @@ const canonicalJson = (value) => {
     (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`,
   );
 };
-export function loadYamlFile(filename) {
-  return yaml(text(filename));
+export function loadDataFile(filename) {
+  return filename.endsWith(".json") ? readJson(filename) : yaml(text(filename));
 }
 export function validateAliasContract(raw = null) {
   const errors = [];
   if (raw === null) {
     try {
-      raw = parse(text(path.join(DATA_DIR, "aliases.yaml")), {
-        ...yamlOptions,
-        mapAsMap: true,
-      });
+      raw = readJson(path.join(DATA_DIR, "aliases.json"));
       if (!truth(raw)) {
         raw = {};
       }
     } catch (error) {
-      return [`data/aliases.yaml: could not load canonical aliases (${error.message})`];
+      return [`data/aliases.json: could not load canonical aliases (${error.message})`];
     }
   }
   if (!mapping(raw) && !(raw instanceof Map)) {
-    return ["data/aliases.yaml: top level must be a mapping"];
+    return ["data/aliases.json: top level must be a mapping"];
   }
   const aliases = new Map();
   for (const [canonical, variants] of raw instanceof Map ? raw : Object.entries(raw)) {
     if (typeof canonical !== "string" || !canonical.trim()) {
-      errors.push("data/aliases.yaml: canonical terms must be non-empty strings");
+      errors.push("data/aliases.json: canonical terms must be non-empty strings");
       continue;
     }
     if (variants != null && !Array.isArray(variants)) {
-      errors.push(`data/aliases.yaml::${canonical}: aliases must be a list`);
+      errors.push(`data/aliases.json::${canonical}: aliases must be a list`);
       continue;
     }
     for (const value of [canonical, ...(variants || [])]) {
       if (typeof value !== "string" || !value.trim()) {
-        errors.push(`data/aliases.yaml::${canonical}: aliases must be non-empty strings`);
+        errors.push(`data/aliases.json::${canonical}: aliases must be non-empty strings`);
         continue;
       }
       const normalized = value.toLowerCase(),
         previous = aliases.get(normalized);
       if (previous != null && previous !== canonical) {
         errors.push(
-          `data/aliases.yaml: ${repr(value)} maps to both ${repr(previous)} and ${repr(canonical)}`,
+          `data/aliases.json: ${repr(value)} maps to both ${repr(previous)} and ${repr(canonical)}`,
         );
       } else {
         aliases.set(normalized, canonical);
@@ -281,7 +282,7 @@ export function validateAliasContract(raw = null) {
     const actual = aliases.get(product);
     if (actual != null && actual.toLowerCase() !== expectedArchitecture) {
       errors.push(
-        `data/aliases.yaml: product ${repr(product)} resolves to ${repr(actual)}; pr_policy requires ${repr(expectedArchitecture)}`,
+        `data/aliases.json: product ${repr(product)} resolves to ${repr(actual)}; pr_policy requires ${repr(expectedArchitecture)}`,
       );
     }
   }
@@ -292,7 +293,7 @@ export function validateAliasContract(raw = null) {
     const actual = aliases.get(family);
     if (actual != null && actual.toLowerCase() !== family) {
       errors.push(
-        `data/aliases.yaml: architecture family ${repr(family)} resolves to exact term ${repr(actual)}`,
+        `data/aliases.json: architecture family ${repr(family)} resolves to exact term ${repr(actual)}`,
       );
     }
   }
@@ -356,7 +357,7 @@ export function changedFileInventoryErrors(fm, rel = "source-pr") {
       if (evidenceMethod !== "github-pull-diff") {
         errors.push(`${rel}: changed_files_evidence_method must be github-pull-diff`);
       }
-      if (evidenceReceipt !== "audit/pr-file-cap-reconstruction.json") {
+      if (evidenceReceipt !== "data/evidence/pr-file-cap-reconstruction.json") {
         errors.push(
           `${rel}: changed_files_evidence_receipt must name the committed cap reconstruction receipt`,
         );
@@ -389,7 +390,7 @@ export function capReconstructionPageErrors(fm, row, rel = "source-pr") {
     changed_files_evidence_count: get(row, "full_diff_paths"),
     changed_files_evidence_complete: get(row, "full_diff_complete"),
     changed_files_evidence_method: "github-pull-diff",
-    changed_files_evidence_receipt: "audit/pr-file-cap-reconstruction.json",
+    changed_files_evidence_receipt: "data/evidence/pr-file-cap-reconstruction.json",
     upstream_files_sha256: get(row, "policy_files_sha256"),
   };
   for (const [field, value] of Object.entries(expected)) {
@@ -449,17 +450,19 @@ export function capCompleteFileEvidenceErrors(row, rel = "cap reconstruction row
 }
 export function validateCapReconstructionReceipt() {
   if (!isFile(PR_CAP_RECONSTRUCTION_RECEIPT)) {
-    return ["audit/pr-file-cap-reconstruction.json: required receipt is missing"];
+    return ["data/evidence/pr-file-cap-reconstruction.json: required receipt is missing"];
   }
   let receipt;
   try {
     receipt = JSON.parse(text(PR_CAP_RECONSTRUCTION_RECEIPT));
   } catch (error) {
-    return [`audit/pr-file-cap-reconstruction.json: cannot parse receipt: ${error.message}`];
+    return [
+      `data/evidence/pr-file-cap-reconstruction.json: cannot parse receipt: ${error.message}`,
+    ];
   }
   const errors = [];
   if (receipt.policy_sha256 !== sha256OfFile(path.join(REPO_ROOT, "scripts/lib/pr-policy.mjs"))) {
-    errors.push("audit/pr-file-cap-reconstruction.json: pr-policy.mjs digest mismatch");
+    errors.push("data/evidence/pr-file-cap-reconstruction.json: pr-policy.mjs digest mismatch");
   }
   const rows = receipt.rows || [],
     byKey = new Map();
@@ -469,11 +472,11 @@ export function validateCapReconstructionReceipt() {
     }
   }
   if (byKey.size !== rows.length) {
-    errors.push("audit/pr-file-cap-reconstruction.json: duplicate or invalid rows");
+    errors.push("data/evidence/pr-file-cap-reconstruction.json: duplicate or invalid rows");
   }
   const expectedKeys = new Set();
   for (const ledgerPath of ledgers()) {
-    const data = loadYamlFile(ledgerPath) || {};
+    const data = loadDataFile(ledgerPath) || {};
     for (const candidate of data.prs || []) {
       if (Number(candidate.files_reviewed_count || 0) > 3000) {
         expectedKeys.add(JSON.stringify([get(data, "repo"), Number(candidate.number)]));
@@ -488,7 +491,7 @@ export function validateCapReconstructionReceipt() {
     .sort(tupleCompare);
   if (missing.length || unexpected.length) {
     errors.push(
-      `audit/pr-file-cap-reconstruction.json: capped candidate roster mismatch; missing=${tupleList(missing)}, unexpected=${tupleList(unexpected)}`,
+      `data/evidence/pr-file-cap-reconstruction.json: capped candidate roster mismatch; missing=${tupleList(missing)}, unexpected=${tupleList(unexpected)}`,
     );
   }
   const currentPages = new Map();
@@ -511,21 +514,29 @@ export function validateCapReconstructionReceipt() {
       row.full_diff_complete !== true ||
       row.enumeration_complete !== false
     ) {
-      errors.push(`audit/pr-file-cap-reconstruction.json: invalid count state for ${keyRepr}`);
+      errors.push(
+        `data/evidence/pr-file-cap-reconstruction.json: invalid count state for ${keyRepr}`,
+      );
     }
     const policy = row.full_policy || {};
     if (get(row, "disposition") !== get(policy, "disposition")) {
-      errors.push(`audit/pr-file-cap-reconstruction.json: policy outcome mismatch for ${keyRepr}`);
+      errors.push(
+        `data/evidence/pr-file-cap-reconstruction.json: policy outcome mismatch for ${keyRepr}`,
+      );
     }
     const current = currentPages.get(key);
     if (truth(policy.retain)) {
       if (!current) {
-        errors.push(`audit/pr-file-cap-reconstruction.json: retained page missing for ${keyRepr}`);
+        errors.push(
+          `data/evidence/pr-file-cap-reconstruction.json: retained page missing for ${keyRepr}`,
+        );
       } else {
         errors.push(...capReconstructionPageErrors(current[0], row, current[1]));
       }
     } else if (current) {
-      errors.push(`audit/pr-file-cap-reconstruction.json: removed page exists for ${keyRepr}`);
+      errors.push(
+        `data/evidence/pr-file-cap-reconstruction.json: removed page exists for ${keyRepr}`,
+      );
     }
   }
   return errors;
@@ -561,11 +572,11 @@ export function architectureReceiptRecord(fm) {
 export function comparePrArchitectureReceipt(actualRows, receipt) {
   const errors = [];
   if (!mapping(receipt) || receipt.schema_version !== 1) {
-    return ["data/pr-architecture-evidence.json: missing or unsupported schema_version"];
+    return ["data/evidence/pr-architecture.json: missing or unsupported schema_version"];
   }
   const expectedRows = receipt.rows;
   if (!mapping(expectedRows)) {
-    return ["data/pr-architecture-evidence.json: rows must be a mapping"];
+    return ["data/evidence/pr-architecture.json: rows must be a mapping"];
   }
   const expectedFields = [
     "upstream_body_sha256",
@@ -575,10 +586,10 @@ export function comparePrArchitectureReceipt(actualRows, receipt) {
     "architecture_evidence_sha256",
   ];
   if (!isDeepStrictEqual(receipt.row_fields, expectedFields)) {
-    errors.push("data/pr-architecture-evidence.json: row_fields contract mismatch");
+    errors.push("data/evidence/pr-architecture.json: row_fields contract mismatch");
   }
   if (receipt.policy_sha256 !== sha256OfFile(path.join(REPO_ROOT, "scripts/lib/pr-policy.mjs"))) {
-    errors.push("data/pr-architecture-evidence.json: pr-policy.mjs digest mismatch");
+    errors.push("data/evidence/pr-architecture.json: pr-policy.mjs digest mismatch");
   }
   const expectedKeys = new Set(Object.keys(expectedRows)),
     actualKeys = new Set(Object.keys(actualRows));
@@ -586,12 +597,12 @@ export function comparePrArchitectureReceipt(actualRows, receipt) {
     unexpected = sorted(difference(actualKeys, expectedKeys));
   if (missing.length) {
     errors.push(
-      `data/pr-architecture-evidence.json: ${missing.length} receipted page(s) missing; first 5: ${repr(missing.slice(0, 5))}`,
+      `data/evidence/pr-architecture.json: ${missing.length} receipted page(s) missing; first 5: ${repr(missing.slice(0, 5))}`,
     );
   }
   if (unexpected.length) {
     errors.push(
-      `data/pr-architecture-evidence.json: ${unexpected.length} unreceipted page(s); first 5: ${repr(unexpected.slice(0, 5))}`,
+      `data/evidence/pr-architecture.json: ${unexpected.length} unreceipted page(s); first 5: ${repr(unexpected.slice(0, 5))}`,
     );
   }
   for (const filename of sorted(intersection(actualKeys, expectedKeys))) {
@@ -611,13 +622,13 @@ export function comparePrArchitectureReceipt(actualRows, receipt) {
 }
 export function validatePrArchitectureReceipt() {
   if (!isFile(PR_ARCHITECTURE_RECEIPT)) {
-    return ["data/pr-architecture-evidence.json: required architecture receipt is missing"];
+    return ["data/evidence/pr-architecture.json: required architecture receipt is missing"];
   }
   let receipt;
   try {
     receipt = JSON.parse(text(PR_ARCHITECTURE_RECEIPT));
   } catch (error) {
-    return [`data/pr-architecture-evidence.json: cannot parse receipt: ${error.message}`];
+    return [`data/evidence/pr-architecture.json: cannot parse receipt: ${error.message}`];
   }
   const actualRows = {};
   for (const pagePath of prPages(path.join(SOURCES_DIR, "prs"))) {
@@ -732,9 +743,9 @@ export const BASE_CODE_LANGS = new Set([
 ]);
 export function loadCodeLangs() {
   const languages = new Set(BASE_CODE_LANGS),
-    filename = path.join(DATA_DIR, "tags.yaml");
+    filename = path.join(DATA_DIR, "tags.json");
   if (existsSync(filename)) {
-    for (const language of loadYamlFile(filename).languages || []) {
+    for (const language of loadDataFile(filename).languages || []) {
       languages.add(language);
     }
   }
@@ -1246,12 +1257,12 @@ export function validateLedger(ledgerPath) {
     rel = relpath(ledgerPath);
   let data;
   try {
-    data = loadYamlFile(ledgerPath);
+    data = loadDataFile(ledgerPath);
   } catch (error) {
     if (error.code) {
       throw error;
     }
-    return [`${rel}: invalid YAML (${error.message})`];
+    return [`${rel}: invalid JSON (${error.message})`];
   }
   if (!mapping(data)) {
     return [`${rel}: top-level value must be a mapping`];
@@ -1320,34 +1331,34 @@ const scopePages = () => [
 ];
 export function validateVersionClaimsRegistry(allSourceIds) {
   const errors = [],
-    filename = path.join(DATA_DIR, "version-claims.yaml");
+    filename = path.join(DATA_DIR, "version-claims.json");
   if (!isFile(filename)) {
-    return ["data/version-claims.yaml: missing (DEC-1 hybrid registry stub required)"];
+    return ["data/version-claims.json: missing (DEC-1 hybrid registry stub required)"];
   }
   let data;
   try {
-    data = loadYamlFile(filename);
+    data = loadDataFile(filename);
   } catch (error) {
     if (error.code) {
       throw error;
     }
-    return [`data/version-claims.yaml: invalid YAML (${error.message})`];
+    return [`data/version-claims.json: invalid JSON (${error.message})`];
   }
   const byId = new Map();
   for (const [i, claim] of (data?.claims || []).entries()) {
     if (!mapping(claim)) {
-      errors.push(`data/version-claims.yaml::claims[${i}]: must be a mapping`);
+      errors.push(`data/version-claims.json::claims[${i}]: must be a mapping`);
       continue;
     }
     const cid = claim.id;
     if (!truth(cid)) {
-      errors.push(`data/version-claims.yaml::claims[${i}]: missing id`);
+      errors.push(`data/version-claims.json::claims[${i}]: missing id`);
       continue;
     }
     byId.set(cid, claim);
     for (const sid of claim.source_ids || []) {
       if (!allSourceIds.has(sid)) {
-        errors.push(`data/version-claims.yaml::${cid}: source_id '${sid}' does not resolve`);
+        errors.push(`data/version-claims.json::${cid}: source_id '${sid}' does not resolve`);
       }
     }
     for (const applies of claim.applies_to || []) {
@@ -1357,7 +1368,7 @@ export function validateVersionClaimsRegistry(allSourceIds) {
       const target = path.resolve(REPO_ROOT, file);
       if (!existsSync(target)) {
         errors.push(
-          `data/version-claims.yaml::${cid}: applies_to '${applies}' (file '${file}') does not exist`,
+          `data/version-claims.json::${cid}: applies_to '${applies}' (file '${file}') does not exist`,
         );
         continue;
       }
@@ -1369,13 +1380,13 @@ export function validateVersionClaimsRegistry(allSourceIds) {
         fm = extractFrontmatter(target);
       } catch (error) {
         errors.push(
-          `data/version-claims.yaml::${cid}: applies_to '${applies}' frontmatter parse failed: ${error.message}`,
+          `data/version-claims.json::${cid}: applies_to '${applies}' frontmatter parse failed: ${error.message}`,
         );
         continue;
       }
       if (!truth(fm) || !mapping(fm)) {
         errors.push(
-          `data/version-claims.yaml::${cid}: applies_to '${applies}' has no frontmatter (AC-2 reverse direction: target must carry version_sensitive: ${cid})`,
+          `data/version-claims.json::${cid}: applies_to '${applies}' has no frontmatter (AC-2 reverse direction: target must carry version_sensitive: ${cid})`,
         );
         continue;
       }
@@ -1383,7 +1394,7 @@ export function validateVersionClaimsRegistry(allSourceIds) {
         ptr = mapping(vs) ? get(vs, "id") : vs;
       if (ptr !== cid) {
         errors.push(
-          `data/version-claims.yaml::${cid}: applies_to '${applies}' carries version_sensitive id=${repr(ptr)}, expected ${repr(cid)} (AC-2 reverse direction)`,
+          `data/version-claims.json::${cid}: applies_to '${applies}' carries version_sensitive id=${repr(ptr)}, expected ${repr(cid)} (AC-2 reverse direction)`,
         );
       }
     }
@@ -1399,14 +1410,14 @@ export function validateVersionClaimsRegistry(allSourceIds) {
       errors.push(`${relpath(page)}: version_sensitive block has no id`);
     } else if (!byId.has(ptr)) {
       errors.push(
-        `${relpath(page)}: version_sensitive id '${str(ptr)}' does not resolve to data/version-claims.yaml`,
+        `${relpath(page)}: version_sensitive id '${str(ptr)}' does not resolve to data/version-claims.json`,
       );
     }
   }
   return errors;
 }
 export function validateInclusionPolicyScalars() {
-  const filename = path.join(DATA_DIR, "inclusion-policy.yaml"),
+  const filename = path.join(DATA_DIR, "inclusion-policy.json"),
     errors = [];
   if (!isFile(filename)) {
     return errors;
@@ -1414,18 +1425,18 @@ export function validateInclusionPolicyScalars() {
   const raw = text(filename);
   let data;
   try {
-    data = yaml(raw);
+    data = parseJson(raw);
   } catch (error) {
-    return [`data/inclusion-policy.yaml: invalid YAML (${error.message})`];
+    return [`data/inclusion-policy.json: invalid JSON (${error.message})`];
   }
   if ((data?.triton?.description || "").toLowerCase().includes("no direct tcgen05/tmem access")) {
     errors.push(
-      "data/inclusion-policy.yaml::triton.description: still contains obsolete substring 'no direct tcgen05/TMEM access' (AC-11)",
+      "data/inclusion-policy.json::triton.description: still contains obsolete substring 'no direct tcgen05/TMEM access' (AC-11)",
     );
   }
   if (raw.toLowerCase().includes("no direct tcgen05/tmem access")) {
     errors.push(
-      "data/inclusion-policy.yaml: raw text (including comments) still contains obsolete substring 'no direct tcgen05/TMEM access' (AC-11)",
+      "data/inclusion-policy.json: raw text (including descriptions) still contains obsolete substring 'no direct tcgen05/TMEM access' (AC-11)",
     );
   }
   return errors;
@@ -1459,16 +1470,16 @@ export function validatePlanSupersession() {
 }
 export function validateSkipAuditCoverage() {
   const errors = [],
-    filename = path.join(DATA_DIR, "pr-page-skipped.yaml");
+    filename = path.join(DATA_DIR, "pr-page-skipped.json");
   let rows = [];
   if (isFile(filename)) {
     try {
-      rows = loadYamlFile(filename)?.rows || [];
+      rows = loadDataFile(filename)?.rows || [];
     } catch (error) {
       if (error.code) {
         throw error;
       }
-      return [`data/pr-page-skipped.yaml: invalid YAML (${error.message})`];
+      return [`data/pr-page-skipped.json: invalid JSON (${error.message})`];
     }
   }
   const keys = new Set(
@@ -1477,7 +1488,7 @@ export function validateSkipAuditCoverage() {
       .map((row) => JSON.stringify([row.repo, row.pr_number])),
   );
   for (const filename of ledgers()) {
-    const ledger = loadYamlFile(filename) || {},
+    const ledger = loadDataFile(filename) || {},
       repo = ledger.repo;
     if (!truth(repo)) {
       continue;
@@ -1499,67 +1510,67 @@ export function validateSkipAuditCoverage() {
         continue;
       }
       errors.push(
-        `AC-4 coverage: ${repo} PR #${str(num)} is \`decision: include\` but has neither sources/prs/${slug}/PR-${str(num)}.md nor a data/pr-page-skipped.yaml row`,
+        `AC-4 coverage: ${repo} PR #${str(num)} is \`decision: include\` but has neither sources/prs/${slug}/PR-${str(num)}.md nor a data/pr-page-skipped.json row`,
       );
     }
   }
   return errors;
 }
 export function validateRefreshCutoffAlignment() {
-  const filename = path.join(DATA_DIR, "refresh-cutoff.yaml"),
+  const filename = path.join(DATA_DIR, "refresh-cutoff.json"),
     errors = [];
   if (!isFile(filename)) {
     return errors;
   }
   let data;
   try {
-    data = loadYamlFile(filename) || {};
+    data = loadDataFile(filename) || {};
   } catch (error) {
     if (error.code) {
       throw error;
     }
-    return [`data/refresh-cutoff.yaml: invalid YAML (${error.message})`];
+    return [`data/refresh-cutoff.json: invalid JSON (${error.message})`];
   }
   if (data.cutoff_date == null) {
-    return ["data/refresh-cutoff.yaml: missing cutoff_date"];
+    return ["data/refresh-cutoff.json: missing cutoff_date"];
   }
   const cutoff = str(data.cutoff_date);
   for (const ledgerFile of ledgers()) {
-    const searched = str(get(loadYamlFile(ledgerFile) || {}, "searched_at"));
+    const searched = str(get(loadDataFile(ledgerFile) || {}, "searched_at"));
     if (searched !== cutoff) {
       errors.push(
-        `AC-5: ${relpath(ledgerFile)}::searched_at (${repr(searched)}) != data/refresh-cutoff.yaml::cutoff_date (${repr(cutoff)})`,
+        `AC-5: ${relpath(ledgerFile)}::searched_at (${repr(searched)}) != data/refresh-cutoff.json::cutoff_date (${repr(cutoff)})`,
       );
     }
   }
   return errors;
 }
 export function validateRefreshSubset() {
-  const filename = path.join(DATA_DIR, "refresh-search-results.yaml"),
+  const filename = path.join(DATA_DIR, "refresh-search-results.json"),
     errors = [];
   if (!isFile(filename)) {
     return errors;
   }
   let results;
   try {
-    results = loadYamlFile(filename) || {};
+    results = loadDataFile(filename) || {};
   } catch (error) {
     if (error.code) {
       throw error;
     }
-    return [`data/refresh-search-results.yaml: invalid YAML (${error.message})`];
+    return [`data/refresh-search-results.json: invalid JSON (${error.message})`];
   }
   for (const block of results.repos || []) {
     const slug = block.repo_slug;
     if (!truth(slug)) {
       continue;
     }
-    const ledgerPath = path.join(CANDIDATES_DIR, `${slug}.yaml`);
+    const ledgerPath = path.join(CANDIDATES_DIR, `${slug}.json`);
     if (!isFile(ledgerPath)) {
       continue;
     }
     const nums = new Set(
-      (loadYamlFile(ledgerPath)?.prs || []).filter(mapping).map((row) => get(row, "number")),
+      (loadDataFile(ledgerPath)?.prs || []).filter(mapping).map((row) => get(row, "number")),
     );
     const missing = difference(new Set(block.pr_numbers_seen || []), nums);
     if (missing.length) {
@@ -1571,13 +1582,13 @@ export function validateRefreshSubset() {
   return errors;
 }
 export function loadPreviousPagesManifest() {
-  const filename = path.join(DATA_DIR, "refresh-cutoff.yaml");
+  const filename = path.join(DATA_DIR, "refresh-cutoff.json");
   if (!isFile(filename)) {
     return null;
   }
   let data;
   try {
-    data = loadYamlFile(filename) || {};
+    data = loadDataFile(filename) || {};
   } catch (error) {
     if (error.code) {
       throw error;
@@ -1587,14 +1598,14 @@ export function loadPreviousPagesManifest() {
   return Array.isArray(data.previous_pages_manifest) ? new Set(data.previous_pages_manifest) : null;
 }
 export function validateCapturedAtCutoff() {
-  const filename = path.join(DATA_DIR, "refresh-cutoff.yaml"),
+  const filename = path.join(DATA_DIR, "refresh-cutoff.json"),
     errors = [];
   if (!isFile(filename) || !existsSync(SOURCES_DIR)) {
     return errors;
   }
   let cutoff;
   try {
-    cutoff = loadYamlFile(filename)?.cutoff_date;
+    cutoff = loadDataFile(filename)?.cutoff_date;
   } catch (error) {
     if (error.code) {
       throw error;
@@ -1655,13 +1666,13 @@ export function validateClaimBearingPagesHavePointer() {
 export function validateCutlassDevPinning() {
   const errors = [],
     claims = new Map(),
-    filename = path.join(DATA_DIR, "version-claims.yaml");
+    filename = path.join(DATA_DIR, "version-claims.json");
   if (!existsSync(WIKI_DIR)) {
     return errors;
   }
   if (isFile(filename)) {
     try {
-      for (const claim of loadYamlFile(filename)?.claims || []) {
+      for (const claim of loadDataFile(filename)?.claims || []) {
         if (mapping(claim) && "id" in claim) {
           claims.set(claim.id, claim);
         }
@@ -1854,7 +1865,7 @@ export function validateBundle(bundleRoot, knownSourceIds) {
   }
   let prov;
   try {
-    prov = loadYamlFile(provPath);
+    prov = loadDataFile(provPath);
   } catch (error) {
     if (error.code) {
       throw error;
@@ -2016,8 +2027,8 @@ export function validateBundle(bundleRoot, knownSourceIds) {
   return errors;
 }
 export function main() {
-  const tags = loadYamlFile(path.join(DATA_DIR, "tags.yaml")),
-    schemas = loadYamlFile(path.join(DATA_DIR, "schemas.yaml"));
+  const tags = loadDataFile(path.join(DATA_DIR, "tags.json")),
+    schemas = loadDataFile(path.join(DATA_DIR, "schemas.json"));
   const errors = [],
     ids = new Map(),
     languages = loadCodeLangs(),
@@ -2065,7 +2076,7 @@ export function main() {
     const filename = path.join(root, "PROVENANCE.yaml");
     if (isFile(filename)) {
       try {
-        const mode = loadYamlFile(filename)?.asset_mode;
+        const mode = loadDataFile(filename)?.asset_mode;
         if (Object.hasOwn(modes, mode)) {
           modes[mode]++;
         }

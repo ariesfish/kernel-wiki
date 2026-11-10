@@ -65,7 +65,7 @@ export BLACKWELL_WIKI_ROOT=/path/to/KernelWiki
 - Verbatim upstream asset bundles under `artifacts/` (PR patches and complete kernel files or excerpts) — pinned to upstream SHAs via `PROVENANCE.yaml`.
 - Auto-generated cross-reference indices — [by architecture](queries/by-architecture.md) / problem / technique / hardware feature / repo / kernel type / language.
 - Reviewed candidate ledgers with include/defer/exclude decisions.
-- **Hybrid version-claim registry** ([`data/version-claims.yaml`](data/version-claims.yaml)) — per-page `version_sensitive: <id>` pointers + central registry, validated for bidirectional consistency
+- **Hybrid version-claim registry** ([`data/version-claims.json`](data/version-claims.json)) — per-page `version_sensitive: <id>` pointers + central registry, validated for bidirectional consistency
 - Run `node scripts/repo_status.mjs` for current corpus counts.
 
 ## Query Tools
@@ -107,13 +107,13 @@ Three layers (inspired by [Karpathy's LLM Wiki pattern](https://gist.github.com/
 3. **`queries/`** — Auto-generated cross-reference indices. Do not edit manually; regenerate via `node scripts/generate-indices.mjs`.
 
 Supporting files:
-- `data/schemas.yaml` — Required/optional fields per page type
-- `data/tags.yaml` — Controlled vocabulary (80+ tags)
-- `data/aliases.yaml` — Canonical → synonym mappings
+- `data/schemas.json` — Required/optional fields per page type
+- `data/tags.json` — Controlled vocabulary (80+ tags)
+- `data/aliases.json` — Canonical → synonym mappings
 - `data/architectures.json` — Architecture hierarchy and documented product mappings shared by queries and maintenance tools
-- `data/version-claims.yaml` — Central registry for version-sensitive claims (DEC-1 hybrid)
-- `data/tool-versions.yaml` — Snapshot of tracked tool releases (Triton, CUTLASS, CUDA, PTX, …)
-- `data/refresh-cutoff.yaml` — Internal refresh-round metadata used by validators
+- `data/version-claims.json` — Central registry for version-sensitive claims (DEC-1 hybrid)
+- `data/tool-versions.json` — Snapshot of tracked tool releases (Triton, CUTLASS, CUDA, PTX, …)
+- `data/refresh-cutoff.json` — Internal refresh-round metadata used by validators
 - `candidates/` — Reviewed PR candidate ledgers (per repo)
 - `artifacts/` — Verbatim upstream asset bundles, each with `PROVENANCE.yaml`
 
@@ -200,9 +200,9 @@ kernel-wiki/                            (= the skill directory the runtime loads
 │   └── examples.md                    # 10 worked query patterns
 │
 ├── data/                              # Schema + vocabulary
-│   ├── schemas.yaml
-│   ├── tags.yaml
-│   └── aliases.yaml
+│   ├── schemas.json
+│   ├── tags.json
+│   └── aliases.json
 │
 ├── candidates/                        # Reviewed PR ledgers (ingestion source of truth)
 │   ├── cutlass.yaml

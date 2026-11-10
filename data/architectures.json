@@ -1,11 +1,28 @@
 {
   "comment": "Language-neutral mirror of the authoritative tables in scripts/lib/pr-policy.mjs, consumed by scripts/lib/architectures.mjs. The PR policy tests enforce agreement; frozen audit receipts bind the policy implementation by SHA-256.",
   "families": {
-    "turing": ["sm75"],
-    "ampere": ["sm80", "sm86", "sm87", "sm88"],
-    "ada": ["sm89"],
-    "hopper": ["sm90"],
-    "blackwell": ["sm100", "sm103", "sm110", "sm120", "sm121"]
+    "turing": [
+      "sm75"
+    ],
+    "ampere": [
+      "sm80",
+      "sm86",
+      "sm87",
+      "sm88"
+    ],
+    "ada": [
+      "sm89"
+    ],
+    "hopper": [
+      "sm90"
+    ],
+    "blackwell": [
+      "sm100",
+      "sm103",
+      "sm110",
+      "sm120",
+      "sm121"
+    ]
   },
   "exact": [
     "sm75",
