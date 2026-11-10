@@ -1574,6 +1574,7 @@ Source-PR pages whose validated evidence review found no family-level or exact a
 | [Grouped GEMM for MoE](../wiki/kernels/grouped-gemm.md) | `wiki/kernels/grouped-gemm.md` |
 | [Sparse MLA](../wiki/kernels/sparse-mla.md) | `wiki/kernels/sparse-mla.md` |
 | [Triton on Blackwell](../wiki/languages/triton-blackwell.md) | `wiki/languages/triton-blackwell.md` |
+| [A transposed warp mapping costs ~10x even when the working set fits in L2](../wiki/patterns/coalesced-warp-mapping-memory-bound.md) | `wiki/patterns/coalesced-warp-mapping-memory-bound.md` |
 | [PTX Cache Policy Differentiation](../wiki/techniques/cache-policy.md) | `wiki/techniques/cache-policy.md` |
 | [Chunk-Based Parallelism for Linear Recurrent Models](../wiki/techniques/chunk-parallelism.md) | `wiki/techniques/chunk-parallelism.md` |
 | [Double/Multi-Buffering Patterns](../wiki/techniques/double-buffering.md) | `wiki/techniques/double-buffering.md` |

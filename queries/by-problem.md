@@ -4,6 +4,7 @@
 
 | Symptom | Pattern Page | Candidate Techniques | Sources |
 |---------|-------------|---------------------|---------|
+|  | [A transposed warp mapping costs ~10x even when the working set fits in L2](../wiki/patterns/coalesced-warp-mapping-memory-bound.md) |  | 1 sources |
 | low-sm-utilization, tail-effect, load-imbalance | [Low SM Utilization](../wiki/patterns/low-sm-utilization.md) | [Persistent Kernels with Cluster Launch Control](../wiki/techniques/persistent-kernels.md), [Tile Scheduling Strategies](../wiki/techniques/tile-scheduling.md), [Cluster Launch Control (CLC)](../wiki/hardware/clc.md) | 3 sources |
 | memory-bound, low-compute-utilization, high-memory-throughput | [Memory Bandwidth Bound](../wiki/patterns/memory-bound.md) | [Wide Vectorized Loads and Cache Policies](../wiki/techniques/vectorized-loads.md), [Shared Memory Swizzling](../wiki/techniques/swizzling.md), [Software Pipelining and Multi-Stage Buffering](../wiki/techniques/pipeline-stages.md) | 3 sources |
 | load-imbalance, tail-effect, low-sm-utilization | [MoE Expert Load Imbalance](../wiki/patterns/moe-load-imbalance.md) | [Tile Scheduling Strategies](../wiki/techniques/tile-scheduling.md), [Persistent Kernels with Cluster Launch Control](../wiki/techniques/persistent-kernels.md), [Kernel fusion](../wiki/techniques/kernel-fusion.md) | 3 sources |
