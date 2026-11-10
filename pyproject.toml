@@ -1,9 +1,0 @@
-[project]
-name = "kernel-wiki-maintenance"
-version = "0.1.0"
-description = "Corpus authoring and validation tooling for kernel-wiki. Queries use the Node.js layer and need no Python."
-requires-python = ">=3.8"
-dependencies = ["PyYAML>=6.0"]
-
-[tool.uv]
-package = false

@@ -3,13 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Query layer for the kernel-wiki Agent Skill. The corpus is read-only; maintenance tooling lives in Python.",
+  "description": "Self-contained Node.js query and corpus maintenance tools for the kernel-wiki Agent Skill.",
   "license": "MIT",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "test": "node --test tests/js/*.test.mjs",
+    "validate": "node scripts/validate.mjs",
+    "generate:indices": "node scripts/generate-indices.mjs",
+    "generate:pr-pages": "node scripts/generate-pr-pages.mjs --all",
+    "generate:core": "node scripts/compute_core_prs.mjs",
+    "refresh:candidates": "node scripts/refresh_candidate_ledger.mjs",
+    "check:dod": "node scripts/check_dod_fixtures.mjs",
+    "check:core": "node scripts/verify_core_prs.mjs",
+    "check:size": "node scripts/repo_size_check.mjs",
+    "check:freshness": "node scripts/check_version_freshness.mjs",
+    "check:blogs": "node scripts/extract_blog_code.mjs --check-all",
+    "verify:verbatim": "node scripts/verify_verbatim.mjs --strict",
+    "verify:architecture": "node scripts/verify_pr_architecture_upstream.mjs",
     "build:yaml": "node scripts/build_yaml_vendor.mjs"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 .codex
 .humanize/
 .claude/
+.dev/
 __pycache__/
 *.pyc
 
@@ -13,5 +14,5 @@ audit/claude-findings-disposition.md
 # Node.js
 node_modules/
 
-# uv
+# Local environments (not required by repository tooling)
 .venv/

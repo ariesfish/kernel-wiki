@@ -3,7 +3,7 @@
  *
  * query, get_page, and the status command share this module so frontmatter
  * parsing, page-id lookup, and artifact-bundle discovery cannot drift apart.
- * Maintenance tooling (scripts/validate.py) keeps its own parser because it
+ * Maintenance tooling (scripts/validate.mjs) keeps its own parser because it
  * reports parse errors instead of silently skipping pages.
  */
 
@@ -13,7 +13,7 @@ import path from "node:path";
 import { WIKI_ROOT, wikiPath } from "./_root.mjs";
 import { parse } from "./_yaml.mjs";
 
-// The same expression the Python query tools used: a page must have a closing
+// A page must have a closing
 // delimiter followed by a newline. A frontmatter-only file is not a page.
 const FRONTMATTER_RE = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n([\s\S]*)/;
 
@@ -153,7 +153,7 @@ export function pageTypeOf(fm, rel) {
 }
 
 // Code-extension sets. query --has-code and get_page --include-code used to
-// keep their own copies; they now share these. validate.py's ASSET_SOURCE_EXTS
+// keep their own copies; they now share these. validate.mjs's ASSET_SOURCE_EXTS
 // remains the authoring-side contract.
 export const HAS_CODE_EXTS = new Set([
   ".cu", ".cuh", ".ptx", ".py", ".cpp", ".h", ".hpp", ".inl",

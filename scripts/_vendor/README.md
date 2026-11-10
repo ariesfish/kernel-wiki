@@ -1,24 +1,21 @@
-# Bundled YAML implementations
+# Vendored YAML parser
 
-Two independent YAML readers are vendored here so a cloned skill works with
-no package installation and no network access.
+`yaml.mjs` is a committed, self-contained ESM bundle of `yaml` 2.9.1
+(ISC), built with esbuild. All query and maintenance scripts import
+`parse` and `stringify` through `scripts/_yaml.mjs`.
 
-## Python maintenance: `yaml/`
+A fresh clone needs no package installation or network access to parse YAML.
+Python and PyYAML are not used by repository tooling. Python files in
+`artifacts/` are immutable upstream source evidence.
 
-The `yaml/` package is the pure-Python portion of PyYAML 6.0.3. It is loaded
-through `scripts/_yaml_compat.py`, which prefers the host PyYAML installation
-when one is available and falls back to this copy otherwise. Only the
-maintenance tooling uses it; the query layer is Node.js.
+To rebuild after updating the `yaml` dependency:
 
-The optional C extension is intentionally not included. PyYAML is distributed
-under the MIT license; see `LICENSE`.
+```bash
+npm ci
+npm run build:yaml
+npm test
+```
 
-## Node query layer: `yaml.mjs`
-
-`yaml.mjs` is a single-file ESM bundle of the `yaml` package 2.9.1 (ISC),
-built with esbuild. It exports `parse` and `stringify` and is imported by
-`scripts/_yaml.mjs`. Rebuild it with `npm run build:yaml` after changing the
-`yaml` version in `package.json`; commit the refreshed bundle and
-`yaml.LICENSE`. The browser entry is used because the Node entry is CommonJS
-and needs a runtime `require("process")`, which a self-contained ESM bundle
-cannot resolve.
+Commit the refreshed bundle and `yaml.LICENSE`. The browser entry is used
+because the Node entry is CommonJS and needs a runtime `require("process")`,
+which a self-contained ESM bundle cannot resolve.

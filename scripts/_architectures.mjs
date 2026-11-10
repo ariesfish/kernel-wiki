@@ -1,8 +1,8 @@
 /**
  * Architecture hierarchy and product mappings for query filters.
  *
- * The tables live in data/architectures.json and are shared with the Python
- * maintenance tooling (scripts/pr_policy.py). This module only implements the
+ * The tables live in data/architectures.json and are shared with corpus
+ * maintenance tooling (scripts/pr_policy.mjs). This module only implements the
  * matching semantics; the data stays language-neutral.
  */
 

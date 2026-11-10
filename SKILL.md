@@ -1,7 +1,7 @@
 ---
 name: kernel-wiki
 license: MIT
-compatibility: "node >= 22 for queries (no install step); python3 >= 3.8 + uv for corpus maintenance only"
+compatibility: "node >= 22; no install step; gh and network access for upstream maintenance"
 metadata:
   upstream: mit-han-lab/KernelWiki
   upstream_revision: b6b4301f15e8ce6955a56776690643ce5db369e6
@@ -44,10 +44,10 @@ The query layer is Node.js (>= 22) and self-contained: `scripts/query.mjs`,
 plus the YAML parser vendored in `scripts/_vendor/yaml.mjs`. A cloned skill
 needs no `npm install`, no Python interpreter, and no network access.
 
-Corpus maintenance (validation, page generation, index generation) is Python.
-It is not needed to query. Use `uv run` so the PyYAML version is reproducible;
-the scripts still fall back to the bundled pure-Python loader when PyYAML is
-missing, including under `python3 -S`.
+Corpus maintenance (validation, page generation, index generation) also uses
+Node.js and the same vendored YAML parser. Run `node scripts/validate.mjs`
+to check the corpus. Refreshing candidates or verifying live upstream evidence
+additionally requires `gh` and network access.
 
 ### Path 1: Unified search (preferred for natural language)
 
@@ -118,10 +118,10 @@ When answering from this KB:
 - **Controlled vocabulary** (80+ tags) in `data/tags.yaml`, alias map in `data/aliases.yaml`
 - **Hybrid version-claim registry** — per-page `version_sensitive: <id>` pointers + `data/version-claims.yaml` central registry, validated for bidirectional consistency
 - **Status script** `scripts/repo_status.mjs` — current corpus counts
-- **Validator** `scripts/validate.py` — schema, link, artifact, and ledger checks
+- **Validator** `scripts/validate.mjs` — schema, link, artifact, and ledger checks
 - **Blackwell-first** — Hopper-only wiki pages carry explicit `blackwell_relevance`; source pages preserve upstream evidence and are exempt
 
-To refresh the corpus: run `uv run scripts/refresh_candidate_ledger.py`, regenerate PR pages and query indices, then validate.
+To refresh the corpus: run `node scripts/refresh_candidate_ledger.mjs`, regenerate PR pages with `node scripts/generate-pr-pages.mjs --all` and query indices with `node scripts/generate-indices.mjs`, then validate with `node scripts/validate.mjs`.
 
 ## Quality Guarantees
 

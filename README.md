@@ -1,15 +1,15 @@
 # KernelWiki — Blackwell & Hopper Kernel Optimization Knowledge Base
 > [!IMPORTANT]
 > **This is `kernel-wiki`, a maintained copy of
-> [KernelWiki](https://github.com/mit-han-lab/KernelWiki) (MIT, hanlab).** Three changes from
-> upstream: the skill is named `kernel-wiki` so Agent Skills runtimes load it without a warning;
-> the 19 files marked `LicenseRef-NvidiaProprietary` are removed at the source (see
-> `SANITIZED.yaml`) instead of being pruned by each consumer; and this copy is what
-> [`pi-kernel-expert`](https://github.com/ariesfish/pi-kernel-expert) pins.
+> [KernelWiki](https://github.com/mit-han-lab/KernelWiki) (MIT, hanlab).** This copy
+> uses the skill name `kernel-wiki` so Agent Skills runtimes load it without a warning;
+> removes the 19 files marked `LicenseRef-NvidiaProprietary` at the source (see
+> `SANITIZED.yaml`); and runs all query and maintenance tools on Node.js.
+> [`pi-kernel-expert`](https://github.com/ariesfish/pi-kernel-expert) pins this copy.
 >
 > Page ids are frozen: `migration-wgmma-to-tcgen05` here is the same id upstream, because ids are
 > the citation contract. Update the corpus by adding pages and running
-> `uv run scripts/generate-indices.py` plus the two checks in `scripts/`; never renumber an id.
+> `node scripts/generate-indices.mjs` plus the quality checks in `scripts/`; never renumber an id.
 
 > **Evidence boundaries:** the audited upstream PR corpus closes at 2026-05-20;
 > documentation, releases, and leaderboard snapshots were verified through
@@ -34,10 +34,10 @@ git clone git@github.com:ariesfish/kernel-wiki.git <that-location>
 
 The query tools are Node.js (>= 22) and resolve the corpus root to their own directory, so no environment variable, `npm install`, or Python interpreter is required. The YAML parser is vendored as a single ESM file under `scripts/_vendor/`.
 
-Corpus maintenance — `validate.py`, `generate-indices.py`, and the other authoring scripts — is Python and managed with uv. It is not needed to query:
+All query and maintenance tools run on Node.js (>= 22), use the committed YAML parser, and need no `npm install` or Python environment. Commands that retrieve upstream evidence also need `gh` with GitHub access.
 
 ```bash
-uv run scripts/validate.py
+node scripts/validate.mjs
 ```
 
 Smoke test:
@@ -54,10 +54,10 @@ Optional override for relocating the scripts:
 export BLACKWELL_WIKI_ROOT=/path/to/KernelWiki
 ```
 
-> **Migration note:** query commands moved from `python3 scripts/*.py` to
-> `node scripts/*.mjs`. The Python tree is now corpus maintenance only. A
-> consumer that pins this repository must switch its invocation to Node in the
-> same change as the pin bump.
+> **Migration note:** all repository tooling now uses `node scripts/*.mjs`.
+> Consumers that invoke maintenance scripts must update those commands when
+> bumping their corpus pin. Python files under `artifacts/` are preserved
+> upstream kernel evidence; repository tooling does not execute them.
 
 ## What's Here
 
@@ -104,13 +104,13 @@ Three layers (inspired by [Karpathy's LLM Wiki pattern](https://gist.github.com/
 
 1. **`sources/`** — Raw data. Immutable summaries of PRs, blogs, docs, contests.
 2. **`wiki/`** — Synthesized knowledge pages. Cross-referenced by `id`. All have YAML frontmatter.
-3. **`queries/`** — Auto-generated cross-reference indices. Do not edit manually; regenerate via `uv run scripts/generate-indices.py`.
+3. **`queries/`** — Auto-generated cross-reference indices. Do not edit manually; regenerate via `node scripts/generate-indices.mjs`.
 
 Supporting files:
 - `data/schemas.yaml` — Required/optional fields per page type
 - `data/tags.yaml` — Controlled vocabulary (80+ tags)
 - `data/aliases.yaml` — Canonical → synonym mappings
-- `data/architectures.json` — Architecture hierarchy and documented product mappings shared by the Node query layer and the Python validator
+- `data/architectures.json` — Architecture hierarchy and documented product mappings shared by queries and maintenance tools
 - `data/version-claims.yaml` — Central registry for version-sensitive claims (DEC-1 hybrid)
 - `data/tool-versions.yaml` — Snapshot of tracked tool releases (Triton, CUTLASS, CUDA, PTX, …)
 - `data/refresh-cutoff.yaml` — Internal refresh-round metadata used by validators
@@ -121,25 +121,35 @@ Supporting files:
 
 | Script | Purpose |
 |---|---|
-| `scripts/validate.py` | Validate YAML frontmatter, enforce schema, check link integrity |
-| `scripts/generate-indices.py` | Regenerate `queries/*.md` from frontmatter |
-| `scripts/generate-pr-pages.py` | Batch-generate source PR pages from candidate ledgers |
+| `scripts/validate.mjs` | Validate frontmatter, schemas, links, evidence receipts, ledgers, and artifact bundles |
+| `scripts/generate-indices.mjs` | Regenerate `queries/*.md` from frontmatter |
+| `scripts/generate-pr-pages.mjs` | Generate source PR pages from candidate ledgers and upstream evidence |
+| `scripts/refresh_candidate_ledger.mjs` | Refresh candidate decisions from GitHub |
+| `scripts/compute_core_prs.mjs` | Derive core PR and DSL universe manifests |
+| `scripts/fetch_pr_diff.mjs` | Capture upstream PR diffs and pinned source files |
+| `scripts/extract_blog_code.mjs` | Extract and check blog code bundles |
+| `scripts/collect_contest_code.mjs` | Collect contest submission bundles |
+| `scripts/check_version_freshness.mjs` | Check local version and ledger freshness without network access |
 
 ```bash
-uv run scripts/validate.py
-uv run scripts/generate-indices.py    # regenerate query indices
+npm test
+npm run validate
+npm run generate:indices
+npm run check:dod
+npm run check:core
+npm run check:size
 ```
 
-PyYAML is declared in `pyproject.toml` and pinned by `uv.lock`. The maintenance scripts still fall back to the bundled pure-Python loader when PyYAML is unavailable, including under `python3 -S`.
+These commands also work directly with `node scripts/<name>.mjs` from a fresh clone. `npm install` is needed only to rebuild the vendored YAML bundle. Upstream verification commands use `gh` and require network access. See [the JavaScript migration notes](docs/javascript-migration.md) for module boundaries, compatibility, and verification evidence.
 
 ## Quality Gates
 
-- `scripts/validate.py` reports 0 validation errors
-- `scripts/verify_verbatim.py` verifies upstream-pinned assets
-- `scripts/check_dod_fixtures.py` verifies every active Definition-of-Done asset contract and audits retired fixture tombstones
-- `scripts/verify_pr_architecture_upstream.py` re-derives a deterministic high-risk PR sample from live paginated GitHub evidence
-- `scripts/verify_core_prs.py` verifies generated PR manifests
-- `scripts/repo_size_check.py` enforces the repository size budget
+- `scripts/validate.mjs` reports 0 validation errors
+- `scripts/verify_verbatim.mjs` verifies upstream-pinned assets
+- `scripts/check_dod_fixtures.mjs` verifies every active Definition-of-Done asset contract and audits retired fixture tombstones
+- `scripts/verify_pr_architecture_upstream.mjs` re-derives a deterministic high-risk PR sample from live paginated GitHub evidence
+- `scripts/verify_core_prs.mjs` verifies generated PR manifests
+- `scripts/repo_size_check.mjs` enforces the repository size budget
 - 0 broken links across all internal references
 - All `verified` wiki pages have official-doc + upstream-code evidence (enforced by `evidence_basis` field)
 - All technique/kernel/language pages have compilable code snippets (`reproducibility >= snippet`)
@@ -161,10 +171,9 @@ kernel-wiki/                            (= the skill directory the runtime loads
 ├── README.md                          # This file
 ├── SCHEMA.md                          # Extended navigation + schema reference
 ├── index.md                           # Curated top-level index
-├── package.json                       # Node query layer metadata + tests
-├── pyproject.toml                     # uv project for Python maintenance
+├── package.json                       # Node tooling, maintenance commands, and tests
 │
-├── scripts/                           # Query layer (Node) + maintenance tooling (Python)
+├── scripts/                           # Query and maintenance tooling (JavaScript)
 │   ├── query.mjs                      # Unified search
 │   ├── get_page.mjs                   # Page fetcher
 │   ├── grep_wiki.mjs                  # Regex search
@@ -175,10 +184,10 @@ kernel-wiki/                            (= the skill directory the runtime loads
 │   ├── _aliases.mjs                   # Alias expansion
 │   ├── _yaml.mjs                      # Vendored YAML entry point
 │   ├── _vendor/yaml.mjs               # Committed ESM bundle of `yaml` 2.9.1
-│   ├── _yaml_compat.py                # Host PyYAML / offline fallback selector
-│   ├── validate.py                    # Schema validator
-│   ├── generate-indices.py            # Query-index generator
-│   └── generate-pr-pages.py           # Batch PR page generator
+│   ├── validate.mjs                   # Schema and evidence validator
+│   ├── pr_policy.mjs                  # Shared PR scope and architecture policy
+│   ├── generate-indices.mjs           # Query-index generator
+│   └── generate-pr-pages.mjs          # Batch PR page generator
 │
 ├── references/                        # Skill knowledge layer
 │   ├── primer.md                      # Topic map
